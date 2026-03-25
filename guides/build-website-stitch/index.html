@@ -304,6 +304,20 @@
       background: var(--border);
     }
 
+    /* Inline links */
+    .step-content a,
+    .why-section a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: var(--accent-border);
+      text-underline-offset: 2px;
+      transition: text-decoration-color 0.15s;
+    }
+    .step-content a:hover,
+    .why-section a:hover {
+      text-decoration-color: var(--accent);
+    }
+
     /* Why it matters */
     .why-section {
       padding: 28px 0;
@@ -508,19 +522,19 @@
     </section>
 
     <section class="why-section" aria-label="Context">
-      <p><strong>Most people trying to sell websites to businesses get stuck in the same loop</strong> -- spend hours in Figma or WordPress, deliver something the client can't edit, and repeat. This workflow flips it. You go from a screenshot on Dribbble to a live, deployed website in minutes, using free tools. And because you rebuild it in GoHighLevel at the end, the client gets something they can actually manage without calling you every time they want to change a headline.</p>
+      <p><strong>Most people building websites with AI still spend way too long getting from idea to live URL.</strong> They fight with prompts, copy-paste code between tools, and end up with something that looks generated. This workflow chains three free tools together so you go from a design screenshot to a deployed website in minutes, with code that actually looks like a developer wrote it.</p>
     </section>
 
     <section class="steps" aria-label="Step-by-step instructions">
 
       <div class="phase">
-        <div class="phase-label">Phase 1: Design</div>
+        <div class="phase-label">Design</div>
 
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
             <h3>Find your visual reference</h3>
-            <p>Go to Dribbble and search for a design style that fits your project. Find something you like, screenshot it. This becomes the creative direction for your AI-generated site.</p>
+            <p>Go to <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a> and search for a design style that fits your project. Find something you like, screenshot it. This becomes the creative direction for your AI-generated site.</p>
           </div>
         </div>
 
@@ -529,7 +543,7 @@
           <div class="step-content">
             <h3>Generate the UI in Google Stitch</h3>
             <ul>
-              <li>Open stitch.withgoogle.com and click the "+" button</li>
+              <li>Open <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">stitch.withgoogle.com</a> and click the "+" button</li>
               <li>Upload the screenshot you just took</li>
               <li>Select <strong>Web</strong> as the design type</li>
               <li>Write a prompt describing what you want (e.g., "Make me a landing page following this visual style for my coffee business")</li>
@@ -540,14 +554,14 @@
       </div>
 
       <div class="phase">
-        <div class="phase-label">Phase 2: Connect the tools</div>
+        <div class="phase-label">Connect the tools</div>
 
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
             <h3>Get your Stitch API key</h3>
             <ul>
-              <li>In Google Stitch, click your profile icon</li>
+              <li>In <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">Google Stitch</a>, click your profile icon</li>
               <li>Go to <strong>Stitch Settings</strong></li>
               <li>Scroll to the API Key section</li>
               <li>Click <strong>Create Key</strong> and copy it</li>
@@ -560,7 +574,7 @@
           <div class="step-content">
             <h3>Add the Stitch MCP server to Antigravity</h3>
             <ul>
-              <li>Open Antigravity (Google's AI IDE)</li>
+              <li>Open <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a> (Google's AI IDE)</li>
               <li>Go to <strong>Settings > Customizations</strong></li>
               <li>Under "Add MCP Servers", search for <strong>Stitch MCP</strong></li>
               <li>Click <strong>+ Add</strong> to install it</li>
@@ -574,14 +588,14 @@
       </div>
 
       <div class="phase">
-        <div class="phase-label">Phase 3: Build and deploy</div>
+        <div class="phase-label">Build and deploy</div>
 
         <div class="step">
           <div class="step-num">5</div>
           <div class="step-content">
             <h3>Pull the design into your workspace</h3>
             <ul>
-              <li>In Antigravity, create a new workspace and open a fresh folder</li>
+              <li>In <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a>, create a new workspace and open a fresh folder</li>
               <li>Tell the agent: "I want to use the Google Stitch MCP server to pull in a website I built"</li>
               <li>Paste your API key when it asks</li>
               <li>Point it to the right Stitch project</li>
@@ -607,14 +621,9 @@
               <li>It packages and deploys the project automatically</li>
               <li>You get a live .vercel.app URL in seconds</li>
             </ul>
-            <p>Add a custom domain later in Vercel's domain settings if you want.</p>
+            <p>Add a custom domain later in <a href="https://vercel.com" target="_blank" rel="noopener">Vercel's</a> domain settings if you want.</p>
           </div>
         </div>
-      </div>
-
-      <div class="callout">
-        <div class="callout-label">Bonus: Hand it off to a client</div>
-        <p>Once you have the design, recreate it in GoHighLevel's AI funnel builder. You get the drag-and-drop builder with the design already done, and your client gets a site they can actually manage themselves.</p>
       </div>
 
     </section>
@@ -626,7 +635,7 @@
       </div>
       <div class="mistake">
         <div class="mistake-icon">X</div>
-        <div class="mistake-text"><strong>Don't try to hand Stitch output directly to a client.</strong> The HTML it generates is clean, but clients need a CMS they can edit. That's why the GoHighLevel rebuild step exists.</div>
+        <div class="mistake-text"><strong>Don't skip the API key step.</strong> The MCP connection is what makes this workflow fast. Without it, you're manually exporting and importing code between Stitch and your IDE.</div>
       </div>
       <div class="mistake">
         <div class="mistake-icon">X</div>
