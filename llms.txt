@@ -1,0 +1,14 @@
+# Roman Peschke
+
+> Free step-by-step AI tool guides. Each guide walks through a specific workflow with exact tools, steps, and links.
+
+Roman Peschke creates daily Instagram Reels breaking down AI tools and workflows for building, automating, and scaling businesses. Each guide on this site is a companion to a video, giving you the exact steps to follow along.
+
+## Guides
+
+- [Build a Website in Two Minutes](/guides/build-website-stitch/): Design a website with Google Stitch, build it in Antigravity (Firebase Studio), and deploy on Vercel. Free, no code.
+
+## Links
+
+- Instagram: https://instagram.com/roman.peschke
+- YouTube: https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ

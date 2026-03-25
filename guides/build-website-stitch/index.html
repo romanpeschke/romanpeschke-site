@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build a Website in Two Minutes | Roman Peschke</title>
+  <meta name="description" content="Step-by-step guide: Use Google Stitch + Antigravity to design, build, and deploy a website for free in under two minutes.">
+  <meta property="og:title" content="Build a Website in Two Minutes">
+  <meta property="og:description" content="Free step-by-step guide: Google Stitch + Antigravity + Vercel. Design to deployment in minutes.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-03-23">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/build-website-stitch/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Build a Website in Two Minutes with Google Stitch + Antigravity",
+    "description": "Step-by-step guide to designing a website with AI using Google Stitch, building it in Antigravity (Firebase Studio), and deploying it live on Vercel. All free, no code required.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-03-23",
+    "totalTime": "PT2M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Google Stitch", "url": "https://stitch.withgoogle.com" },
+      { "@type": "HowToTool", "name": "Antigravity (Firebase Studio)", "url": "https://idx.google.com" },
+      { "@type": "HowToTool", "name": "Vercel", "url": "https://vercel.com" },
+      { "@type": "HowToTool", "name": "Dribbble", "url": "https://dribbble.com" }
+    ],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Find your visual reference",
+        "text": "Go to Dribbble and search for a design style that fits your project. Find something you like, screenshot it. This becomes the creative direction for your AI-generated site.",
+        "url": "https://dribbble.com"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Generate the UI in Google Stitch",
+        "text": "Open stitch.withgoogle.com, upload your screenshot, select Web design type, write a prompt describing what you want, select the 3.1 Pro model and hit generate.",
+        "url": "https://stitch.withgoogle.com"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Get your Stitch API key",
+        "text": "In Google Stitch, click your profile icon, go to Stitch Settings, scroll to the API Key section, click Create Key and copy it."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": "Add the Stitch MCP server to Antigravity",
+        "text": "Open Antigravity, go to Settings > Customizations, search for Stitch MCP under Add MCP Servers, and click + Add to install it."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 5,
+        "name": "Pull the design into your workspace",
+        "text": "In Antigravity, create a new workspace and open a fresh folder. Tell the agent you want to use the Google Stitch MCP server, paste your API key, and point it to your Stitch project. The agent retrieves your screens and sets up the HTML/Tailwind CSS project files."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 6,
+        "name": "Test it locally",
+        "text": "The agent builds the project and spins up a local dev server. Click the localhost link to preview the fully coded, functional website in your browser."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 7,
+        "name": "Deploy to Vercel",
+        "text": "Tell the agent to deploy it to Vercel. It packages and deploys the project automatically. You get a live .vercel.app URL in seconds."
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 0;
+    }
+    .ig-link {
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero {
+      padding: 36px 0 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Tools bar */
+    .tools-bar {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tools-bar-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+    .tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tool-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      min-height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .tool-pill:hover, .tool-pill:active {
+      border-color: var(--accent-border);
+      background: var(--surface-2);
+    }
+    .tool-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* Steps */
+    .steps {
+      padding: 32px 0;
+    }
+    .phase {
+      margin-bottom: 36px;
+    }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 1px;
+    }
+    .step-content {
+      min-width: 0;
+    }
+    .step-content h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .step-content p {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .step-content ul {
+      list-style: none;
+      padding: 0;
+    }
+    .step-content li {
+      font-size: 15px;
+      color: var(--text-muted);
+      padding: 3px 0;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .step-content li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    /* Why it matters */
+    .why-section {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .why-section p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .why-section p strong {
+      color: var(--text);
+    }
+
+    /* Mistakes */
+    .mistakes-section {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+    .mistakes-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .mistake {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .mistake:last-child { margin-bottom: 0; }
+    .mistake-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #dc2626;
+      margin-top: 2px;
+    }
+    .mistake-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .mistake-text strong {
+      color: var(--text);
+    }
+
+    /* Quick win */
+    .quickwin {
+      background: rgba(5,150,105,0.06);
+      border: 1px solid rgba(5,150,105,0.18);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 24px 0 0;
+    }
+    .quickwin-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #059669;
+      margin-bottom: 6px;
+    }
+    .quickwin p {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Callout */
+    .callout {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 20px 0;
+    }
+    .callout-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .callout p {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Tools section */
+    .tools-section {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+    .tools-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .tool-card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.15s;
+    }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .tool-card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .tool-card-url {
+      font-size: 13px;
+      color: var(--accent);
+      margin-top: 5px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 36px 0 env(safe-area-inset-bottom, 48px);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-cta {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 28px;
+      min-height: 48px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: 10px;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s;
+    }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    /* Responsive */
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">Build a Website in Two Minutes</h1>
+      <p class="subtitle" itemprop="description">Design a full website with AI, pull it into your IDE, and deploy it live. All free. No code required.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://stitch.withgoogle.com" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Google Stitch</a>
+        <a href="https://idx.google.com" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Antigravity</a>
+        <a href="https://vercel.com" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Vercel</a>
+        <a href="https://dribbble.com" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Dribbble</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>Most people trying to sell websites to businesses get stuck in the same loop</strong> -- spend hours in Figma or WordPress, deliver something the client can't edit, and repeat. This workflow flips it. You go from a screenshot on Dribbble to a live, deployed website in minutes, using free tools. And because you rebuild it in GoHighLevel at the end, the client gets something they can actually manage without calling you every time they want to change a headline.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Phase 1: Design</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Find your visual reference</h3>
+            <p>Go to Dribbble and search for a design style that fits your project. Find something you like, screenshot it. This becomes the creative direction for your AI-generated site.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Generate the UI in Google Stitch</h3>
+            <ul>
+              <li>Open stitch.withgoogle.com and click the "+" button</li>
+              <li>Upload the screenshot you just took</li>
+              <li>Select <strong>Web</strong> as the design type</li>
+              <li>Write a prompt describing what you want (e.g., "Make me a landing page following this visual style for my coffee business")</li>
+              <li>Select the <strong>3.1 Pro</strong> model and hit generate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Phase 2: Connect the tools</div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Get your Stitch API key</h3>
+            <ul>
+              <li>In Google Stitch, click your profile icon</li>
+              <li>Go to <strong>Stitch Settings</strong></li>
+              <li>Scroll to the API Key section</li>
+              <li>Click <strong>Create Key</strong> and copy it</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Add the Stitch MCP server to Antigravity</h3>
+            <ul>
+              <li>Open Antigravity (Google's AI IDE)</li>
+              <li>Go to <strong>Settings > Customizations</strong></li>
+              <li>Under "Add MCP Servers", search for <strong>Stitch MCP</strong></li>
+              <li>Click <strong>+ Add</strong> to install it</li>
+            </ul>
+            <div class="callout">
+              <div class="callout-label">What is MCP?</div>
+              <p>Model Context Protocol lets your AI IDE talk directly to other tools. In this case, it connects Antigravity to your Stitch designs so the AI can read and convert them into code automatically.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Phase 3: Build and deploy</div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Pull the design into your workspace</h3>
+            <ul>
+              <li>In Antigravity, create a new workspace and open a fresh folder</li>
+              <li>Tell the agent: "I want to use the Google Stitch MCP server to pull in a website I built"</li>
+              <li>Paste your API key when it asks</li>
+              <li>Point it to the right Stitch project</li>
+            </ul>
+            <p>The agent uses MCP to retrieve your screens, extract the HTML/Tailwind CSS code, and set up the project files locally.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Test it locally</h3>
+            <p>The agent builds the project and spins up a local dev server. Click the localhost link it gives you to preview the fully coded, functional website in your browser.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Deploy to Vercel</h3>
+            <ul>
+              <li>Tell the agent: "Looks good, deploy it to Vercel"</li>
+              <li>It packages and deploys the project automatically</li>
+              <li>You get a live .vercel.app URL in seconds</li>
+            </ul>
+            <p>Add a custom domain later in Vercel's domain settings if you want.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">Bonus: Hand it off to a client</div>
+        <p>Once you have the design, recreate it in GoHighLevel's AI funnel builder. You get the drag-and-drop builder with the design already done, and your client gets a site they can actually manage themselves.</p>
+      </div>
+
+    </section>
+
+    <section class="mistakes-section" aria-label="Things to watch out for">
+      <div class="mistake">
+        <div class="mistake-icon">X</div>
+        <div class="mistake-text"><strong>Don't skip the screenshot step.</strong> Stitch generates way better output when it has a visual reference. A text-only prompt gives you generic Bootstrap-looking pages.</div>
+      </div>
+      <div class="mistake">
+        <div class="mistake-icon">X</div>
+        <div class="mistake-text"><strong>Don't try to hand Stitch output directly to a client.</strong> The HTML it generates is clean, but clients need a CMS they can edit. That's why the GoHighLevel rebuild step exists.</div>
+      </div>
+      <div class="mistake">
+        <div class="mistake-icon">X</div>
+        <div class="mistake-text"><strong>Don't use the free Stitch model.</strong> The 3.1 Pro model is significantly better at following your visual reference. The free tier model works, but the output needs more manual cleanup.</div>
+      </div>
+
+      <div class="quickwin">
+        <div class="quickwin-label">Start here</div>
+        <p>Open Dribbble right now, search "landing page dark" or whatever style fits your niche, and screenshot the first design that catches your eye. Then paste it into Stitch. You'll have a working prototype in under 60 seconds. That's the proof of concept that sells the whole workflow.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools used in this guide</h2>
+
+      <a href="https://stitch.withgoogle.com" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Google Stitch</div>
+        <div class="tool-card-desc">AI design canvas that transforms prompts and screenshots into editable UI designs and production-ready HTML/CSS code. Free with daily credit limits.</div>
+        <div class="tool-card-url">stitch.withgoogle.com</div>
+      </a>
+
+      <a href="https://idx.google.com" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Antigravity (Firebase Studio)</div>
+        <div class="tool-card-desc">Google's AI-powered cloud IDE. Import repos, prototype with natural language, and deploy full-stack apps. Free during preview.</div>
+        <div class="tool-card-url">idx.google.com</div>
+      </a>
+
+      <a href="https://vercel.com" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Vercel</div>
+        <div class="tool-card-desc">Deploy websites instantly. Push code, get a live URL. Free tier is more than enough for most projects.</div>
+        <div class="tool-card-url">vercel.com</div>
+      </a>
+
+      <a href="https://dribbble.com" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Dribbble</div>
+        <div class="tool-card-desc">Design inspiration. Screenshot a style you like and feed it to Stitch as your visual reference.</div>
+        <div class="tool-card-url">dribbble.com</div>
+      </a>
+    </section>
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>
