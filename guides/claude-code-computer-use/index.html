@@ -58,8 +58,8 @@
       },
       {
         "@type": "Question",
-        "name": "What are Claude Code scheduled tasks?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Scheduled tasks let Claude re-run a prompt on an interval. Three options: cloud tasks (run on Anthropic's servers, survive restarts), Desktop tasks (run on your machine with local file access), and /loop (quick session-scoped polling). Cloud tasks have a 1-hour minimum interval. Desktop and /loop have a 1-minute minimum." }
+        "name": "What are Claude Code cloud scheduled tasks?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Cloud scheduled tasks run a prompt on a recurring cadence using Anthropic's servers. They keep working even when your computer is off. Create them at claude.ai/code/scheduled or with /schedule in the CLI. Available on Pro, Max, Team, and Enterprise plans. Minimum interval is 1 hour." }
       }
     ]
   }
@@ -256,13 +256,15 @@
         <div class="step">
           <div class="step-num">6</div>
           <div class="step-content">
-            <h3>Schedule a recurring task</h3>
-            <p>Three options depending on what you need:</p>
+            <h3>Create a cloud scheduled task</h3>
+            <p>These run on Anthropic's servers. Your machine doesn't need to be on.</p>
             <ul>
-              <li><strong>Quick polling</strong>: type <code>/loop 5m check if the deployment finished</code> in a session. Runs every 5 minutes while the session is open.</li>
-              <li><strong>Desktop task</strong>: create a scheduled task in the Desktop sidebar. Runs on your machine with local file access. Survives restarts. 1-minute minimum interval.</li>
-              <li><strong>Cloud task</strong>: use <code>/schedule</code> in the CLI. Runs on Anthropic's servers. Survives restarts, doesn't need your machine on. 1-hour minimum interval.</li>
+              <li>Go to <a href="https://claude.ai/code/scheduled" target="_blank" rel="noopener">claude.ai/code/scheduled</a> and click <strong>New scheduled task</strong></li>
+              <li>Name it and write the prompt (make it self-contained since it runs autonomously)</li>
+              <li>Select a GitHub repo for Claude to work in</li>
+              <li>Pick a frequency (hourly, daily, weekly). Minimum interval is 1 hour.</li>
             </ul>
+            <p>You can also create one from the CLI with <code>/schedule daily PR review at 9am</code>. Available on Pro, Max, Team, and Enterprise.</p>
           </div>
         </div>
       </div>
