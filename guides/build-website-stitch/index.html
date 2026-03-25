@@ -10,7 +10,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Roman Peschke">
   <meta property="article:author" content="Roman Peschke">
-  <meta property="article:published_time" content="2026-03-23">
+  <meta property="article:published_time" content="2026-03-20">
   <meta name="author" content="Roman Peschke">
   <meta name="robots" content="index, follow, max-snippet:-1">
   <link rel="canonical" href="https://romanpeschke.com/guides/build-website-stitch/">
@@ -25,7 +25,7 @@
       "name": "Roman Peschke",
       "url": "https://instagram.com/roman.peschke"
     },
-    "datePublished": "2026-03-23",
+    "datePublished": "2026-03-20",
     "totalTime": "PT2M",
     "tool": [
       { "@type": "HowToTool", "name": "Google Stitch", "url": "https://stitch.withgoogle.com" },
@@ -38,45 +38,43 @@
         "@type": "HowToStep",
         "position": 1,
         "name": "Find your visual reference",
-        "text": "Go to Dribbble and search for a design style that fits your project. Find something you like, screenshot it. This becomes the creative direction for your AI-generated site.",
-        "url": "https://dribbble.com"
+        "text": "Go to Dribbble, find a design aesthetic you like, and take a screenshot."
       },
       {
         "@type": "HowToStep",
         "position": 2,
         "name": "Generate the UI in Google Stitch",
-        "text": "Open stitch.withgoogle.com, upload your screenshot, select Web design type, write a prompt describing what you want, select the 3.1 Pro model and hit generate.",
-        "url": "https://stitch.withgoogle.com"
+        "text": "Upload the screenshot to Google Stitch, select Web, write a prompt for what you want, select 3.1, and send it off."
       },
       {
         "@type": "HowToStep",
         "position": 3,
-        "name": "Get your Stitch API key",
-        "text": "In Google Stitch, click your profile icon, go to Stitch Settings, scroll to the API Key section, click Create Key and copy it."
+        "name": "Set up the MCP connection",
+        "text": "While Stitch generates, open Antigravity, go to Settings > Customizations, search for Stitch MCP, and install it."
       },
       {
         "@type": "HowToStep",
         "position": 4,
-        "name": "Add the Stitch MCP server to Antigravity",
-        "text": "Open Antigravity, go to Settings > Customizations, search for Stitch MCP under Add MCP Servers, and click + Add to install it."
+        "name": "Grab your Stitch API key",
+        "text": "In Google Stitch, click your profile icon, go to Stitch Settings, scroll to the API Key section, click Create Key and copy it."
       },
       {
         "@type": "HowToStep",
         "position": 5,
         "name": "Pull the design into your workspace",
-        "text": "In Antigravity, create a new workspace and open a fresh folder. Tell the agent you want to use the Google Stitch MCP server, paste your API key, and point it to your Stitch project. The agent retrieves your screens and sets up the HTML/Tailwind CSS project files."
+        "text": "In Antigravity, create a new workspace, tell the agent to use the Stitch MCP server, paste your API key, and point it to your project."
       },
       {
         "@type": "HowToStep",
         "position": 6,
         "name": "Test it locally",
-        "text": "The agent builds the project and spins up a local dev server. Click the localhost link to preview the fully coded, functional website in your browser."
+        "text": "The agent creates an implementation plan and builds the project. Hit Proceed, then click the localhost link to preview."
       },
       {
         "@type": "HowToStep",
         "position": 7,
         "name": "Deploy to Vercel",
-        "text": "Tell the agent to deploy it to Vercel. It packages and deploys the project automatically. You get a live .vercel.app URL in seconds."
+        "text": "Tell the agent to deploy to Vercel. It packages and deploys automatically. You get a live URL."
       }
     ]
   }
@@ -522,7 +520,7 @@
     </section>
 
     <section class="why-section" aria-label="Context">
-      <p><strong>Most people building websites with AI still spend way too long getting from idea to live URL.</strong> They fight with prompts, copy-paste code between tools, and end up with something that looks generated. This workflow chains three free tools together so you go from a design screenshot to a deployed website in minutes, with code that actually looks like a developer wrote it.</p>
+      <p><strong>Most AI-generated websites look like AI-generated websites.</strong> Generic layouts, stock copy, obviously templated. This workflow is different. You start with a real design reference, feed it to an AI design tool, then pull the code into an AI IDE that actually understands the design. The result is a non-AI-slop website, live on the internet, in about two minutes.</p>
     </section>
 
     <section class="steps" aria-label="Step-by-step instructions">
@@ -546,8 +544,8 @@
               <li>Open <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">stitch.withgoogle.com</a> and click the "+" button</li>
               <li>Upload the screenshot you just took</li>
               <li>Select <strong>Web</strong> as the design type</li>
-              <li>Write a prompt describing what you want (e.g., "Make me a landing page following this visual style for my coffee business")</li>
-              <li>Select the <strong>3.1 Pro</strong> model and hit generate</li>
+              <li>Write a prompt telling it what you want to make</li>
+              <li>Select <strong>3.1</strong> and send it off</li>
             </ul>
           </div>
         </div>
@@ -559,30 +557,30 @@
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <h3>Get your Stitch API key</h3>
+            <h3>Set up the MCP connection while Stitch generates</h3>
+            <p>While your design is generating, open <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a>. If you don't have it, go to antigravity.google and download it.</p>
             <ul>
-              <li>In <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">Google Stitch</a>, click your profile icon</li>
-              <li>Go to <strong>Stitch Settings</strong></li>
-              <li>Scroll to the API Key section</li>
-              <li>Click <strong>Create Key</strong> and copy it</li>
+              <li>Go to <strong>Settings > Customizations</strong></li>
+              <li>Search for <strong>Stitch MCP</strong> in the MCP servers section</li>
+              <li>Click <strong>+ Add</strong> to install it</li>
             </ul>
+            <div class="callout">
+              <div class="callout-label">What is MCP?</div>
+              <p>Model Context Protocol lets your AI IDE talk directly to other tools. It connects Antigravity to your Stitch designs so the AI can read and convert them into code automatically.</p>
+            </div>
           </div>
         </div>
 
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-content">
-            <h3>Add the Stitch MCP server to Antigravity</h3>
+            <h3>Grab your Stitch API key</h3>
             <ul>
-              <li>Open <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a> (Google's AI IDE)</li>
-              <li>Go to <strong>Settings > Customizations</strong></li>
-              <li>Under "Add MCP Servers", search for <strong>Stitch MCP</strong></li>
-              <li>Click <strong>+ Add</strong> to install it</li>
+              <li>Back in <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">Google Stitch</a>, click your profile icon</li>
+              <li>Go to <strong>Stitch Settings</strong></li>
+              <li>Scroll down to the API Key section</li>
+              <li>Click <strong>Create Key</strong> and copy it (don't share it with anyone)</li>
             </ul>
-            <div class="callout">
-              <div class="callout-label">What is MCP?</div>
-              <p>Model Context Protocol lets your AI IDE talk directly to other tools. In this case, it connects Antigravity to your Stitch designs so the AI can read and convert them into code automatically.</p>
-            </div>
           </div>
         </div>
       </div>
@@ -595,12 +593,12 @@
           <div class="step-content">
             <h3>Pull the design into your workspace</h3>
             <ul>
-              <li>In <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a>, create a new workspace and open a fresh folder</li>
-              <li>Tell the agent: "I want to use the Google Stitch MCP server to pull in a website I built"</li>
-              <li>Paste your API key when it asks</li>
-              <li>Point it to the right Stitch project</li>
+              <li>In Antigravity, click the <strong>+</strong> button at the top, open a new folder, and give it a name</li>
+              <li>Tell the agent: "I want to use the Google Stitch MCP server and connect it so I can show you a website that I just built out in there"</li>
+              <li>It'll ask for your API key. Paste it in.</li>
+              <li>Tell it which project to pull (e.g., "It's the Altitude Coffee page")</li>
             </ul>
-            <p>The agent uses MCP to retrieve your screens, extract the HTML/Tailwind CSS code, and set up the project files locally.</p>
+            <p>The agent finds your Stitch project, pulls in the code, and sets up the project files locally.</p>
           </div>
         </div>
 
@@ -608,7 +606,7 @@
           <div class="step-num">6</div>
           <div class="step-content">
             <h3>Test it locally</h3>
-            <p>The agent builds the project and spins up a local dev server. Click the localhost link it gives you to preview the fully coded, functional website in your browser.</p>
+            <p>The agent creates an implementation plan and builds the project. Hit <strong>Proceed</strong> and let it run. Once it's done, it'll give you a localhost link. Click it to see your fully coded website in the browser.</p>
           </div>
         </div>
 
@@ -616,12 +614,7 @@
           <div class="step-num">7</div>
           <div class="step-content">
             <h3>Deploy to Vercel</h3>
-            <ul>
-              <li>Tell the agent: "Looks good, deploy it to Vercel"</li>
-              <li>It packages and deploys the project automatically</li>
-              <li>You get a live .vercel.app URL in seconds</li>
-            </ul>
-            <p>Add a custom domain later in <a href="https://vercel.com" target="_blank" rel="noopener">Vercel's</a> domain settings if you want.</p>
+            <p>Tell the agent: "Looks beautiful, let's get it on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>." It'll package and deploy the project automatically. You get a live .vercel.app URL. Buy your own domain if you want, but the site is live either way.</p>
           </div>
         </div>
       </div>
