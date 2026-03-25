@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build a Website in Two Minutes | Roman Peschke</title>
-  <meta name="description" content="Step-by-step guide: Use Google Stitch + Antigravity to design, build, and deploy a website for free in under two minutes.">
-  <meta property="og:title" content="Build a Website in Two Minutes">
-  <meta property="og:description" content="Free step-by-step guide: Google Stitch + Antigravity + Vercel. Design to deployment in minutes.">
+  <title>How to Build a Website with Google Stitch and Antigravity | Roman Peschke</title>
+  <meta name="description" content="Step-by-step guide to building a website with Google Stitch and Antigravity (Firebase Studio). Design with AI, pull the code via MCP, deploy on Vercel. Free tools, no code required.">
+  <meta property="og:title" content="How to Build a Website with Google Stitch and Antigravity">
+  <meta property="og:description" content="Design a website with AI, pull it into your IDE, deploy it live on Vercel. Free tools, no code. Step-by-step guide.">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Roman Peschke">
   <meta property="article:author" content="Roman Peschke">
@@ -18,8 +18,8 @@
   {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "Build a Website in Two Minutes with Google Stitch + Antigravity",
-    "description": "Step-by-step guide to designing a website with AI using Google Stitch, building it in Antigravity (Firebase Studio), and deploying it live on Vercel. All free, no code required.",
+    "name": "How to Build a Website with Google Stitch and Antigravity",
+    "description": "Step-by-step guide to building a website using Google Stitch for AI design, Antigravity (Firebase Studio) for code generation via MCP, and Vercel for free deployment.",
     "author": {
       "@type": "Person",
       "name": "Roman Peschke",
@@ -34,47 +34,52 @@
       { "@type": "HowToTool", "name": "Dribbble", "url": "https://dribbble.com" }
     ],
     "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Find a design you like", "text": "Go to Dribbble, find a design aesthetic you like, and take a screenshot." },
+      { "@type": "HowToStep", "position": 2, "name": "Generate the UI in Google Stitch", "text": "Upload the screenshot to Google Stitch, select Web, write a prompt, select 3.1, and generate. Stitch has daily credit limits that reset at midnight UTC." },
+      { "@type": "HowToStep", "position": 3, "name": "Set up the MCP connection", "text": "While Stitch generates, open Antigravity. Go to Settings > Customizations, search for Stitch MCP, and install it. MCP connects your IDE directly to your Stitch designs." },
+      { "@type": "HowToStep", "position": 4, "name": "Grab your Stitch API key", "text": "In Google Stitch, click your profile icon, go to Stitch Settings, create an API key and copy it." },
+      { "@type": "HowToStep", "position": 5, "name": "Pull the design into your workspace", "text": "In Antigravity, create a new workspace. Tell the agent to use the Stitch MCP server, paste your API key, and point it to your project." },
+      { "@type": "HowToStep", "position": 6, "name": "Test it locally", "text": "The agent builds the project and serves it locally. Hit Proceed, then click the localhost link to preview." },
+      { "@type": "HowToStep", "position": 7, "name": "Deploy to Vercel", "text": "Tell the agent to deploy to Vercel. You get a live URL in seconds." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
       {
-        "@type": "HowToStep",
-        "position": 1,
-        "name": "Find your visual reference",
-        "text": "Go to Dribbble, find a design aesthetic you like, and take a screenshot."
+        "@type": "Question",
+        "name": "Is Google Stitch free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Google Stitch is free with a daily credit limit that resets at midnight UTC. It's available in English to users 18+ in countries where Gemini is available."
+        }
       },
       {
-        "@type": "HowToStep",
-        "position": 2,
-        "name": "Generate the UI in Google Stitch",
-        "text": "Upload the screenshot to Google Stitch, select Web, write a prompt for what you want, select 3.1, and send it off."
+        "@type": "Question",
+        "name": "What is MCP (Model Context Protocol)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "MCP is a protocol that lets AI tools talk to each other directly. In this workflow, it connects Antigravity (your AI IDE) to Google Stitch (your design tool) so the IDE can read your designs and convert them into code automatically, without manual exporting."
+        }
       },
       {
-        "@type": "HowToStep",
-        "position": 3,
-        "name": "Set up the MCP connection",
-        "text": "While Stitch generates, open Antigravity, go to Settings > Customizations, search for Stitch MCP, and install it."
+        "@type": "Question",
+        "name": "Do I need to know how to code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The AI agent in Antigravity handles all the code generation, project setup, and deployment. You just describe what you want and approve the output."
+        }
       },
       {
-        "@type": "HowToStep",
-        "position": 4,
-        "name": "Grab your Stitch API key",
-        "text": "In Google Stitch, click your profile icon, go to Stitch Settings, scroll to the API Key section, click Create Key and copy it."
-      },
-      {
-        "@type": "HowToStep",
-        "position": 5,
-        "name": "Pull the design into your workspace",
-        "text": "In Antigravity, create a new workspace, tell the agent to use the Stitch MCP server, paste your API key, and point it to your project."
-      },
-      {
-        "@type": "HowToStep",
-        "position": 6,
-        "name": "Test it locally",
-        "text": "The agent creates an implementation plan and builds the project. Hit Proceed, then click the localhost link to preview."
-      },
-      {
-        "@type": "HowToStep",
-        "position": 7,
-        "name": "Deploy to Vercel",
-        "text": "Tell the agent to deploy to Vercel. It packages and deploys automatically. You get a live URL."
+        "@type": "Question",
+        "name": "Is Antigravity free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Antigravity (Firebase Studio) is currently free during its preview period with 3 workspaces at no cost. Members of the Google Developer Program get up to 30 workspaces."
+        }
       }
     ]
   }
@@ -109,380 +114,102 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
 
     /* Header */
     header {
       padding: 16px 0;
       border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
+      position: sticky; top: 0;
       background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       z-index: 10;
     }
-    header .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .brand {
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--text);
-      text-decoration: none;
-      padding: 8px 0;
-    }
-    .ig-link {
-      font-size: 14px;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 8px 0;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
     .ig-link:hover { text-decoration: underline; }
 
     /* Hero */
-    .hero {
-      padding: 36px 0 32px;
-      border-bottom: 1px solid var(--border);
-    }
-    .hero-label {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      background: var(--accent-dim);
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin-bottom: 14px;
-    }
-    h1 {
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 10px;
-      letter-spacing: -0.02em;
-    }
-    .subtitle {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
 
     /* Tools bar */
-    .tools-bar {
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .tools-bar-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-    }
-    .tools-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .tool-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 14px;
-      min-height: 44px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-      text-decoration: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .tool-pill:hover, .tool-pill:active {
-      border-color: var(--accent-border);
-      background: var(--surface-2);
-    }
-    .tool-pill .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      flex-shrink: 0;
-    }
-
-    /* Steps */
-    .steps {
-      padding: 32px 0;
-    }
-    .phase {
-      margin-bottom: 36px;
-    }
-    .phase:last-child { margin-bottom: 0; }
-    .phase-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      margin-bottom: 18px;
-    }
-
-    .step {
-      display: flex;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-    .step:last-child { margin-bottom: 0; }
-    .step-num {
-      flex-shrink: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent);
-      margin-top: 1px;
-    }
-    .step-content {
-      min-width: 0;
-    }
-    .step-content h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      line-height: 1.3;
-    }
-    .step-content p {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      line-height: 1.6;
-    }
-    .step-content ul {
-      list-style: none;
-      padding: 0;
-    }
-    .step-content li {
-      font-size: 15px;
-      color: var(--text-muted);
-      padding: 3px 0;
-      padding-left: 16px;
-      position: relative;
-      line-height: 1.6;
-    }
-    .step-content li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 11px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--border);
-    }
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
     /* Inline links */
-    .step-content a,
-    .why-section a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-color: var(--accent-border);
-      text-underline-offset: 2px;
-      transition: text-decoration-color 0.15s;
-    }
-    .step-content a:hover,
-    .why-section a:hover {
-      text-decoration-color: var(--accent);
-    }
+    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
 
-    /* Why it matters */
-    .why-section {
-      padding: 28px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .why-section p {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-    .why-section p strong {
-      color: var(--text);
-    }
+    /* Context */
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
 
-    /* Mistakes */
-    .mistakes-section {
-      padding: 32px 0;
-      border-top: 1px solid var(--border);
-    }
-    .mistakes-section h2 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .mistake {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .mistake:last-child { margin-bottom: 0; }
-    .mistake-icon {
-      flex-shrink: 0;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 6px;
-      font-size: 12px;
-      color: #dc2626;
-      margin-top: 2px;
-    }
-    .mistake-text {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-    .mistake-text strong {
-      color: var(--text);
-    }
-
-    /* Quick win */
-    .quickwin {
-      background: rgba(5,150,105,0.06);
-      border: 1px solid rgba(5,150,105,0.18);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin: 24px 0 0;
-    }
-    .quickwin-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #059669;
-      margin-bottom: 6px;
-    }
-    .quickwin p {
-      font-size: 14px;
-      color: var(--text);
-      line-height: 1.6;
-    }
+    /* Steps */
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
 
     /* Callout */
-    .callout {
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin: 20px 0;
-    }
-    .callout-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
-    .callout p {
-      font-size: 14px;
-      color: var(--text);
-      line-height: 1.6;
-    }
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Before you start */
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    /* Start here */
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
 
     /* Tools section */
-    .tools-section {
-      padding: 32px 0;
-      border-top: 1px solid var(--border);
-    }
-    .tools-section h2 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .tool-card {
-      display: block;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-      text-decoration: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: border-color 0.15s;
-    }
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
     .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
-    .tool-card-name {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 3px;
-    }
-    .tool-card-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-    .tool-card-url {
-      font-size: 13px;
-      color: var(--accent);
-      margin-top: 5px;
-    }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
     /* Footer */
-    footer {
-      padding: 36px 0 env(safe-area-inset-bottom, 48px);
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-    .footer-cta {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-    .footer-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 14px 28px;
-      min-height: 48px;
-      background: var(--accent);
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 15px;
-      border-radius: 10px;
-      text-decoration: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: opacity 0.15s;
-    }
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
     .footer-link:hover, .footer-link:active { opacity: 0.9; }
 
-    /* Responsive */
     @media (min-width: 480px) {
       h1 { font-size: 32px; }
       .hero { padding: 48px 0 40px; }
@@ -505,8 +232,8 @@
 
     <section class="hero" aria-label="Guide overview">
       <span class="hero-label">Free Guide</span>
-      <h1 itemprop="name">Build a Website in Two Minutes</h1>
-      <p class="subtitle" itemprop="description">Design a full website with AI, pull it into your IDE, and deploy it live. All free. No code required.</p>
+      <h1 itemprop="name">How to Build a Website with Google Stitch and Antigravity</h1>
+      <p class="subtitle" itemprop="description">Design a website with AI, pull it into your IDE via MCP, and deploy it live on Vercel. Free tools, no code required.</p>
     </section>
 
     <section class="tools-bar" aria-label="Tools used">
@@ -520,7 +247,7 @@
     </section>
 
     <section class="why-section" aria-label="Context">
-      <p><strong>Most AI-generated websites look like AI-generated websites.</strong> Generic layouts, stock copy, obviously templated. This workflow is different. You start with a real design reference, feed it to an AI design tool, then pull the code into an AI IDE that actually understands the design. The result is a non-AI-slop website, live on the internet, in about two minutes.</p>
+      <p><strong>The pipeline is Screenshot > Generate > Connect > Build > Deploy.</strong> Five links, all free tools. You start with a real design from <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a> so the output doesn't look AI-generated, feed it to <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">Google Stitch</a> to generate a UI, then use MCP to pull the code directly into <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a> where it becomes a real project you can test and deploy.</p>
     </section>
 
     <section class="steps" aria-label="Step-by-step instructions">
@@ -531,8 +258,8 @@
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <h3>Find your visual reference</h3>
-            <p>Go to <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a> and search for a design style that fits your project. Find something you like, screenshot it. This becomes the creative direction for your AI-generated site.</p>
+            <h3>Find a design you like</h3>
+            <p>Go to <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a> and find an aesthetic that fits your project. Take a screenshot. This is what keeps the output from looking like every other AI website.</p>
           </div>
         </div>
 
@@ -541,12 +268,11 @@
           <div class="step-content">
             <h3>Generate the UI in Google Stitch</h3>
             <ul>
-              <li>Open <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">stitch.withgoogle.com</a> and click the "+" button</li>
-              <li>Upload the screenshot you just took</li>
-              <li>Select <strong>Web</strong> as the design type</li>
-              <li>Write a prompt telling it what you want to make</li>
+              <li>Open <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">stitch.withgoogle.com</a> and upload your screenshot</li>
+              <li>Select <strong>Web</strong> and tell it what you want to make</li>
               <li>Select <strong>3.1</strong> and send it off</li>
             </ul>
+            <p>Stitch has daily credit limits that reset at midnight UTC. Get your reference screenshot right before you start generating.</p>
           </div>
         </div>
       </div>
@@ -558,7 +284,7 @@
           <div class="step-num">3</div>
           <div class="step-content">
             <h3>Set up the MCP connection while Stitch generates</h3>
-            <p>While your design is generating, open <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a>. If you don't have it, go to antigravity.google and download it.</p>
+            <p>While your design is generating, open <a href="https://idx.google.com" target="_blank" rel="noopener">Antigravity</a>. If you don't have it, download it from antigravity.google. It's free during the preview period.</p>
             <ul>
               <li>Go to <strong>Settings > Customizations</strong></li>
               <li>Search for <strong>Stitch MCP</strong> in the MCP servers section</li>
@@ -566,7 +292,7 @@
             </ul>
             <div class="callout">
               <div class="callout-label">What is MCP?</div>
-              <p>Model Context Protocol lets your AI IDE talk directly to other tools. It connects Antigravity to your Stitch designs so the AI can read and convert them into code automatically.</p>
+              <p>Model Context Protocol lets your AI IDE talk directly to other tools. It connects Antigravity to your Stitch designs so the AI can read and convert them into code automatically, without manual exporting.</p>
             </div>
           </div>
         </div>
@@ -579,7 +305,7 @@
               <li>Back in <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">Google Stitch</a>, click your profile icon</li>
               <li>Go to <strong>Stitch Settings</strong></li>
               <li>Scroll down to the API Key section</li>
-              <li>Click <strong>Create Key</strong> and copy it (don't share it with anyone)</li>
+              <li>Click <strong>Create Key</strong> and copy it</li>
             </ul>
           </div>
         </div>
@@ -606,7 +332,7 @@
           <div class="step-num">6</div>
           <div class="step-content">
             <h3>Test it locally</h3>
-            <p>The agent creates an implementation plan and builds the project. Hit <strong>Proceed</strong> and let it run. Once it's done, it'll give you a localhost link. Click it to see your fully coded website in the browser.</p>
+            <p>The agent creates an implementation plan and builds the project. Hit <strong>Proceed</strong> and let it run. Once it's done, it gives you a localhost link. Click it to see your fully coded website in the browser.</p>
           </div>
         </div>
 
@@ -614,30 +340,32 @@
           <div class="step-num">7</div>
           <div class="step-content">
             <h3>Deploy to Vercel</h3>
-            <p>Tell the agent: "Looks beautiful, let's get it on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>." It'll package and deploy the project automatically. You get a live .vercel.app URL. Buy your own domain if you want, but the site is live either way.</p>
+            <p>Tell the agent: "Looks beautiful, let's get it on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>." It packages and deploys the project automatically. You get a live .vercel.app URL. Buy your own domain if you want, but the site is live either way.</p>
           </div>
         </div>
       </div>
 
     </section>
 
-    <section class="mistakes-section" aria-label="Things to watch out for">
-      <div class="mistake">
-        <div class="mistake-icon">X</div>
-        <div class="mistake-text"><strong>Don't skip the screenshot step.</strong> Stitch generates way better output when it has a visual reference. A text-only prompt gives you generic Bootstrap-looking pages.</div>
+    <section class="before-section" aria-label="Before you start">
+      <h2>Before you start</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Use a real screenshot as your reference.</strong> Text-only prompts give Stitch nothing to work with. The screenshot is what keeps the output from looking generic.</div>
       </div>
-      <div class="mistake">
-        <div class="mistake-icon">X</div>
-        <div class="mistake-text"><strong>Don't skip the API key step.</strong> The MCP connection is what makes this workflow fast. Without it, you're manually exporting and importing code between Stitch and your IDE.</div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Set up the MCP connection before you try to pull in code.</strong> MCP is what makes the whole chain work. Without it, you're manually exporting and importing between tools.</div>
       </div>
-      <div class="mistake">
-        <div class="mistake-icon">X</div>
-        <div class="mistake-text"><strong>Don't use the free Stitch model.</strong> The 3.1 Pro model is significantly better at following your visual reference. The free tier model works, but the output needs more manual cleanup.</div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Stitch has daily credit limits.</strong> They reset at midnight UTC. Nail your reference screenshot before burning generations on iterations.</div>
       </div>
 
-      <div class="quickwin">
-        <div class="quickwin-label">Start here</div>
-        <p>Open Dribbble right now, search "landing page dark" or whatever style fits your niche, and screenshot the first design that catches your eye. Then paste it into Stitch. You'll have a working prototype in under 60 seconds. That's the proof of concept that sells the whole workflow.</p>
+      <div class="start-here">
+        <div class="start-here-label">Start here</div>
+        <p>Open <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a>, search "landing page", screenshot the first design that catches your eye, and paste it into <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">Stitch</a>. Working prototype in under 60 seconds.</p>
       </div>
     </section>
 
@@ -658,7 +386,7 @@
 
       <a href="https://vercel.com" class="tool-card" target="_blank" rel="noopener">
         <div class="tool-card-name">Vercel</div>
-        <div class="tool-card-desc">Deploy websites instantly. Push code, get a live URL. Free tier is more than enough for most projects.</div>
+        <div class="tool-card-desc">Deploy websites instantly. Push code, get a live URL. Free tier covers most projects.</div>
         <div class="tool-card-url">vercel.com</div>
       </a>
 
@@ -668,6 +396,31 @@
         <div class="tool-card-url">dribbble.com</div>
       </a>
     </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Is Google Stitch free?</div>
+        <div class="faq-answer">Yes. It's free with a daily credit limit that resets at midnight UTC. Available in English to users 18+ in countries where Gemini is available.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What is MCP (Model Context Protocol)?</div>
+        <div class="faq-answer">A protocol that lets AI tools talk to each other. In this workflow, it connects Antigravity to Google Stitch so the IDE can read your designs and convert them into code automatically, without manual exporting.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need to know how to code?</div>
+        <div class="faq-answer">No. The AI agent in Antigravity handles code generation, project setup, and deployment. You describe what you want and approve the output.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Is Antigravity free?</div>
+        <div class="faq-answer">Yes, during the preview period. You get 3 workspaces at no cost. Members of the <a href="https://developers.google.com/program" target="_blank" rel="noopener">Google Developer Program</a> get up to 30.</div>
+      </div>
+    </section>
+
     </article>
   </main>
 
