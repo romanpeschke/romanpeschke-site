@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How to Set Up Computer Use in Claude Code (Plus Channels and Scheduled Tasks) | Roman Peschke</title>
-  <meta name="description" content="Step-by-step guide to enabling computer use in Claude Code Desktop. Plus how to set up channels (talk from your phone) and scheduled tasks (autopilot). macOS, Pro or Max plan required.">
+  <meta name="description" content="Step-by-step guide to enabling computer use in Claude Code Desktop on macOS. Plus how to set up Telegram/Discord/iMessage channels and scheduled tasks. Requires Pro or Max plan.">
   <meta property="og:title" content="How to Set Up Computer Use in Claude Code">
-  <meta property="og:description" content="Enable Claude to control your entire desktop, talk to it from your phone, and run tasks on autopilot. Step-by-step setup guide.">
+  <meta property="og:description" content="Enable Claude to control your desktop, set up Telegram channels, and schedule recurring tasks. Step-by-step setup for all three features.">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Roman Peschke">
   <meta property="article:author" content="Roman Peschke">
@@ -19,7 +19,7 @@
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "How to Set Up Computer Use in Claude Code",
-    "description": "Step-by-step guide to enabling computer use, channels, and scheduled tasks in Claude Code Desktop. Requires macOS and a Pro or Max plan.",
+    "description": "Enable computer use in Claude Code Desktop on macOS. Grant Accessibility and Screen Recording permissions, then Claude can click, type, and navigate your apps.",
     "author": { "@type": "Person", "name": "Roman Peschke", "url": "https://instagram.com/roman.peschke" },
     "datePublished": "2026-03-25",
     "totalTime": "PT5M",
@@ -27,12 +27,12 @@
       { "@type": "HowToTool", "name": "Claude Code Desktop", "url": "https://code.claude.com/docs/en/desktop" }
     ],
     "step": [
-      { "@type": "HowToStep", "position": 1, "name": "Open Claude Code Desktop", "text": "Download and open Claude Code Desktop from claude.ai. The Code tab is where all three features live." },
-      { "@type": "HowToStep", "position": 2, "name": "Set up channels", "text": "Start a session in Desktop, then open the Claude iOS app or claude.ai/code. You can send messages to the running session from your phone." },
-      { "@type": "HowToStep", "position": 3, "name": "Create a scheduled task", "text": "In the Desktop sidebar, create a scheduled task. Set the frequency and prompt. Claude runs it on schedule even if you close the app." },
-      { "@type": "HowToStep", "position": 4, "name": "Enable computer use", "text": "Go to Settings > Desktop app > General and toggle Computer Use on." },
-      { "@type": "HowToStep", "position": 5, "name": "Grant macOS permissions", "text": "Grant Accessibility (lets Claude click, type, scroll) and Screen Recording (lets Claude see your screen) when prompted." },
-      { "@type": "HowToStep", "position": 6, "name": "Test it", "text": "Ask Claude to open an app or interact with something on your desktop. It controls your screen the way you would." }
+      { "@type": "HowToStep", "position": 1, "name": "Open Claude Code Desktop settings", "text": "Go to Settings > Desktop app > General." },
+      { "@type": "HowToStep", "position": 2, "name": "Toggle Computer Use on", "text": "Flip the Computer Use toggle. macOS will prompt for two permissions." },
+      { "@type": "HowToStep", "position": 3, "name": "Grant Accessibility permission", "text": "This lets Claude click, type, and scroll. Click Allow when macOS prompts, or grant it in System Settings > Privacy & Security > Accessibility." },
+      { "@type": "HowToStep", "position": 4, "name": "Grant Screen Recording permission", "text": "This lets Claude see what's on your screen. Grant it in System Settings > Privacy & Security > Screen Recording." },
+      { "@type": "HowToStep", "position": 5, "name": "Approve apps per session", "text": "The first time Claude needs an app, it asks. Browsers are view-only, terminals are click-only, everything else gets full control. Approvals last for the session." },
+      { "@type": "HowToStep", "position": 6, "name": "Ask Claude to use your desktop", "text": "Tell Claude to open an app, interact with a GUI tool, or test something in the iOS simulator. It controls your screen the way you would." }
     ]
   }
   </script>
@@ -44,12 +44,7 @@
       {
         "@type": "Question",
         "name": "Is Claude Code computer use free?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. Computer use requires a Claude Pro or Max plan. It is not available on Team or Enterprise plans. The Claude Desktop app itself is free to download." }
-      },
-      {
-        "@type": "Question",
-        "name": "What can Claude control with computer use?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Claude can click, type, scroll, drag, and use keyboard shortcuts in most apps. Browsers are restricted to view-only (Claude uses the Chrome extension for browser work). Terminals and IDEs are click-only. Everything else gets full control." }
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Computer use requires a Claude Pro or Max plan. It is not available on free, Team, or Enterprise plans. The Claude Desktop app itself is free to download." }
       },
       {
         "@type": "Question",
@@ -59,7 +54,12 @@
       {
         "@type": "Question",
         "name": "What are Claude Code channels?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Channels let you push messages into a running Claude Code session from another device. Start a session on your desktop, then send it instructions from the Claude iOS app or claude.ai/code." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Channels are plugins that push messages into a running Claude Code session from Telegram, Discord, or iMessage. You install a plugin, configure your bot token, restart Claude Code with the --channels flag, and pair your account. Then you can message your bot from your phone and Claude responds in the same session." }
+      },
+      {
+        "@type": "Question",
+        "name": "What are Claude Code scheduled tasks?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Scheduled tasks let Claude re-run a prompt on an interval. Three options: cloud tasks (run on Anthropic's servers, survive restarts), Desktop tasks (run on your machine with local file access), and /loop (quick session-scoped polling). Cloud tasks have a 1-hour minimum interval. Desktop and /loop have a 1-minute minimum." }
       }
     ]
   }
@@ -85,42 +85,28 @@
       --green-dim: rgba(5,150,105,0.08);
     }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-    }
-
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
     .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-
     header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
     header .container { display: flex; justify-content: space-between; align-items: center; }
     .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
     .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
     .ig-link:hover { text-decoration: underline; }
-
     .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
     .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
     h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
     .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
-
     .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
     .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
     .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
     .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
     .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
     .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-
-    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
-    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
-
+    .step-content a, .why-section a, .faq-answer a, .before-text a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .before-text a:hover { text-decoration-color: var(--accent); }
     .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
     .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
     .why-section p strong { color: var(--text); }
-
     .steps { padding: 32px 0; }
     .phase { margin-bottom: 36px; }
     .phase:last-child { margin-bottom: 0; }
@@ -134,11 +120,10 @@
     .step-content ul { list-style: none; padding: 0; }
     .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
     .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
-
+    .step-content code { font-size: 13px; background: var(--surface); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Menlo, monospace; }
     .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
     .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
     .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
-
     .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
     .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
     .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
@@ -146,11 +131,9 @@
     .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
     .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
     .before-text strong { color: var(--text); }
-
     .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
     .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
     .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
-
     .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
     .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
     .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
@@ -158,25 +141,17 @@
     .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
     .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
     .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
-
     .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
     .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
     .faq-item { margin-bottom: 20px; }
     .faq-item:last-child { margin-bottom: 0; }
     .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
     .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-
     footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
     .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
     .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
     .footer-link:hover, .footer-link:active { opacity: 0.9; }
-
-    @media (min-width: 480px) {
-      h1 { font-size: 32px; }
-      .hero { padding: 48px 0 40px; }
-      .steps { padding: 40px 0; }
-      .tools-section { padding: 40px 0; }
-    }
+    @media (min-width: 480px) { h1 { font-size: 32px; } .hero { padding: 48px 0 40px; } .steps { padding: 40px 0; } .tools-section { padding: 40px 0; } }
   </style>
 </head>
 <body>
@@ -194,82 +169,100 @@
     <section class="hero" aria-label="Guide overview">
       <span class="hero-label">Free Guide</span>
       <h1 itemprop="name">How to Set Up Computer Use in Claude Code</h1>
-      <p class="subtitle" itemprop="description">Enable Claude to control your entire desktop, talk to it from your phone, and run tasks on autopilot.</p>
+      <p class="subtitle" itemprop="description">Enable Claude to control your entire desktop, message it from your phone via Telegram, and schedule tasks to run on autopilot.</p>
     </section>
 
     <section class="tools-bar" aria-label="Tools used">
-      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-bar-label">What you need</div>
       <div class="tools-list">
-        <a href="https://code.claude.com/docs/en/desktop" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code Desktop</a>
+        <a href="https://code.claude.com/docs/en/desktop" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Desktop (macOS)</a>
+        <a href="https://claude.com/pricing" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Pro or Max plan</a>
       </div>
     </section>
 
     <section class="why-section" aria-label="Context">
-      <p><strong>Three new Claude Code features shipped in the same week.</strong> Channels let you talk to a running session from your phone. Scheduled tasks run Claude on a recurring schedule without you being there. And computer use gives Claude full control of your desktop: clicking, typing, navigating your apps. Here's how to set up all three.</p>
+      <p><strong>Three Claude Code features shipped in the same week that change what it can do.</strong> Channels let you message a running session from Telegram, Discord, or iMessage. Scheduled tasks run prompts on a recurring schedule without you being there. And computer use gives Claude full control of your macOS desktop: clicking, typing, opening apps, navigating GUIs. Here's the setup for all three, starting with computer use.</p>
     </section>
 
     <section class="steps" aria-label="Step-by-step instructions">
 
       <div class="phase">
-        <div class="phase-label">Channels</div>
+        <div class="phase-label">Computer use</div>
 
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <h3>Talk to Claude Code from your phone</h3>
-            <p>Start a session in <a href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">Claude Code Desktop</a>. Then open the Claude iOS app or go to <a href="https://claude.ai/code" target="_blank" rel="noopener">claude.ai/code</a>. You can push messages into the running session from anywhere. It's not remote control. It's a direct line into whatever Claude is working on.</p>
+            <h3>Enable computer use in settings</h3>
+            <p>Open <a href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">Claude Code Desktop</a>. Go to <strong>Settings > Desktop app > General</strong>. Toggle <strong>Computer Use</strong> on.</p>
           </div>
         </div>
-      </div>
-
-      <div class="phase">
-        <div class="phase-label">Scheduled tasks</div>
 
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <h3>Set up a recurring task</h3>
-            <p>In Claude Code Desktop, create a scheduled task. Give it a prompt and a frequency (hourly, daily, weekly, or custom cron). Claude runs it on schedule, even if you close the app. Missed runs execute when the app reopens.</p>
+            <h3>Grant the two macOS permissions</h3>
+            <ul>
+              <li><strong>Accessibility</strong>: lets Claude click, type, and scroll. macOS prompts you, or grant it in <strong>System Settings > Privacy & Security > Accessibility</strong></li>
+              <li><strong>Screen Recording</strong>: lets Claude see your screen. Grant in <strong>System Settings > Privacy & Security > Screen Recording</strong></li>
+            </ul>
+            <p>The Settings page shows the status of each. If either says denied, click the badge to open the right System Settings pane.</p>
           </div>
         </div>
-      </div>
-
-      <div class="phase">
-        <div class="phase-label">Computer use</div>
 
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <h3>Enable computer use in settings</h3>
-            <p>Open <strong>Settings > Desktop app > General</strong> and toggle <strong>Computer Use</strong> on.</p>
+            <h3>Approve apps as Claude requests them</h3>
+            <p>The first time Claude needs to use an app, a prompt appears in your session. Click <strong>Allow for this session</strong>. Approvals last for the current session.</p>
+            <div class="callout">
+              <div class="callout-label">Access tiers (you can't change these)</div>
+              <p><strong>View only</strong>: browsers, trading platforms (Claude can see but not click). <strong>Click only</strong>: terminals, IDEs (click and scroll, no typing). <strong>Full control</strong>: everything else (click, type, drag, keyboard shortcuts). Claude uses the <a href="https://code.claude.com/docs/en/chrome" target="_blank" rel="noopener">Chrome extension</a> for browser work instead of computer use.</p>
+            </div>
           </div>
         </div>
 
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-content">
-            <h3>Grant macOS permissions</h3>
-            <ul>
-              <li><strong>Accessibility</strong>: lets Claude click, type, and scroll</li>
-              <li><strong>Screen Recording</strong>: lets Claude see what's on your screen</li>
-            </ul>
-            <p>The Settings page shows the status of each permission. If either is denied, click the badge to open System Settings.</p>
+            <h3>Ask Claude to do something on your desktop</h3>
+            <p>Tell it to open an app, interact with a native tool that has no CLI, test something in the iOS simulator, or automate a GUI-only workflow. Claude takes screenshots, clicks, types, and navigates the way you would.</p>
           </div>
         </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Channels (talk from your phone)</div>
 
         <div class="step">
           <div class="step-num">5</div>
           <div class="step-content">
-            <h3>Approve apps as Claude requests them</h3>
-            <p>The first time Claude needs to use an app, it asks for permission. You approve per session. Browsers are view-only, terminals are click-only, everything else gets full control.</p>
+            <h3>Set up a Telegram channel</h3>
+            <ul>
+              <li>Open <a href="https://t.me/BotFather" target="_blank" rel="noopener">BotFather</a> in Telegram, send <code>/newbot</code>, name it, and copy the token</li>
+              <li>In Claude Code, run <code>/plugin install telegram@claude-plugins-official</code></li>
+              <li>Run <code>/telegram:configure &lt;your-token&gt;</code></li>
+              <li>Restart Claude Code with: <code>claude --channels plugin:telegram@claude-plugins-official</code></li>
+              <li>Message your bot in Telegram. It replies with a pairing code.</li>
+              <li>Back in Claude Code, run <code>/telegram:access pair &lt;code&gt;</code> then <code>/telegram:access policy allowlist</code></li>
+            </ul>
+            <p>Now you can message your bot from your phone and Claude responds in the same session, working against your real files on your machine. Discord and iMessage channels work the same way with their own plugins.</p>
           </div>
         </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Scheduled tasks (autopilot)</div>
 
         <div class="step">
           <div class="step-num">6</div>
           <div class="step-content">
-            <h3>Test it</h3>
-            <p>Ask Claude to do something that requires your desktop. Open an app, interact with a tool that has no CLI, test something in the iOS simulator. Claude controls your screen the way you would.</p>
+            <h3>Schedule a recurring task</h3>
+            <p>Three options depending on what you need:</p>
+            <ul>
+              <li><strong>Quick polling</strong>: type <code>/loop 5m check if the deployment finished</code> in a session. Runs every 5 minutes while the session is open.</li>
+              <li><strong>Desktop task</strong>: create a scheduled task in the Desktop sidebar. Runs on your machine with local file access. Survives restarts. 1-minute minimum interval.</li>
+              <li><strong>Cloud task</strong>: use <code>/schedule</code> in the CLI. Runs on Anthropic's servers. Survives restarts, doesn't need your machine on. 1-hour minimum interval.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -281,30 +274,46 @@
 
       <div class="before-item">
         <div class="before-icon">!</div>
-        <div class="before-text"><strong>Computer use requires a Pro or Max plan.</strong> It's not available on free, Team, or Enterprise plans.</div>
+        <div class="before-text"><strong>Computer use requires a <a href="https://claude.com/pricing" target="_blank" rel="noopener">Pro or Max plan</a>.</strong> Not available on free, Team, or Enterprise.</div>
       </div>
       <div class="before-item">
         <div class="before-icon">!</div>
-        <div class="before-text"><strong>macOS only.</strong> Computer use is not available on Windows or Linux yet.</div>
+        <div class="before-text"><strong>macOS only.</strong> Computer use is not available on Windows or Linux.</div>
       </div>
       <div class="before-item">
         <div class="before-icon">!</div>
-        <div class="before-text"><strong>This is a research preview.</strong> Anthropic says don't give it access to sensitive data. It's trained to avoid stock trading and facial image gathering, but the trust boundary is different from normal Claude Code.</div>
+        <div class="before-text"><strong>Research preview.</strong> Anthropic says it's trained to avoid stock trading, sensitive data, and facial image gathering. But they also say don't give it access to sensitive stuff. The trust boundary is different from normal Claude Code.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Channels require <a href="https://bun.sh" target="_blank" rel="noopener">Bun</a></strong> and Claude Code v2.1.80+. Check with <code>bun --version</code> and <code>claude --version</code>.</div>
       </div>
 
       <div class="start-here">
         <div class="start-here-label">Start here</div>
-        <p>Open Settings > Desktop app > General, toggle Computer Use on, grant the two permissions. Then ask Claude to open an app for you. That's your proof of concept.</p>
+        <p>Open Settings > Desktop app > General. Toggle Computer Use on. Grant the two permissions. Ask Claude to open Finder for you. If it opens, everything is working.</p>
       </div>
     </section>
 
     <section class="tools-section" aria-label="Tool details">
-      <h2>Tools used in this guide</h2>
+      <h2>Sources</h2>
 
-      <a href="https://code.claude.com/docs/en/desktop" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">Claude Code Desktop</div>
-        <div class="tool-card-desc">The Code tab in the Claude Desktop app. Visual diff review, live app preview, computer use, parallel sessions, scheduled tasks, channels, and connectors for GitHub, Slack, Linear, and more.</div>
-        <div class="tool-card-url">code.claude.com</div>
+      <a href="https://code.claude.com/docs/en/desktop#let-claude-use-your-computer" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Computer Use docs</div>
+        <div class="tool-card-desc">Official setup guide. Covers enabling, permissions, app access tiers, and safety considerations.</div>
+        <div class="tool-card-url">code.claude.com/docs/en/desktop</div>
+      </a>
+
+      <a href="https://code.claude.com/docs/en/channels" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Channels docs</div>
+        <div class="tool-card-desc">Telegram, Discord, and iMessage setup. Plugin install, token config, pairing, and security.</div>
+        <div class="tool-card-url">code.claude.com/docs/en/channels</div>
+      </a>
+
+      <a href="https://code.claude.com/docs/en/scheduled-tasks" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Scheduled Tasks docs</div>
+        <div class="tool-card-desc">Three scheduling options compared: cloud tasks, Desktop tasks, and /loop. Intervals, limitations, and cron syntax.</div>
+        <div class="tool-card-url">code.claude.com/docs/en/scheduled-tasks</div>
       </a>
     </section>
 
@@ -313,22 +322,22 @@
 
       <div class="faq-item">
         <div class="faq-question">Is Claude Code computer use free?</div>
-        <div class="faq-answer">No. Computer use requires a Claude Pro or Max plan. The Claude Desktop app itself is free to download.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">What can Claude actually control?</div>
-        <div class="faq-answer">Claude can click, type, scroll, drag, and use keyboard shortcuts in most apps. Browsers are restricted to view-only (Claude uses the <a href="https://code.claude.com/docs/en/chrome" target="_blank" rel="noopener">Chrome extension</a> for browser work). Terminals and IDEs are click-only. Everything else gets full control.</div>
+        <div class="faq-answer">No. Requires a <a href="https://claude.com/pricing" target="_blank" rel="noopener">Pro or Max plan</a>. The Claude Desktop app itself is free to download.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-question">Does computer use work on Windows?</div>
-        <div class="faq-answer">Not yet. Computer use is currently macOS only. It's a research preview feature.</div>
+        <div class="faq-answer">Not yet. macOS only. It's a research preview.</div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">What are Claude Code channels?</div>
-        <div class="faq-answer">Channels let you push messages into a running Claude Code session from another device. Start a session on your desktop, then send instructions from the Claude iOS app or <a href="https://claude.ai/code" target="_blank" rel="noopener">claude.ai/code</a>.</div>
+        <div class="faq-question">What can Claude actually control on my screen?</div>
+        <div class="faq-answer">Most apps get full control (click, type, drag, keyboard shortcuts). Browsers are view-only. Terminals and IDEs are click-only. Claude uses the <a href="https://code.claude.com/docs/en/chrome" target="_blank" rel="noopener">Chrome extension</a> for browser work instead.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can I use channels without computer use?</div>
+        <div class="faq-answer">Yes. Channels, scheduled tasks, and computer use are independent features. You can set up any combination.</div>
       </div>
     </section>
 
