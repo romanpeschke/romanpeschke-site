@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Turn Sales Call Transcripts Into Ad Copy with AI | Roman Peschke</title>
+  <meta name="description" content="Step-by-step guide to automatically extracting pain points, objections, and buying signals from your CRM call transcripts using Claude Code. Build an ad copy bank that writes itself.">
+  <meta property="og:title" content="Turn Sales Call Transcripts Into Ad Copy with AI">
+  <meta property="og:description" content="Connect your CRM to Claude Code and automatically extract the exact language your prospects use. Then put it in your ads, landing pages, and content.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-03-27">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/sales-call-ad-copy/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Turn Sales Call Transcripts Into Ad Copy with AI",
+    "description": "Connect your CRM to Claude Code to automatically extract pain points, objections, and buying signals from sales calls. Build a segmented ad copy bank that improves with every call.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-03-27",
+    "totalTime": "PT30M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://claude.ai/claude-code" },
+      { "@type": "HowToTool", "name": "GoHighLevel", "url": "https://www.gohighlevel.com" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Enable call recording and transcription in your CRM", "text": "Turn on call recording and automatic transcription in your CRM settings. In GoHighLevel, this is under Settings > Phone Numbers > Call Recording." },
+      { "@type": "HowToStep", "position": 2, "name": "Create a custom field for the transcript", "text": "Add a custom contact field called Call Transcript (large text type) to store the full transcript on the contact record." },
+      { "@type": "HowToStep", "position": 3, "name": "Build an automation that fires after each call", "text": "Create a workflow that triggers after a call transcript is generated. It should save the transcript to the custom field and add a trigger tag like ev:needs-intel." },
+      { "@type": "HowToStep", "position": 4, "name": "Write the extraction prompt", "text": "Create a prompt that tells the AI exactly what to pull: prospect profile, pain points with exact quotes, objections, buying signals, and ad-ready language grouped by theme." },
+      { "@type": "HowToStep", "position": 5, "name": "Set up the processing script in Claude Code", "text": "Build a script that searches for tagged contacts, reads the transcript from the custom field, sends it to the AI for extraction, and stores the structured output." },
+      { "@type": "HowToStep", "position": 6, "name": "Run your first extraction and review the output", "text": "Process your most recent sales call and review the extracted pain points, buying signals, and ad language. Check if the quotes are accurate and the categorization makes sense." },
+      { "@type": "HowToStep", "position": 7, "name": "Use the extracted language in your marketing", "text": "Take the exact phrases prospects use and put them in your ads, landing pages, and content. Write 'if you've ever felt...' copy using their words, not yours." },
+      { "@type": "HowToStep", "position": 8, "name": "Segment by qualified vs unqualified", "text": "Separate pain points from prospects who bought vs those who didn't. The language from qualified prospects goes in your ads. The language from unqualified prospects tells you what to avoid." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need to know how to code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not really. Claude Code handles the scripting. You need to be comfortable working in a terminal and following instructions, but you won't be writing code from scratch. The guide gives you the exact prompt and system architecture."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What CRM does this work with?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This guide uses GoHighLevel, which has built-in call recording, transcription, custom fields, and workflow automations. The concept works with any CRM that records calls and has an API, but you'd need to adapt the automation and API calls."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many calls do I need before this is useful?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You get value from the first call. One extraction gives you real prospect language you can use in an ad today. But patterns start emerging after 10-15 calls, like 'owners doing under $15k/month always mention X.' That's when the segmentation gets powerful."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does this cost to run?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Claude Code requires a Claude Pro or Team subscription ($20-30/month). Each extraction costs roughly $0.05-0.10 in API usage via OpenRouter. GoHighLevel plans start at $97/month. If you're already paying for GHL and Claude, the marginal cost is near zero."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
+
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
+    .why-section p:last-child { margin-bottom: 0; }
+    .why-section p strong { color: var(--text); }
+
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    .example-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; }
+    .example-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 10px; }
+    .example-box p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .example-box .quote { font-style: italic; color: var(--text); }
+    .example-box .label { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+
+    .prompt-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre-wrap; overflow-x: auto; }
+
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Turn Sales Call Transcripts Into Ad Copy with AI</h1>
+      <p class="subtitle" itemprop="description">Connect your CRM to Claude Code and automatically extract the exact language your prospects use. Then put it in your ads, landing pages, and content.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://claude.ai/claude-code" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+        <a href="https://www.gohighlevel.com" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> GoHighLevel</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>Your sales calls are a goldmine you're probably ignoring.</strong> Every call, your prospects tell you exactly how they describe their problems, what words they use, what makes them hesitate, and what gets them excited. That language is more powerful than any copywriting framework because it comes straight from the people you're trying to reach.</p>
+      <p>The problem is nobody has time to listen to every call, take notes, and organize it all. This system does it automatically. Your CRM records the call, an automation saves the transcript, and <a href="https://claude.ai/claude-code" target="_blank" rel="noopener">Claude Code</a> extracts pain points, objections, buying signals, and ad-ready phrases, all in the prospect's exact words. It runs every 5 minutes. You don't touch it.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Set up your CRM</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Enable call recording and transcription</h3>
+            <p>In <a href="https://www.gohighlevel.com" target="_blank" rel="noopener">GoHighLevel</a>, go to <strong>Settings > Phone Numbers</strong> and turn on call recording and transcription. This is what generates the raw transcript after every call.</p>
+            <p>If you're using a different CRM, you need one that records calls and can produce a text transcript. Most modern CRMs support this.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Create a custom field for the transcript</h3>
+            <p>Add a custom contact field called <strong>Call Transcript</strong> (use "Large Text" as the field type). This is where the full transcript gets stored on the contact record so your extraction script can read it without making extra API calls.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Build the automation</h3>
+            <p>Create a workflow that fires after a call transcript is generated. It does two things:</p>
+            <ul>
+              <li>Saves the transcript text into the custom field you just created</li>
+              <li>Adds a tag like <strong>ev:needs-intel</strong> to the contact</li>
+            </ul>
+            <p>The tag is the trigger. Your extraction script checks for contacts with this tag, processes them, and removes it when done. One API call to find work instead of scanning every contact.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Build the extraction</div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Write the extraction prompt</h3>
+            <p>This is the most important piece. The prompt tells the AI exactly what to pull from each transcript. Here's what to extract:</p>
+            <ul>
+              <li><strong>Prospect profile</strong> - location, years in business, revenue range, team size</li>
+              <li><strong>Pain points</strong> - exact quotes, categorized (revenue, retention, staffing, burnout, etc.)</li>
+              <li><strong>Objections</strong> - what they pushed back on, in their words</li>
+              <li><strong>Buying signals</strong> - moments of interest or excitement</li>
+              <li><strong>Ad language</strong> - phrases grouped by theme that other prospects would relate to</li>
+              <li><strong>Outcome</strong> - qualified or not, next steps</li>
+            </ul>
+            <p>The key is requiring <strong>exact quotes</strong>, not summaries. You want the raw words prospects use, not a cleaned-up version. "I'm trying to get my business to run without me" hits harder in an ad than "owner seeks operational independence."</p>
+
+            <div class="callout">
+              <div class="callout-label">The ad language field</div>
+              <p>This is the secret weapon. It groups prospect phrases by theme (burnout, staffing, cash flow, growth) so you can write "if you've ever felt..." style copy using real words from real people. Every call adds to this bank automatically.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Set up the processing script</h3>
+            <p>Tell <a href="https://claude.ai/claude-code" target="_blank" rel="noopener">Claude Code</a> to build a script that:</p>
+            <ul>
+              <li>Searches your CRM for contacts with the trigger tag</li>
+              <li>Reads the transcript from the custom field</li>
+              <li>Sends it to the AI with your extraction prompt</li>
+              <li>Stores the structured output in a local database</li>
+              <li>Removes the tag so it doesn't process the same call twice</li>
+            </ul>
+            <p>The script runs on a schedule (every 5 minutes via a cron job or task scheduler). When there's nothing to process, it checks once and exits. When a new call comes in, it picks it up automatically.</p>
+
+            <div class="callout">
+              <div class="callout-label">Storage</div>
+              <p>You want two layers. A structured database (like DuckDB or SQLite) for filtering and analytics: "show me all pain points from prospects doing under $15k/month." And a vector database (like Pinecone) for semantic search: "find me quotes about students quitting." Claude Code can set up both.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Run your first extraction</h3>
+            <p>Process your most recent sales call and look at what comes back. You're checking for:</p>
+            <ul>
+              <li>Are the quotes accurate? (exact words from the call, not paraphrased)</li>
+              <li>Are pain points categorized correctly?</li>
+              <li>Are the ad language phrases things other prospects would actually relate to?</li>
+            </ul>
+
+            <div class="example-box">
+              <div class="example-label">Real output example</div>
+              <div class="label">Burnout / Freedom</div>
+              <p class="quote">"I'm trying to get my business to run more without me than with me"</p>
+              <p class="quote">"I know systems are the only way you can do that"</p>
+              <div class="label" style="margin-top: 12px;">Staffing</div>
+              <p class="quote">"I don't think they understand the importance of saying the right words"</p>
+              <p class="quote">"trying to keep them corralled in the right direction"</p>
+              <div class="label" style="margin-top: 12px;">Cash Flow</div>
+              <p class="quote">"when leads dry up, now you're stuck"</p>
+              <p class="quote">"This is either gonna work or I'm gonna close the doors"</p>
+            </div>
+
+            <p>That's from one 27-minute call. Every phrase is something you can drop directly into an ad.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Use it</div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Put the language into your marketing</h3>
+            <p>You're not quoting anyone directly. You're using their language to write copy that makes other prospects feel seen:</p>
+
+            <div class="example-box">
+              <div class="example-label">Ad copy from extracted language</div>
+              <p>"If you've got 200+ students but you're still the one holding everything together... if your staff nods along in meetings but then does their own thing on the floor... if you survived COVID but you're still digging out of the holes it left... you're not alone."</p>
+            </div>
+
+            <p>Every line in that ad came from a real call. It hits different because it sounds like a real person, not marketing.</p>
+            <p>Use the extracted language in:</p>
+            <ul>
+              <li><strong>Ads</strong> - "if you've ever felt..." hooks using exact phrases</li>
+              <li><strong>Landing pages</strong> - problem sections written in prospect language</li>
+              <li><strong>Content</strong> - topics pulled from the most common pain points</li>
+              <li><strong>Sales scripts</strong> - mirror the language back during calls</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <h3>Segment by qualified vs. unqualified</h3>
+            <p>This is the part most people miss. Not all prospect language belongs in your ads.</p>
+            <p>Pain points from <strong>qualified</strong> prospects (people who were a real fit) go into your marketing. Pain points from <strong>unqualified</strong> prospects tell you what language to <strong>avoid</strong>, because it attracts the wrong people.</p>
+            <p>If every unqualified prospect mentions "I just need more leads," and every qualified one says "I need systems so I can step away," then you know exactly which angle to run in your ads and which one to kill.</p>
+            <p>The extraction tags each call as qualified or not, so this segmentation happens automatically as data accumulates.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="before-section" aria-label="Before you start">
+      <h2>Before you start</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Your CRM must record and transcribe calls.</strong> Without a transcript, there's nothing to extract. GoHighLevel does this natively. If your CRM doesn't, you can use a third-party call recording tool and upload transcripts manually.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>The extraction prompt matters more than the code.</strong> A vague prompt gives you vague output. The prompt needs to demand exact quotes, enforce categories, and specify the output format. Get this right and everything else falls into place.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Don't expect patterns from 2 calls.</strong> The first extraction gives you usable ad language immediately. But the real power (segmentation by revenue, recurring themes, qualified vs. unqualified splits) takes 10-15 calls to emerge.</div>
+      </div>
+
+      <div class="start-here">
+        <div class="start-here-label">Start here</div>
+        <p>Pull up your most recent sales call transcript. Paste it into <a href="https://claude.ai/claude-code" target="_blank" rel="noopener">Claude Code</a> and ask it to extract pain points with exact quotes, categorized by theme. That one action gives you ad copy you can use today.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools used in this guide</h2>
+
+      <a href="https://claude.ai/claude-code" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Code</div>
+        <div class="tool-card-desc">AI-powered coding assistant that works directly in your terminal and IDE. Builds scripts, connects to APIs, and handles the extraction pipeline. Requires Claude Pro or Team subscription.</div>
+        <div class="tool-card-url">claude.ai/claude-code</div>
+      </a>
+
+      <a href="https://www.gohighlevel.com" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">GoHighLevel</div>
+        <div class="tool-card-desc">All-in-one CRM with built-in call recording, transcription, custom fields, workflow automations, and a full API. The CRM backbone of this system.</div>
+        <div class="tool-card-url">gohighlevel.com</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need to know how to code?</div>
+        <div class="faq-answer">Not really. Claude Code handles the scripting. You need to be comfortable in a terminal and following instructions, but you won't be writing code from scratch. This guide gives you the architecture and the prompt. Claude Code builds the rest.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What CRM does this work with?</div>
+        <div class="faq-answer">This guide uses <a href="https://www.gohighlevel.com" target="_blank" rel="noopener">GoHighLevel</a>, which has built-in call recording, transcription, custom fields, and workflow automations. The concept works with any CRM that records calls and has an API (HubSpot, Salesforce, Close), but you'd need to adapt the automation and API calls.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How many calls do I need before this is useful?</div>
+        <div class="faq-answer">You get value from the first call. One extraction gives you real prospect language you can use in an ad today. Patterns start emerging after 10-15 calls, like "owners doing under $15k/month always mention staffing." That's when the segmentation gets powerful.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What does this cost to run?</div>
+        <div class="faq-answer">Claude Code requires a Claude Pro or Team subscription ($20-30/month). Each extraction costs roughly $0.05-0.10 in API usage. GoHighLevel plans start at $97/month. If you're already paying for GHL and Claude, the marginal cost per call is near zero.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for more AI automation breakdowns.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>
