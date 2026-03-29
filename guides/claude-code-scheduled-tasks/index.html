@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Scheduled Tasks and Project Antspace | Roman Peschke</title>
+  <meta name="description" content="How to set up scheduled tasks in Claude Code, plus the Antspace leak: Anthropic's unannounced PaaS, Project Baku, and what it means for developers.">
+  <meta property="og:title" content="Claude Code Scheduled Tasks and Project Antspace">
+  <meta property="og:description" content="Schedule cloud-based tasks in Claude Code, plus the Antspace deep-dive: Anthropic's leaked PaaS and Project Baku.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-03-29">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/claude-code-scheduled-tasks/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Claude Code Scheduled Tasks and Project Antspace",
+    "description": "How to set up scheduled tasks in Claude Code, plus the Antspace leak and Project Baku.",
+    "author": { "@type": "Person", "name": "Roman Peschke", "url": "https://instagram.com/roman.peschke" },
+    "datePublished": "2026-03-29"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are Claude Code scheduled tasks?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Scheduled tasks let you run Claude Code agents on a cron schedule in the cloud. Set them up from the desktop app or at claude.ai/code/scheduled. They run on Anthropic's infrastructure, no local machine required." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Project Antspace?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Antspace is an unannounced Platform as a Service (PaaS) being built by Anthropic, discovered through reverse engineering Claude Code's Firecracker MicroVM. It appears to be a vertically integrated deployment pipeline with Vercel as one target and Antspace as the second." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Project Baku?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Baku is the internal codename for Claude Code's web app builder. When a user asks Claude to build an app, Baku automatically generates a Vite + React + TypeScript template, creates a Supabase database, and connects the needed MCP tools." }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #ffffff; --surface: #f9fafb; --surface-2: #f3f4f6; --border: #e5e7eb; --text: #1a1a1a; --text-muted: #6b7280; --text-dim: #9ca3af; --accent: #6366f1; --accent-dim: rgba(99,102,241,0.06); --accent-border: rgba(99,102,241,0.20); --green: #059669; --green-dim: rgba(5,150,105,0.08); }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .content-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .content-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
+    .content-section { padding: 32px 0; border-bottom: 1px solid var(--border); }
+    .content-section:last-of-type { border-bottom: none; }
+    .content-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.01em; }
+    .content-section h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; margin-top: 20px; }
+    .content-section p { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.7; }
+    .content-section p strong { color: var(--text); }
+    .content-section code { font-size: 13px; background: var(--surface); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Menlo, monospace; }
+    .content-section ul { list-style: none; padding: 0; margin-bottom: 12px; }
+    .content-section li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .content-section li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; margin-top: 0; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 0; }
+    .callout-orange { background: rgba(234,88,12,0.06); border: 1px solid rgba(234,88,12,0.20); }
+    .callout-orange .callout-label { color: #ea580c; }
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+    @media (min-width: 480px) { h1 { font-size: 32px; } .hero { padding: 48px 0 40px; } .steps { padding: 40px 0; } .tools-section { padding: 40px 0; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article>
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1>Claude Code Scheduled Tasks and Project Antspace</h1>
+      <p class="subtitle">Schedule cloud-based Claude Code agents on a cron, plus the leaked Antspace PaaS and Project Baku web app builder.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Quick links">
+      <div class="tools-bar-label">Quick links</div>
+      <div class="tools-list">
+        <a href="https://claude.ai/code/scheduled" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Scheduled Tasks (Web)</a>
+        <a href="https://code.claude.com/docs/en/overview" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Scheduling Cloud-Based Tasks</h2>
+      <p><strong>Scheduled tasks let you run Claude Code agents on a recurring cron schedule in the cloud.</strong> They run on Anthropic's infrastructure. No local machine needs to be on. Set a prompt, pick a schedule, point it at a repo, and it runs automatically.</p>
+    </section>
+
+    <section class="steps" style="border-bottom: 1px solid var(--border);">
+      <div class="phase">
+        <div class="phase-label">How to set it up</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Open Scheduled Tasks</h3>
+            <p><strong>Desktop app:</strong> Open Claude Code, click "Scheduled" in the sidebar. If it's missing, update your app.</p>
+            <p><strong>Web:</strong> Go to <a href="https://claude.ai/code/scheduled" target="_blank" rel="noopener">claude.ai/code/scheduled</a> directly.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Connect your repos</h3>
+            <p>If you want scheduled tasks to access your repositories, run <code>/web-setup</code> from within your terminal. Available on Pro and Max plans.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Create a task</h3>
+            <p>Write your prompt, set the cron schedule, pick the repo, and save. The agent runs on Anthropic's cloud at the times you set.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Project Antspace</h2>
+
+      <div class="callout callout-orange">
+        <div class="callout-label">Credit</div>
+        <p>This research comes from <a href="https://x.com/aprilnea/status/2034209430158619084" target="_blank" rel="noopener">AprilNEA's deep-dive</a> into Claude Code's Firecracker MicroVM. Go read the full thread and blog post for the technical details.</p>
+      </div>
+
+      <p><strong>AprilNEA reverse-engineered Claude Code's infrastructure and found an unannounced Platform as a Service (PaaS) being built by Anthropic.</strong> It looks like Anthropic is building a complete, vertically integrated deployment pipeline.</p>
+
+      <p>The code shows two deployment targets:</p>
+      <ul>
+        <li><strong>Vercel</strong>, which is the widely known integration</li>
+        <li><strong>Antspace</strong>, the leaked second target</li>
+      </ul>
+
+      <h3>Project Baku</h3>
+      <p><strong>Baku is the internal codename for the web app builder.</strong> When a user asks Claude to build an app, Baku automatically:</p>
+      <ul>
+        <li>Generates a Vite + React + TypeScript template</li>
+        <li>Creates a Supabase database</li>
+        <li>Connects the needed MCP tools</li>
+      </ul>
+      <p>This suggests Anthropic is building an end-to-end flow: describe what you want, Claude builds it, and it deploys to Anthropic's own hosting. No external platform needed.</p>
+    </section>
+
+    <section class="tools-section" aria-label="Sources and further reading">
+      <h2>Sources</h2>
+
+      <a href="https://x.com/noahzweben/status/2035122989533163971" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Noah Zweben on Scheduled Tasks</div>
+        <div class="tool-card-desc">X thread covering the scheduled tasks feature and how to set it up.</div>
+        <div class="tool-card-url">x.com/noahzweben</div>
+      </a>
+
+      <a href="https://x.com/aprilnea/status/2034209430158619084" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">AprilNEA's Antspace Deep-Dive (X Thread)</div>
+        <div class="tool-card-desc">The original reverse engineering thread that uncovered Antspace, Project Baku, and the deployment pipeline.</div>
+        <div class="tool-card-url">x.com/aprilnea</div>
+      </a>
+
+      <a href="https://aprilnea.me/en/blog/reverse-engineering-claude-code-antspace" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Technical Blog Post: Reverse Engineering Antspace</div>
+        <div class="tool-card-desc">Full technical write-up with code analysis, architecture diagrams, and infrastructure details.</div>
+        <div class="tool-card-url">aprilnea.me</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">What are scheduled tasks?</div>
+        <div class="faq-answer">Cloud-based Claude Code agents that run on a cron schedule. They execute on Anthropic's infrastructure, so your machine doesn't need to be on.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What plans support scheduled tasks?</div>
+        <div class="faq-answer">Pro and Max plans. Run <code>/web-setup</code> from your terminal to connect your repos.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What is Antspace?</div>
+        <div class="faq-answer">An unannounced PaaS being built by Anthropic, discovered through reverse engineering Claude Code's Firecracker MicroVM. It appears to be a vertically integrated deployment pipeline, meaning Anthropic could host apps that Claude builds, no external platform needed.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What is Project Baku?</div>
+        <div class="faq-answer">The internal codename for Claude Code's web app builder. It auto-generates a Vite + React + TypeScript template, creates a Supabase database, and connects MCP tools when a user asks Claude to build an app.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>
