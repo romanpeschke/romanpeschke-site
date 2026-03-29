@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Install Superpowers for Claude Code | Roman Peschke</title>
+  <meta name="description" content="Install Superpowers, the free plugin that turns Claude Code into an autonomous dev team. Brainstorming, design docs, sub-agent dispatch, TDD, and code review built in. Also works on Cursor, Codex, Gemini CLI, and OpenCode.">
+  <meta property="og:title" content="How to Install Superpowers for Claude Code, Cursor, Codex, and Gemini CLI">
+  <meta property="og:description" content="Free plugin that makes your coding agent brainstorm, plan, dispatch sub-agents, and review code before shipping. One command to install.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-03-29">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/superpowers-claude-code/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Install Superpowers for Claude Code",
+    "description": "Install and use Superpowers, a free plugin that turns your coding agent into an autonomous development team with brainstorming, planning, sub-agent dispatch, TDD, and code review. Works on Claude Code, Cursor, Codex, Gemini CLI, and OpenCode.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-03-29",
+    "totalTime": "PT2M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Superpowers", "url": "https://github.com/obra/superpowers" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Install Superpowers", "text": "Run /plugin install superpowers@claude-plugins-official in Claude Code. For Cursor, run /add-plugin superpowers. Codex and OpenCode have their own install methods." },
+      { "@type": "HowToStep", "position": 2, "name": "Start a real task", "text": "Ask your agent to build something. Instead of jumping to code, it asks clarifying questions to understand what you actually want." },
+      { "@type": "HowToStep", "position": 3, "name": "Review the design", "text": "The agent presents a design document in digestible chunks. You approve each section before it moves on." },
+      { "@type": "HowToStep", "position": 4, "name": "Let it plan", "text": "After design approval, it breaks the work into bite-sized tasks with exact file paths, complete code, and verification steps." },
+      { "@type": "HowToStep", "position": 5, "name": "Sub-agents execute the plan", "text": "Fresh sub-agents work through each task with two-stage review: spec compliance first, then code quality." },
+      { "@type": "HowToStep", "position": 6, "name": "Finish and ship", "text": "Tests verified, options presented: merge, PR, keep the branch, or discard. Clean worktree cleanup." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Superpowers free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Superpowers is free and open source under the MIT license. It has 122,000+ GitHub stars and is actively maintained by Jesse Vincent and the team at Prime Radiant."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Superpowers work with Cursor, Codex, or Gemini CLI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Superpowers supports Claude Code, Cursor, Codex, OpenCode, and Gemini CLI. Each platform has its own install method. Claude Code and Cursor use their built-in plugin marketplaces. Codex, OpenCode, and Gemini CLI have separate installation steps documented in the repo."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does Superpowers actually do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Superpowers is a set of composable skills that change how your coding agent works. Instead of jumping straight to code, it brainstorms with you, writes a design doc, creates an implementation plan, dispatches sub-agents to execute each task, reviews the code, and handles branch management. Skills trigger automatically based on what you're doing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will Superpowers slow down simple tasks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Skills trigger based on context. If you ask for a quick fix, it won't force you through a full design process. The brainstorming and planning workflows activate when you're building something substantial, not for one-line changes."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Tools bar */
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    /* Inline links */
+    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
+
+    /* Context */
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+
+    /* Steps */
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+    .step-content code { font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-family: 'SF Mono', 'Fira Code', monospace; }
+
+    /* Callout */
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Before you start */
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    /* Start here */
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Tools section */
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Footer */
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Install Superpowers for Claude Code</h1>
+      <p class="subtitle" itemprop="description">A free plugin that turns your coding agent into a brainstorming partner, architect, and autonomous dev team. Also works on Cursor, Codex, Gemini CLI, and OpenCode.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://github.com/obra/superpowers" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Superpowers</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>Most people use their coding agent like a fancy autocomplete.</strong> <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">Superpowers</a> changes that. It's a free, open-source plugin (122k+ GitHub stars, MIT license) that forces your agent to stop and think before writing code. It asks clarifying questions, writes a design doc, builds an implementation plan, dispatches sub-agents to execute each task, reviews the output, and handles branch management. Anthropic added it to the official Claude Code marketplace. It also works on Cursor, Codex, Gemini CLI, and OpenCode.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Install</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Install Superpowers on your platform</h3>
+            <p><strong>Claude Code</strong> (official marketplace):</p>
+            <ul>
+              <li>Run <code>/plugin install superpowers@claude-plugins-official</code></li>
+            </ul>
+            <p><strong>Cursor:</strong></p>
+            <ul>
+              <li>Run <code>/add-plugin superpowers</code> in Agent chat, or search the plugin marketplace</li>
+            </ul>
+            <p><strong>Codex:</strong></p>
+            <ul>
+              <li>Tell Codex: "Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md"</li>
+            </ul>
+            <p><strong>Gemini CLI:</strong></p>
+            <ul>
+              <li>Run <code>gemini extensions install https://github.com/obra/superpowers</code></li>
+            </ul>
+            <p>All install methods pull from the same <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>. OpenCode has its own install path documented there.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Verify it's working</h3>
+            <p>Start a new session and ask your agent to help you plan a feature. If Superpowers is installed, it will ask clarifying questions instead of immediately writing code. That's the signal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">The workflow</div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Brainstorm before building</h3>
+            <p>Describe what you want to build. The agent activates the brainstorming skill automatically. It refines your idea through questions, explores alternatives, and presents the design in chunks short enough to actually read and digest. No wall-of-text design docs.</p>
+            <div class="callout">
+              <div class="callout-label">How skills trigger</div>
+              <p>Superpowers skills activate automatically based on context. You don't run slash commands for them. The agent detects what you're doing and uses the right skill. Brainstorming fires before code. TDD fires during implementation. Code review fires between tasks.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Approve the design, get a plan</h3>
+            <p>Once you sign off on the design, the agent writes an implementation plan. Each task is bite-sized (2-5 minutes), with exact file paths, complete code expectations, and verification steps. The plan is detailed enough that a junior engineer with no project context could follow it.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Sub-agents execute the work</h3>
+            <p>Say "go" and the agent dispatches fresh sub-agents for each task. Each sub-agent gets a clean context window. Two-stage review on every task: first it checks spec compliance, then code quality. The agent can work autonomously for hours without deviating from the plan you approved.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Review, test, and ship</h3>
+            <p>When all tasks are done, the agent verifies tests pass and presents your options: merge to main, create a PR, keep the branch for more work, or discard. Git worktree cleanup is automatic.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">What's included</div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Full skills library</h3>
+            <p><a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">Superpowers</a> includes 14 skills that cover the entire development lifecycle:</p>
+            <ul>
+              <li><strong>Brainstorming</strong> and <strong>writing plans</strong> for design and architecture</li>
+              <li><strong>Test-driven development</strong> enforcing red-green-refactor</li>
+              <li><strong>Systematic debugging</strong> with 4-phase root cause analysis</li>
+              <li><strong>Sub-agent-driven development</strong> and <strong>parallel agent dispatch</strong></li>
+              <li><strong>Code review</strong> (requesting and receiving)</li>
+              <li><strong>Git worktree management</strong> for isolated branches</li>
+              <li><strong>Verification before completion</strong> so nothing ships unchecked</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="before-section" aria-label="Before you start">
+      <h2>Before you start</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Don't skip the brainstorming phase.</strong> If you paste code and say "fix this," you're bypassing the whole system. Superpowers works best when you describe what you want to achieve, not what code to write.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Give it 2-3 real tasks before judging.</strong> Superpowers changes how you interact with your agent. The first session will feel different. By the third, you'll see why 122k people use it.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Keep it updated.</strong> Superpowers is on v5.0.6 as of March 2026 and moves fast. In Claude Code, run <code>/plugin update superpowers</code>. In Gemini CLI, run <code>gemini extensions update superpowers</code>.</div>
+      </div>
+
+      <div class="start-here">
+        <div class="start-here-label">Start here</div>
+        <p>Open Claude Code, run <code>/plugin install superpowers@claude-plugins-official</code>, then say "Help me plan a new feature." Watch it ask questions instead of writing code.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools used in this guide</h2>
+
+      <a href="https://github.com/obra/superpowers" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Superpowers</div>
+        <div class="tool-card-desc">An agentic skills framework and software development methodology for coding agents. 14 composable skills covering brainstorming, TDD, sub-agent dispatch, code review, debugging, and git worktree management. Free, open source, MIT license. 122k+ GitHub stars.</div>
+        <div class="tool-card-url">github.com/obra/superpowers</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Is Superpowers free?</div>
+        <div class="faq-answer">Yes. <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">Superpowers</a> is free and open source under the MIT license. Built by Jesse Vincent and the team at Prime Radiant. 122k+ GitHub stars.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Does Superpowers work with Cursor, Codex, or Gemini CLI?</div>
+        <div class="faq-answer">Yes. It supports Claude Code, Cursor, Codex, OpenCode, and Gemini CLI. Each platform has its own install method. Claude Code and Cursor use their built-in plugin marketplaces. Codex, OpenCode, and Gemini CLI have separate install steps in the <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">repo README</a>.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What does Superpowers actually do?</div>
+        <div class="faq-answer">It's a set of 14 composable skills that change how your coding agent works. Instead of jumping straight to code, it brainstorms with you, writes a design doc, creates an implementation plan, dispatches sub-agents to execute each task, reviews the code with a two-stage process, and handles branch management. Skills trigger automatically based on context.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Will Superpowers slow down simple tasks?</div>
+        <div class="faq-answer">No. Skills trigger based on context. A quick one-line fix won't activate the full brainstorming and planning workflow. The heavier skills fire when you're building something substantial.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>
