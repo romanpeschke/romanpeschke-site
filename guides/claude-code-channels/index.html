@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Set Up Claude Code Channels | Roman Peschke</title>
+  <meta name="description" content="Step-by-step guide to setting up Claude Code channels. Push messages, alerts, and webhooks into your session from Telegram, Discord, or a local chat UI.">
+  <meta property="og:title" content="How to Set Up Claude Code Channels">
+  <meta property="og:description" content="Push messages into your Claude Code session from Telegram, Discord, or localhost. Full setup guide for all three channels.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-03-29">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/claude-code-channels/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Set Up Claude Code Channels",
+    "description": "Use channels to push messages, alerts, and webhooks into your Claude Code session. Set up Fakechat for local testing, Telegram for mobile access, or Discord for team use.",
+    "author": { "@type": "Person", "name": "Roman Peschke", "url": "https://instagram.com/roman.peschke" },
+    "datePublished": "2026-03-29",
+    "totalTime": "PT5M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://code.claude.com/docs/en/overview" },
+      { "@type": "HowToTool", "name": "Bun", "url": "https://bun.sh" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Test locally with Fakechat", "text": "Install the fakechat plugin with /plugin install fakechat@claude-plugins-official, restart with claude --channels plugin:fakechat@claude-plugins-official, then open http://localhost:8787." },
+      { "@type": "HowToStep", "position": 2, "name": "Set up Telegram", "text": "Create a bot with BotFather, install the telegram plugin, configure your token, restart with --channels, pair your account." },
+      { "@type": "HowToStep", "position": 3, "name": "Set up Discord", "text": "Create a bot in the Discord Developer Portal, enable Message Content Intent, invite to your server, install the discord plugin, configure, restart with --channels, pair." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are Claude Code channels?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A channel is an MCP server plugin that pushes events (messages, alerts, webhooks) into a running Claude Code session. Claude reads the event and can reply back through the same channel. Channels only work while the session is open." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do channels work with API keys or Console auth?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Channels require claude.ai login. Console and API key authentication are not supported." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can anyone message my Claude Code session?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Every channel plugin maintains a strict sender allowlist. Only IDs you have explicitly paired and added can push messages. All others are silently dropped." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I run multiple channels at once?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pass multiple channel names to the --channels flag separated by commas, e.g. claude --channels plugin:telegram@claude-plugins-official,plugin:discord@claude-plugins-official" }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #ffffff; --surface: #f9fafb; --surface-2: #f3f4f6; --border: #e5e7eb; --text: #1a1a1a; --text-muted: #6b7280; --text-dim: #9ca3af; --accent: #6366f1; --accent-dim: rgba(99,102,241,0.06); --accent-border: rgba(99,102,241,0.20); --green: #059669; --green-dim: rgba(5,150,105,0.08); }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .step-content a, .why-section a, .faq-answer a, .before-text a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .before-text a:hover { text-decoration-color: var(--accent); }
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+    .step-content code { font-size: 13px; background: var(--surface); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Menlo, monospace; }
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+    @media (min-width: 480px) { h1 { font-size: 32px; } .hero { padding: 48px 0 40px; } .steps { padding: 40px 0; } .tools-section { padding: 40px 0; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Set Up Claude Code Channels</h1>
+      <p class="subtitle" itemprop="description">Push messages, alerts, and webhooks into your Claude Code session from Telegram, Discord, or a local chat UI. Two-way communication while you're away from the terminal.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="What you need">
+      <div class="tools-bar-label">What you need</div>
+      <div class="tools-list">
+        <a href="https://code.claude.com/docs/en/overview" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code (v2.1.80+)</a>
+        <a href="https://bun.sh" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Bun</a>
+        <span class="tool-pill"><span class="dot"></span> claude.ai login</span>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>A channel is an MCP server that pushes events into your running Claude Code session.</strong> Channels can be two-way: Claude reads the event and replies back through the same channel, like a chat bridge. Events only arrive while the session is open, so for an always-on setup, run Claude in a background process or persistent terminal.</p>
+    </section>
+
+    <section class="before-section" aria-label="Before you start">
+      <h2>Before you start</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Research preview.</strong> Channels are currently in research preview. Expect changes.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Claude Code v2.1.80+ required.</strong> Check with <code>claude --version</code>. Update if needed.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>claude.ai login required.</strong> Console and API key authentication are not supported for channels.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong><a href="https://bun.sh" target="_blank" rel="noopener">Bun</a> is required.</strong> The pre-built channel plugins are Bun scripts. Check with <code>bun --version</code>. If missing, <a href="https://bun.sh/docs/installation" target="_blank" rel="noopener">install Bun</a> first.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Team and Enterprise orgs must enable channels.</strong> Admins: claude.ai > Admin settings > Claude Code > Channels, or set <code>channelsEnabled</code> to true in managed settings.</div>
+      </div>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">1. Quickstart: Local Testing with Fakechat</div>
+
+        <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">Fakechat is an officially supported demo channel that runs a chat UI on localhost. No authentication, no external services. The fastest way to test channels.</p>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Install the plugin</h3>
+            <p>In Claude Code, run:</p>
+            <p><code>/plugin install fakechat@claude-plugins-official</code></p>
+            <p>If the plugin is not found, run <code>/plugin marketplace add anthropics/claude-plugins-official</code> first.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Restart with channels enabled</h3>
+            <p>Exit Claude Code, then restart with the channels flag:</p>
+            <p><code>claude --channels plugin:fakechat@claude-plugins-official</code></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Push a message</h3>
+            <p>Open <code>http://localhost:8787</code> in your browser and type a message. It arrives in your Claude session, and Claude's reply appears back in the browser UI.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">2. Telegram Channel</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Create a Telegram bot</h3>
+            <p>Open <a href="https://t.me/BotFather" target="_blank" rel="noopener">BotFather</a> in Telegram and send <code>/newbot</code>. Follow the prompts to give it a display name and username. Copy the access token BotFather provides.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Install the plugin</h3>
+            <p>In Claude Code, run:</p>
+            <p><code>/plugin install telegram@claude-plugins-official</code></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Configure your token</h3>
+            <p><code>/telegram:configure &lt;your_token_here&gt;</code></p>
+            <p>Alternatively, set <code>TELEGRAM_BOT_TOKEN</code> in your shell environment.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Restart with channels enabled</h3>
+            <p>Exit and restart Claude Code:</p>
+            <p><code>claude --channels plugin:telegram@claude-plugins-official</code></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Pair your account</h3>
+            <p>Send any message to your bot in Telegram. The bot replies with a pairing code. Back in Claude Code, run:</p>
+            <p><code>/telegram:access pair &lt;code&gt;</code></p>
+            <p>Then lock it down so only your account can send messages:</p>
+            <p><code>/telegram:access policy allowlist</code></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">3. Discord Channel</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Create a Discord bot</h3>
+            <p>Go to the <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a>, click New Application, and name it. Under the Bot section, create a username, click Reset Token, and copy the new token.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Enable Message Content Intent</h3>
+            <p>In your bot's settings, scroll to Privileged Gateway Intents and enable <strong>Message Content Intent</strong>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Invite the bot to your server</h3>
+            <p>Go to OAuth2 > URL Generator. Select the <strong>bot</strong> scope and enable these permissions: View Channels, Send Messages, Send Messages in Threads, Read Message History, Attach Files, Add Reactions. Open the generated URL to add the bot to your server.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Install the plugin</h3>
+            <p>In Claude Code, run:</p>
+            <p><code>/plugin install discord@claude-plugins-official</code></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Configure your token</h3>
+            <p><code>/discord:configure &lt;your_token_here&gt;</code></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Restart with channels enabled</h3>
+            <p>Exit and restart:</p>
+            <p><code>claude --channels plugin:discord@claude-plugins-official</code></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Pair your account</h3>
+            <p>Send a DM to your bot on Discord. It replies with a pairing code. In Claude Code, run:</p>
+            <p><code>/discord:access pair &lt;code&gt;</code></p>
+            <p>Lock down access:</p>
+            <p><code>/discord:access policy allowlist</code></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">4. Security and Access Control</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Sender allowlists</h3>
+            <p>Every approved channel plugin maintains a strict sender allowlist. Only IDs you have explicitly paired and added can push messages to your session. All other messages are silently dropped.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>The --channels flag is required</h3>
+            <p>Being listed in <code>.mcp.json</code> is not enough. A server must also be explicitly named in the <code>--channels</code> startup flag for that specific session.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Custom channels (development)</h3>
+            <p>During the research preview, the <code>--channels</code> flag only accepts plugins from an Anthropic-maintained allowlist. If you're building your own channel, start Claude Code with the <code>--dangerously-load-development-channels</code> flag.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="tools-section" aria-label="Sources">
+      <h2>Sources</h2>
+
+      <a href="https://github.com/anthropics/claude-plugins-official/blob/main/external_plugins/telegram/README.md" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Telegram channel plugin</div>
+        <div class="tool-card-desc">Official source code and README for the Telegram channel plugin.</div>
+        <div class="tool-card-url">github.com/anthropics/claude-plugins-official</div>
+      </a>
+
+      <a href="https://github.com/anthropics/claude-plugins-official/blob/main/external_plugins/discord/README.md" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Discord channel plugin</div>
+        <div class="tool-card-desc">Official source code and README for the Discord channel plugin.</div>
+        <div class="tool-card-url">github.com/anthropics/claude-plugins-official</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">What are Claude Code channels?</div>
+        <div class="faq-answer">A channel is an MCP server plugin that pushes events (messages, alerts, webhooks) into a running Claude Code session. Claude reads the event and can reply back through the same channel. Events only arrive while the session is open.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do channels work with API keys?</div>
+        <div class="faq-answer">No. Channels require claude.ai login. Console and API key authentication are not supported.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can anyone message my Claude Code session?</div>
+        <div class="faq-answer">No. Every channel plugin maintains a strict sender allowlist. Only IDs you have explicitly paired and added can push messages. All others are silently dropped.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can I run multiple channels at once?</div>
+        <div class="faq-answer">Yes. Pass multiple channel names to the <code>--channels</code> flag separated by commas, e.g. <code>claude --channels plugin:telegram@claude-plugins-official,plugin:discord@claude-plugins-official</code></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do messages queue up when the session is closed?</div>
+        <div class="faq-answer">No. Events only arrive while the session is open. For always-on access, run Claude in a background process or persistent terminal session.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>
