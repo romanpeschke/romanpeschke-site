@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Get OpenAI Codex Inside Your Claude Code Session | Roman Peschke</title>
+  <meta name="description" content="Install the official Codex plugin for Claude Code. Get a second-pass code review, adversarial challenge, or hand off tasks to Codex without leaving your workflow.">
+  <meta property="og:title" content="How to Get OpenAI Codex Inside Claude Code">
+  <meta property="og:description" content="Official OpenAI plugin. Code reviews, adversarial challenges, and task handoff from Codex inside your Claude Code session.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-03-31">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/codex-inside-claude-code/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Get OpenAI Codex Inside Your Claude Code Session",
+    "description": "Install the official Codex plugin for Claude Code to get second-pass code reviews, adversarial challenges, and task delegation to Codex without leaving your workflow.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-03-31",
+    "totalTime": "PT5M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://docs.anthropic.com/en/docs/claude-code" },
+      { "@type": "HowToTool", "name": "OpenAI Codex", "url": "https://github.com/openai/codex-plugin-cc" },
+      { "@type": "HowToTool", "name": "Node.js", "url": "https://nodejs.org" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Install the Codex CLI", "text": "Run npm install -g @openai/codex in your terminal. Requires Node.js 18.18 or later." },
+      { "@type": "HowToStep", "position": 2, "name": "Log into Codex", "text": "Run codex login in your terminal. Sign in with your ChatGPT account or OpenAI API key." },
+      { "@type": "HowToStep", "position": 3, "name": "Add the plugin marketplace", "text": "In Claude Code, run /plugin marketplace add openai/codex-plugin-cc to register the marketplace." },
+      { "@type": "HowToStep", "position": 4, "name": "Install the Codex plugin", "text": "Run /plugin install codex@openai-codex, then /reload-plugins to activate it." },
+      { "@type": "HowToStep", "position": 5, "name": "Run setup", "text": "Run /codex:setup to verify Codex is installed and authenticated. It checks everything and tells you if something is missing." },
+      { "@type": "HowToStep", "position": 6, "name": "Run your first review", "text": "Run /codex:review to get a read-only code review from Codex on your current changes. Use --background for longer jobs." },
+      { "@type": "HowToStep", "position": 7, "name": "Try adversarial review or rescue", "text": "Use /codex:adversarial-review on high-stakes code to challenge your implementation. Use /codex:rescue to hand a task directly to Codex." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need a separate Codex account?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If you're already signed into Codex on your machine, it works immediately. If not, you need a ChatGPT subscription (including the Free tier) or an OpenAI API key. Run codex login to authenticate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the plugin run a separate Codex runtime?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. It delegates through your local Codex CLI and app server. Same install, same auth, same config, same environment. It's Codex, just invoked from inside Claude Code."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will it use my existing Codex config?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. It picks up your user-level config from ~/.codex/config.toml and any project-level overrides from .codex/config.toml. Same model, effort, and base URL settings you already have."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the review gate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An optional Stop hook that runs a Codex review before Claude Code exits. If Codex finds issues, it blocks the stop so Claude can address them first. Enable with /codex:setup --enable-review-gate. Use carefully as it can create long Claude/Codex loops and burn usage limits."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use adversarial review vs regular review?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use /codex:review as your default second pass on any code. Use /codex:adversarial-review on migrations, auth changes, infra scripts, refactors, and anything where the risk is hidden assumptions rather than obvious syntax mistakes."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Tools bar */
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    /* Inline links */
+    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
+
+    /* Context */
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+
+    /* Steps */
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+    .step-content code { font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 5px; color: var(--text); word-break: break-all; }
+
+    /* Callout */
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Command reference */
+    .commands-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .commands-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .cmd-item { margin-bottom: 16px; }
+    .cmd-item:last-child { margin-bottom: 0; }
+    .cmd-name { font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 3px; }
+    .cmd-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Before you start */
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    /* Start here */
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Tools section */
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Footer */
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Get OpenAI Codex Inside Your Claude Code Session</h1>
+      <p class="subtitle" itemprop="description">Install the official Codex plugin for Claude Code. Get a second-pass code review, adversarial challenge, or hand off entire tasks to Codex without leaving your workflow.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://docs.anthropic.com/en/docs/claude-code" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+        <a href="https://github.com/openai/codex-plugin-cc" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> OpenAI Codex</a>
+        <a href="https://nodejs.org" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Node.js 18.18+</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>OpenAI just shipped an official plugin that puts Codex inside Claude Code.</strong> No separate window, no context switching. You get a real second pass from a completely different AI agent on every piece of code you write. The <a href="https://github.com/openai/codex-plugin-cc" target="_blank" rel="noopener">plugin</a> wraps your local Codex CLI, so it uses your existing auth, config, and environment. Three commands cover 90% of what you need: <code>/codex:review</code> for standard reviews, <code>/codex:adversarial-review</code> for pressure-testing high-stakes code, and <code>/codex:rescue</code> for handing a task directly to Codex.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Prerequisites</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Install the Codex CLI</h3>
+            <p>Open your terminal and run:</p>
+            <p><code>npm install -g @openai/codex</code></p>
+            <p>This requires <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a> 18.18 or later. If you already have Codex installed, skip this step.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Log into Codex</h3>
+            <p>Run <code>codex login</code> in your terminal. Sign in with your ChatGPT account (Free tier works) or an OpenAI API key.</p>
+            <p>If you're already signed in from using Codex directly, the plugin picks up that auth automatically.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Install the plugin</div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Add the plugin marketplace</h3>
+            <p>In your Claude Code session, run:</p>
+            <p><code>/plugin marketplace add openai/codex-plugin-cc</code></p>
+            <p>This registers OpenAI's <a href="https://github.com/openai/codex-plugin-cc" target="_blank" rel="noopener">plugin repository</a> as a source.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Install and activate</h3>
+            <p>Run these two commands:</p>
+            <ul>
+              <li><code>/plugin install codex@openai-codex</code></li>
+              <li><code>/reload-plugins</code></li>
+            </ul>
+            <p>You should now see the Codex slash commands and the <code>codex:codex-rescue</code> subagent in <code>/agents</code>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Run setup</h3>
+            <p>Run <code>/codex:setup</code> to verify everything is working. It checks whether Codex is installed, authenticated, and ready. If something is missing, it tells you exactly what to fix.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Use it</div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Run your first code review</h3>
+            <p>The simplest first run:</p>
+            <ul>
+              <li><code>/codex:review --background</code></li>
+              <li><code>/codex:status</code> to check progress</li>
+              <li><code>/codex:result</code> to read the output</li>
+            </ul>
+            <p>This gives you the same quality review as running <code>/review</code> inside Codex directly. It's read-only and won't change your code.</p>
+            <p>Use <code>--base main</code> to review your whole branch instead of just uncommitted changes.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Adversarial review for high-stakes code</h3>
+            <p>When the risk is hidden assumptions, not obvious syntax mistakes:</p>
+            <p><code>/codex:adversarial-review</code></p>
+            <p>Unlike regular review, this one is steerable. You can tell it what to focus on:</p>
+            <ul>
+              <li><code>/codex:adversarial-review --base main challenge whether this was the right caching design</code></li>
+              <li><code>/codex:adversarial-review --background look for race conditions</code></li>
+            </ul>
+            <p>Best for migrations, auth changes, infra scripts, refactors, and anything where you need someone to question your approach, not just inspect the code.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <h3>Hand off a task with rescue</h3>
+            <p>When a thread stalls or you want Codex to take over completely:</p>
+            <ul>
+              <li><code>/codex:rescue investigate why the tests started failing</code></li>
+              <li><code>/codex:rescue fix the failing test with the smallest safe patch</code></li>
+              <li><code>/codex:rescue --resume apply the top fix from the last run</code></li>
+            </ul>
+            <p>Rescue supports <code>--model</code> and <code>--effort</code> flags. You can also just say "Ask Codex to redesign the database connection" and the subagent handles it.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="commands-section" aria-label="Command reference">
+      <h2>Command reference</h2>
+
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:review</div>
+        <div class="cmd-desc">Standard read-only code review. Supports <code>--base</code>, <code>--background</code>, <code>--wait</code>.</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:adversarial-review</div>
+        <div class="cmd-desc">Steerable challenge review. Questions your design, tradeoffs, and hidden assumptions. Accepts free-text focus after the flags.</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:rescue</div>
+        <div class="cmd-desc">Delegate a task to Codex. Supports <code>--resume</code>, <code>--fresh</code>, <code>--model</code>, <code>--effort</code>.</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:status</div>
+        <div class="cmd-desc">Check running and recent Codex jobs for the current repo.</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:result</div>
+        <div class="cmd-desc">Show the final output from a finished job. Includes session ID for resuming in Codex.</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:cancel</div>
+        <div class="cmd-desc">Cancel an active background job.</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-name">/codex:setup</div>
+        <div class="cmd-desc">Verify install and auth. Manage the optional review gate.</div>
+      </div>
+    </section>
+
+    <section class="before-section" aria-label="Before you start">
+      <h2>Watch out for</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>The review gate can burn through usage fast.</strong> It creates a Claude/Codex feedback loop where Codex blocks Claude from stopping until issues are resolved. Only enable it (<code>/codex:setup --enable-review-gate</code>) when you're actively watching.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Multi-file reviews can take a while.</strong> Always run reviews with <code>--background</code> for anything non-trivial. Check back with <code>/codex:status</code>.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Codex usage counts against your ChatGPT plan limits.</strong> <a href="https://developers.openai.com/codex/pricing" target="_blank" rel="noopener">Check OpenAI's pricing page</a> to understand what your plan includes.</div>
+      </div>
+
+      <div class="start-here">
+        <div class="start-here-label">Start here</div>
+        <p>Install the plugin, run <code>/codex:setup</code>, then <code>/codex:review --background</code> on whatever you're working on right now. That's the fastest way to see it in action.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools used in this guide</h2>
+
+      <a href="https://docs.anthropic.com/en/docs/claude-code" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Code</div>
+        <div class="tool-card-desc">Anthropic's agentic coding tool. Terminal-based AI assistant that reads, writes, and runs code in your local environment. Supports plugins for extending functionality.</div>
+        <div class="tool-card-url">docs.anthropic.com/en/docs/claude-code</div>
+      </a>
+
+      <a href="https://github.com/openai/codex-plugin-cc" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Codex Plugin for Claude Code</div>
+        <div class="tool-card-desc">Official OpenAI plugin that brings Codex into Claude Code. Code reviews, adversarial challenges, and task delegation. Wraps your local Codex CLI. Apache-2.0 licensed.</div>
+        <div class="tool-card-url">github.com/openai/codex-plugin-cc</div>
+      </a>
+
+      <a href="https://nodejs.org" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Node.js</div>
+        <div class="tool-card-desc">JavaScript runtime required by the Codex CLI. Version 18.18 or later needed.</div>
+        <div class="tool-card-url">nodejs.org</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need a separate Codex account?</div>
+        <div class="faq-answer">If you're already signed into Codex on your machine, it works immediately. If not, you need a ChatGPT subscription (the Free tier works) or an OpenAI API key. Run <code>codex login</code> to authenticate.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Does the plugin run a separate Codex runtime?</div>
+        <div class="faq-answer">No. It delegates through your local <a href="https://developers.openai.com/codex/cli/" target="_blank" rel="noopener">Codex CLI</a> and <a href="https://developers.openai.com/codex/app-server" target="_blank" rel="noopener">app server</a>. Same install, same auth, same config, same environment. It's Codex, just invoked from inside Claude Code.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Will it pick up my existing Codex config?</div>
+        <div class="faq-answer">Yes. It reads your user-level config from <code>~/.codex/config.toml</code> and project-level overrides from <code>.codex/config.toml</code>. Same model, effort, and base URL settings you already use.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What's the review gate?</div>
+        <div class="faq-answer">An optional Stop hook that runs a Codex review before Claude Code exits. If Codex finds issues, Claude addresses them before stopping. Enable with <code>/codex:setup --enable-review-gate</code>. Disable with <code>--disable-review-gate</code>. Use carefully. It can create long loops and burn through usage limits.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">When should I use adversarial review vs regular review?</div>
+        <div class="faq-answer">Use <code>/codex:review</code> as your default on everything. Use <code>/codex:adversarial-review</code> on migrations, auth changes, infra scripts, refactors, and anything where the danger is hidden assumptions rather than obvious mistakes. Adversarial review is steerable, so you can tell it exactly what to question.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Where did this come from?</div>
+        <div class="faq-answer">OpenAI shipped it on March 30, 2026. <a href="https://x.com/reach_vb/status/2038670509768839458" target="_blank" rel="noopener">Announced on X</a> and published to <a href="https://github.com/openai/codex-plugin-cc" target="_blank" rel="noopener">GitHub</a> under Apache-2.0. Already at 3.4k stars.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>
