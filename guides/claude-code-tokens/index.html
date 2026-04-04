@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 Ways to Stop Burning Claude Code Tokens | Roman Peschke</title>
+  <meta name="description" content="Cut your Claude Code token usage by 10-30x. 15 configuration and workflow changes that stop invisible token bleed before you hit your limit.">
+  <meta property="og:title" content="15 Ways to Stop Burning Claude Code Tokens">
+  <meta property="og:description" content="Cut your Claude Code token usage by 10-30x. Configuration and workflow changes that stop invisible token bleed.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-04-04">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/claude-code-tokens/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "15 Ways to Stop Burning Claude Code Tokens",
+    "description": "Cut your Claude Code token usage by 10-30x with these configuration and workflow changes.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-04-04",
+    "totalTime": "PT10M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://claude.ai/download" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Start fresh", "text": "Run /clear between unrelated tasks. One conversation = one task. Message 1 costs 500 tokens. Message 30 costs 15,000. Same work across 3 chats = 500 tokens each." },
+      { "@type": "HowToStep", "position": 2, "name": "Kill unused MCPs", "text": "Run /mcp at the start of each session. Disconnect anything you're not using. GitHub + Playwright + Gmail = ~26,000 wasted tokens per message." },
+      { "@type": "HowToStep", "position": 3, "name": "Combine prompts", "text": "Batch multiple requests into one prompt. Three separate messages cost 12K tokens. One combined message costs 2K. Edits replace, follow-ups stack." },
+      { "@type": "HowToStep", "position": 4, "name": "Start with a plan", "text": "Hit Shift+Tab twice to enter plan mode. Let Claude map the approach before writing code. Add a 95% confidence rule to your CLAUDE.md." },
+      { "@type": "HowToStep", "position": 5, "name": "Use /context and /cost", "text": "Run /context in a fresh session to see what's eating your context window. Run /cost to track actual token usage and dollar spend." },
+      { "@type": "HowToStep", "position": 6, "name": "Paste less", "text": "Ask yourself: does Claude need this entire document, or just a section? 20 lines x 30 messages = 600 lines. 500 lines x 30 messages = 15,000 lines." },
+      { "@type": "HowToStep", "position": 7, "name": "Watch for 30 seconds", "text": "Watch Claude for 30 seconds after every prompt. If it starts opening files you didn't expect, hit Escape and redirect." },
+      { "@type": "HowToStep", "position": 8, "name": "Trim CLAUDE.md", "text": "Keep CLAUDE.md under 200 lines. Move detailed docs into separate files and use CLAUDE.md as an index that references them." },
+      { "@type": "HowToStep", "position": 9, "name": "Point, don't search", "text": "Be specific: 'Check verifyUser in src/auth.js, line 42.' Use @filename to reference files. Give function names and line numbers." },
+      { "@type": "HowToStep", "position": 10, "name": "Compact at 60%", "text": "Run /compact at 60% with specific instructions. After 3-4 compactions, get a session summary, /clear, paste into a fresh chat." },
+      { "@type": "HowToStep", "position": 11, "name": "The 5-minute clear", "text": "Prompt cache expires after ~5 minutes of inactivity. Get a handoff summary before stepping away, start fresh when you return." },
+      { "@type": "HowToStep", "position": 12, "name": "Match model to task", "text": "Switch models with /model. Sonnet for 80% of coding. Haiku for formatting and summaries. Opus for deep architectural planning." },
+      { "@type": "HowToStep", "position": 13, "name": "Use sub-agents less", "text": "Agent workflows use 7-10x more tokens. Each sub-agent runs its own full context window. Use them only for isolated tasks that can run on Haiku." },
+      { "@type": "HowToStep", "position": 14, "name": "Time your sessions", "text": "Peak hours (8 AM - 2 PM EST weekdays) drain limits faster. Save token-heavy work for afternoons, evenings, or weekends." },
+      { "@type": "HowToStep", "position": 15, "name": "Make CLAUDE.md learn", "text": "Add stable decisions and architecture rules so every future prompt is shorter. Check weekly and trim anything that no longer applies." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does /clear delete my CLAUDE.md or memory?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. /clear only wipes your conversation history. Your CLAUDE.md, memory files, and project settings are untouched. It's safe to use between tasks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the difference between /compact and /clear?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "/compact summarizes your conversation into a shorter version and keeps going. /clear wipes the conversation entirely and starts fresh. Use /compact when you need to preserve context. Use /clear when you're switching tasks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do sub-agents share the same token limit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Sub-agents draw from the same session budget as your main conversation. Each one spins up its own full context window, which is why they use 7-10x more tokens than doing the same work in a single session."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does switching models reset my conversation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Your conversation context carries over when you switch models with /model. You can switch to Haiku for a formatting task and back to Sonnet for coding without losing anything."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Tools bar */
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    /* Intro */
+    .intro-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .intro-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+    .intro-section p:last-child { margin-bottom: 0; }
+    .intro-section strong { color: var(--text); }
+
+    /* Tips */
+    .tips { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+
+    .tip { margin-bottom: 28px; }
+    .tip:last-child { margin-bottom: 0; }
+    .tip-header { display: flex; gap: 12px; align-items: baseline; margin-bottom: 8px; }
+    .tip-num { flex-shrink: 0; font-size: 13px; font-weight: 700; color: var(--accent); }
+    .tip-title { font-size: 16px; font-weight: 600; line-height: 1.3; }
+    .tip-body { padding-left: 32px; }
+    .tip-body p { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
+    .tip-body p:last-child { margin-bottom: 0; }
+
+    .tip-do { margin-top: 10px; }
+    .tip-do-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--green); margin-bottom: 6px; }
+    .tip-do ul { list-style: none; padding: 0; }
+    .tip-do li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .tip-do li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
+    .tip-example { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-top: 12px; }
+    .tip-example-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 6px; }
+    .tip-example p, .tip-example code { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .tip-example code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: var(--surface-2); padding: 2px 5px; border-radius: 4px; }
+
+    .tip-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .tip-before, .tip-after { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+    .tip-after { border-color: rgba(5,150,105,0.25); background: var(--green-dim); }
+    .comp-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .tip-before .comp-label { color: var(--text-dim); }
+    .tip-after .comp-label { color: var(--green); }
+    .comp-line { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .comp-line strong { color: var(--text); }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Footer */
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (max-width: 479px) {
+      .tip-comparison { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .tips { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">15 Ways to Stop Burning Claude Code Tokens</h1>
+      <p class="subtitle" itemprop="description">Cut your token usage by 10-30x with configuration and workflow changes. No extra tools. Just better habits.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://claude.ai/download" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+      </div>
+    </section>
+
+    <section class="intro-section" aria-label="Introduction">
+      <p><strong>People are burning through their Claude Code limits in under an hour.</strong> Max 20 users ($200/month) have reported hitting 100% in 70 minutes. Max 5 users are getting one hour of work before they're locked out. Anthropic acknowledged it publicly and called it their "top priority."</p>
+      <p>Some of that was bugs on their end (an autocompact loop was silently retrying thousands of times per session). They patched it. But the bigger problem is how most people use Claude Code. Bloated context, compounding chat history, unused MCP servers loading on every single message. That's all on you.</p>
+      <p>These 15 changes target the actual causes. Most take under a minute to implement.</p>
+    </section>
+
+    <section class="tips" aria-label="Tips">
+
+      <!-- Phase 1: Cut the bloat -->
+      <div class="phase">
+        <div class="phase-label">Cut the bloat</div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#1</span>
+            <h3 class="tip-title">Start fresh</h3>
+          </div>
+          <div class="tip-body">
+            <p>Claude rereads your entire conversation history on every single message. Message 1 costs ~500 tokens. Message 30 costs ~15,000. The longer the chat, the more every message costs.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Run <code>/clear</code> between unrelated tasks</li>
+                <li>One conversation = one task</li>
+                <li>If you need context from the last task, paste a summary</li>
+              </ul>
+            </div>
+            <div class="tip-comparison">
+              <div class="tip-before">
+                <div class="comp-label">Before</div>
+                <div class="comp-line">30 messages, 1 chat</div>
+                <div class="comp-line"><strong>15,000 tokens</strong></div>
+              </div>
+              <div class="tip-after">
+                <div class="comp-label">After</div>
+                <div class="comp-line">30 messages, 3 chats</div>
+                <div class="comp-line"><strong>500 tokens each</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#2</span>
+            <h3 class="tip-title">Kill unused MCPs</h3>
+          </div>
+          <div class="tip-body">
+            <p>Every connected MCP server loads its full tool definitions into your context on every message, whether you use it or not. Unused servers = bloat on every interaction.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Run <code>/mcp</code> at the start of each session</li>
+                <li>Review what's connected, disconnect anything you're not using</li>
+                <li>If a CLI exists for the same thing, use that instead</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p>GitHub (~8K) + Playwright (~13K) + Gmail (~2.6K) = <strong>~26,000 wasted tokens per message.</strong> Over 10 messages, that's 260,000 tokens gone.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#3</span>
+            <h3 class="tip-title">Combine prompts</h3>
+          </div>
+          <div class="tip-body">
+            <p>Three separate back-and-forth messages cost three times as much as one combined message because chat history compounds.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Batch multiple requests into one prompt</li>
+                <li>If Claude gets it wrong, edit your original message and regenerate</li>
+                <li>Edits replace. Follow-ups stack.</li>
+              </ul>
+            </div>
+            <div class="tip-comparison">
+              <div class="tip-before">
+                <div class="comp-label">3 messages</div>
+                <div class="comp-line">"Summarize this." 2K</div>
+                <div class="comp-line">"Extract issues." 4K</div>
+                <div class="comp-line">"Suggest fixes." 6K</div>
+                <div class="comp-line"><strong>Total: 12K tokens</strong></div>
+              </div>
+              <div class="tip-after">
+                <div class="comp-label">1 message</div>
+                <div class="comp-line">"Summarize this log, extract the errors, and suggest a fix."</div>
+                <div class="comp-line"><strong>Total: 2K tokens</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2: Control the context -->
+      <div class="phase">
+        <div class="phase-label">Control the context</div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#4</span>
+            <h3 class="tip-title">Start with a plan</h3>
+          </div>
+          <div class="tip-body">
+            <p>The fastest way to burn through a limit is letting Claude write hundreds of lines of code down the wrong path.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Hit <code>Shift+Tab</code> twice to enter plan mode</li>
+                <li>Let Claude map the approach and ask questions before writing a single line</li>
+                <li>Add explicit instructions to your CLAUDE.md</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Add this to CLAUDE.md</div>
+              <p><code>"Do not make any changes until you have 95% confidence in what you need to build. Ask me follow-up questions until you reach that confidence level."</code></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#5</span>
+            <h3 class="tip-title">/context and /cost</h3>
+          </div>
+          <div class="tip-body">
+            <p>Token bleeds are invisible. You might be losing 50,000 tokens per message to a bloated CLAUDE.md, skills, memory, and loaded files without realizing it.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Run <code>/context</code> in a fresh session to see what's eating your context window</li>
+                <li>Run <code>/cost</code> to track actual token usage and dollar spend</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">What they do</div>
+              <p><code>/context</code> = full breakdown of what's loaded into your context window right now.</p>
+              <p><code>/cost</code> = actual token usage and dollar spend for the current session.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#6</span>
+            <h3 class="tip-title">Paste less</h3>
+          </div>
+          <div class="tip-body">
+            <p>Pasting entire documents when Claude only needs a fraction is a massive waste. Every line gets reprocessed on every message.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Before you drop a PDF, error log, or anything large, ask: "Does Claude need this entire thing, or just a section?"</li>
+              </ul>
+            </div>
+            <div class="tip-comparison">
+              <div class="tip-before">
+                <div class="comp-label">500 lines pasted</div>
+                <div class="comp-line">500 lines x 30 messages</div>
+                <div class="comp-line"><strong>15,000 lines of token cost</strong></div>
+              </div>
+              <div class="tip-after">
+                <div class="comp-label">20 lines pasted</div>
+                <div class="comp-line">20 lines x 30 messages</div>
+                <div class="comp-line"><strong>600 lines of token cost</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3: Stay in control -->
+      <div class="phase">
+        <div class="phase-label">Stay in control</div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#7</span>
+            <h3 class="tip-title">Watch for 30 seconds</h3>
+          </div>
+          <div class="tip-body">
+            <p>Sometimes Claude gets stuck in an internal loop. You send a prompt and switch tabs. Claude goes the wrong direction. You come back to AI slop.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Watch Claude for 30 seconds after every prompt</li>
+                <li>If it starts opening files you didn't expect, or re-reading things it already looked at, hit <code>Escape</code> and redirect</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p>You ask Claude to fix copy on your landing page. It starts reading every subpage. Hit Escape. "No, just focus on /home."</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#8</span>
+            <h3 class="tip-title">Trim CLAUDE.md</h3>
+          </div>
+          <div class="tip-body">
+            <p>CLAUDE.md gets loaded into context on every single message. A 1,000-line file with inline docs, style guides, and API references means 1,000 lines of tokens on every message.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Keep CLAUDE.md under 200 lines</li>
+                <li>Move detailed docs into separate files</li>
+                <li>Use CLAUDE.md as an index that points to them</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p>Instead of pasting your entire style guide inline, add one line:</p>
+              <p><code>references/sales-messaging.md -- Copy frameworks, pain points. Read when writing ads or emails.</code></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#9</span>
+            <h3 class="tip-title">Point, don't search</h3>
+          </div>
+          <div class="tip-body">
+            <p>A vague prompt like "find the bug and fix pls" forces Claude to freely explore, open, and read dozens of irrelevant files, burning tokens the whole time.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Be specific: <code>"Check verifyUser in src/auth.js, line 42."</code></li>
+                <li>Use <code>@filename</code> to reference specific files</li>
+                <li>If you know the function name, give it. If you know the line, give it.</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p><code>Come up with 4 variations for our landing page headline, reference @offer.md and @customer-pain-points.md. Current headline is: "[HEADLINE]"</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4: Manage the session -->
+      <div class="phase">
+        <div class="phase-label">Manage the session</div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#10</span>
+            <h3 class="tip-title">Compact at 60%</h3>
+          </div>
+          <div class="tip-body">
+            <p>Claude's auto-compaction triggers at 95% capacity. By that point, the context is already suffering from "loss in the middle," where the AI ignores data buried in a massive context window.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Run <code>/compact</code> at 60% with specific instructions</li>
+                <li>After 3-4 compactions, the summary drifts. Ask for a session summary, run <code>/clear</code>, paste into a fresh chat.</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p><code>/compact Keep the final database schema and the updated user authentication logic</code></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#11</span>
+            <h3 class="tip-title">The 5-minute clear</h3>
+          </div>
+          <div class="tip-body">
+            <p>Claude's prompt cache expires after ~5 minutes of inactivity. If you step away and come back, your next message reprocesses the entire session from scratch at full token cost.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Don't start a large project and walk away</li>
+                <li>Use <code>/compact</code>, handoffs, or session summaries before leaving</li>
+                <li>When you sit back down, start a fresh session and use <code>@</code> to reference the handoff</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p>You need to make lunch. Tell Claude to make a detailed handoff summary. When you come back, start fresh and reference it with <code>@</code>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#12</span>
+            <h3 class="tip-title">Model = Task</h3>
+          </div>
+          <div class="tip-body">
+            <p>Different models have wildly different token costs. Using the most expensive model for simple tasks drains usage for no reason.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Switch models with <code>/model</code></li>
+                <li><strong>Sonnet:</strong> 80% of coding work</li>
+                <li><strong>Haiku:</strong> Simple formatting and summaries</li>
+                <li><strong>Opus:</strong> Deep, complex architectural planning</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p>You have a massive block of raw text that needs to be formatted into JSON. Switch to Haiku, format the text, switch back to Sonnet for coding.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5: System-level savings -->
+      <div class="phase">
+        <div class="phase-label">System-level savings</div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#13</span>
+            <h3 class="tip-title">Use sub-agents less</h3>
+          </div>
+          <div class="tip-body">
+            <p>Agent workflows use 7-10x more tokens than single-agent sessions. Every sub-agent runs its own full context window as a separate instance. If it needs full context, it loads everything from scratch.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Use sub-agents for one-off isolated tasks (research, file scanning, test runs) that can use Haiku</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Add this to CLAUDE.md</div>
+              <p><code>"If a task requires multi-file analysis, spawn a sub-agent using Haiku to do the reading, and return only the summarized insights to the main session."</code></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#14</span>
+            <h3 class="tip-title">Time your sessions</h3>
+          </div>
+          <div class="tip-body">
+            <p>Anthropic throttles how fast your session limit drains based on global server demand. Peak hours (8 AM to 2 PM EST on weekdays) will drain your limit faster than off-peak hours.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Save your most token-heavy tasks for afternoons, evenings, or weekends</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Example</div>
+              <p>You need to run a massive, repository-wide code refactor. Instead of doing it at 10 AM on a Tuesday, wait until 4 PM so your token limit stretches further.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-header">
+            <span class="tip-num">#15</span>
+            <h3 class="tip-title">Make CLAUDE.md learn</h3>
+          </div>
+          <div class="tip-body">
+            <p>Your CLAUDE.md should contain stable decisions, architecture rules, and progress summaries. Think of it as the source of truth that makes every future prompt shorter.</p>
+            <div class="tip-do">
+              <div class="tip-do-label">What to do</div>
+              <ul>
+                <li>Build a dynamic constitution inside your CLAUDE.md</li>
+                <li>Check weekly and trim anything that no longer applies</li>
+                <li>Keep it under 200 lines</li>
+              </ul>
+            </div>
+            <div class="tip-example">
+              <div class="tip-example-label">Add this section to CLAUDE.md</div>
+              <p><code>## Applied Learning</code></p>
+              <p><code>When something fails repeatedly, when I have to re-explain, or when a workaround is found, add a one-line bullet here. Keep each bullet under 15 words. No explanations.</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Does /clear delete my CLAUDE.md or memory?</div>
+        <div class="faq-answer">No. /clear only wipes your conversation history. Your CLAUDE.md, memory files, and project settings are untouched. It's safe to use between tasks.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What's the difference between /compact and /clear?</div>
+        <div class="faq-answer">/compact summarizes your conversation into a shorter version and keeps going. /clear wipes the conversation entirely and starts fresh. Use /compact when you need to preserve context. Use /clear when you're switching tasks.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do sub-agents share the same token limit?</div>
+        <div class="faq-answer">Yes. Sub-agents draw from the same session budget as your main conversation. Each one spins up its own full context window, which is why they use 7-10x more tokens than doing the same work in a single session.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Does switching models reset my conversation?</div>
+        <div class="faq-answer">No. Your conversation context carries over when you switch models with /model. You can switch to Haiku for a formatting task and back to Sonnet for coding without losing anything.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
+      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
+    </div>
+  </footer>
+
+</body>
+</html>

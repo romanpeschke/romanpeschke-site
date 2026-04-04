@@ -41,6 +41,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://romanpeschke.com/guides/claude-code-tokens/</loc>
+    <lastmod>2026-04-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://romanpeschke.com/guides/codex-inside-claude-code/</loc>
     <lastmod>2026-03-31</lastmod>
     <priority>0.8</priority>
