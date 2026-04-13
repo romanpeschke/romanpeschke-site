@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Make Videos with Remotion and Claude Code | Roman Peschke</title>
+  <meta name="description" content="Step-by-step guide to making videos with Remotion and Claude Code. Scaffold a React video project, prompt what you want, render real MP4s. Free for teams up to 3.">
+  <meta property="og:title" content="How to Make Videos with Remotion and Claude Code">
+  <meta property="og:description" content="Set up a React video project, prompt what you want, and render real MP4s. Free for teams up to 3. Step-by-step guide.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-04-12">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/make-videos-remotion/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Make Videos with Remotion and Claude Code",
+    "description": "Step-by-step guide to making programmatic videos using Remotion (a React framework for video) and Claude Code (Anthropic's AI coding CLI). Scaffold, prompt, preview, and render real MP4 files.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-04-12",
+    "totalTime": "PT5M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Remotion", "url": "https://www.remotion.dev/" },
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://claude.com/product/claude-code" },
+      { "@type": "HowToTool", "name": "Node.js", "url": "https://nodejs.org" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Install the prerequisites", "text": "Install Claude Code (paid subscription required) and Node.js. These are the only two things you need." },
+      { "@type": "HowToStep", "position": 2, "name": "Scaffold a Remotion project", "text": "Run npx create-video@latest. Select the Blank template, say yes to TailwindCSS, say yes to install Skills." },
+      { "@type": "HowToStep", "position": 3, "name": "Start the preview", "text": "Run npm install then npm run dev. This opens Remotion Studio in your browser with a live preview of your video." },
+      { "@type": "HowToStep", "position": 4, "name": "Open Claude Code in the project", "text": "In a separate terminal, navigate to your project directory and run claude. Claude now has access to your Remotion project and its Skills." },
+      { "@type": "HowToStep", "position": 5, "name": "Prompt your video", "text": "Describe what you want in plain English. Claude writes the React components and Remotion composition for you." },
+      { "@type": "HowToStep", "position": 6, "name": "Preview and iterate", "text": "The browser preview updates as Claude makes changes. Ask for tweaks until it looks right." },
+      { "@type": "HowToStep", "position": 7, "name": "Render to MP4", "text": "Tell Claude to render the video, or run npx remotion render yourself. Real MP4 file, ready to upload." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Remotion free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Free for individuals and companies up to 3 people, including commercial use. Company license required at 4+ people, starting at $100/month for automators or $25/month per seat for creators."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to know React to use Remotion?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Claude Code writes the React components for you. You describe what you want in plain English and Claude handles the code."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What formats can Remotion render?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "MP4, WebM, GIF, and image sequences. You can render locally, on a server, or serverless via Remotion Lambda."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are Remotion Skills?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Documentation context files that Claude Code reads so it understands Remotion's API. Install them during project setup so Claude writes valid Remotion code instead of guessing."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Tools bar */
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    /* Inline links */
+    .step-content a, .why-section a, .faq-answer a, .usecase-desc a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .usecase-desc a:hover { text-decoration-color: var(--accent); }
+
+    /* Context */
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+
+    /* Steps */
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+    .step-content code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+
+    /* Callout */
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Use cases */
+    .usecases-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .usecases-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .usecase { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .usecase:last-child { margin-bottom: 0; }
+    .usecase-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .usecase-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Before you start */
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    /* Tools section */
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Footer */
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
+        api_host: 'https://t.romanpeschke.com',
+        ui_host: 'https://us.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'always',
+    })
+  </script>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Make Videos with Remotion and Claude Code</h1>
+      <p class="subtitle" itemprop="description">Set up a React video project, prompt what you want, and render real MP4s. Free for teams up to 3.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://www.remotion.dev/" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Remotion</a>
+        <a href="https://claude.com/product/claude-code" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+        <a href="https://nodejs.org" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Node.js</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>The setup is Install > Scaffold > Prompt > Preview > Render.</strong> You install two things (<a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> and <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>), scaffold a <a href="https://www.remotion.dev/" target="_blank" rel="noopener">Remotion</a> project with one command, then prompt Claude to build your video in React. The preview updates live as you work. When it looks right, render to MP4.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Set up</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Install the prerequisites</h3>
+            <p>You need two things:</p>
+            <ul>
+              <li><a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> (requires a paid Anthropic subscription)</li>
+              <li><a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a> (free, download the LTS version)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Scaffold a Remotion project</h3>
+            <p>Run <code>npx create-video@latest</code> in your terminal. When it asks:</p>
+            <ul>
+              <li>Select the <strong>Blank</strong> template</li>
+              <li>Say <strong>yes</strong> to TailwindCSS</li>
+              <li>Say <strong>yes</strong> to install Skills</li>
+            </ul>
+            <div class="callout">
+              <div class="callout-label">Why Skills matter</div>
+              <p>Skills are documentation context files that <a href="https://www.remotion.dev/docs/ai/claude-code" target="_blank" rel="noopener">Remotion built for Claude Code</a>. They tell Claude how Remotion's API works so it writes valid code instead of guessing. Always install them.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Start the preview</h3>
+            <p>Navigate into your project folder and run:</p>
+            <ul>
+              <li><code>npm install</code></li>
+              <li><code>npm run dev</code></li>
+            </ul>
+            <p>This opens <a href="https://www.remotion.dev/" target="_blank" rel="noopener">Remotion</a> Studio in your browser with a live preview of your video. Keep this running.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Build</div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Open Claude Code in the project</h3>
+            <p>Open a separate terminal window. Navigate to the same project folder and run <code>claude</code>. Claude now has access to your Remotion project files and the Skills you installed.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Prompt your video</h3>
+            <p>Describe what you want in plain English. Something like: "Make a 10-second intro with my logo fading in, text sliding up from the bottom, and a gradient background." Claude writes the React components and <a href="https://www.remotion.dev/" target="_blank" rel="noopener">Remotion</a> composition for you.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Preview and iterate</h3>
+            <p>Your browser preview updates as Claude makes changes. Watch the result, ask for tweaks. "Make the text bigger." "Slow down the fade." "Add a bounce effect." Keep going until it looks right.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Export</div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Render to MP4</h3>
+            <p>Tell Claude to render the video, or run <code>npx remotion render</code> yourself. You get a real MP4 file, ready to upload anywhere. <a href="https://www.remotion.dev/" target="_blank" rel="noopener">Remotion</a> also supports WebM, GIF, and image sequences.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="usecases-section" aria-label="Use cases">
+      <h2>What you can build</h2>
+
+      <div class="usecase">
+        <div class="usecase-name">Social media content</div>
+        <div class="usecase-desc">Captions, shorts, reels. <a href="https://www.remotion.dev/showcase" target="_blank" rel="noopener">Submagic</a> uses Remotion for short-form videos with auto-captions, b-rolls, zooms, and sound effects.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">Product demos</div>
+        <div class="usecase-desc">Screen recordings with auto layouts, device mockups, captions, and 4K export. Vibrantsnap and SuperMotion both run on Remotion.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">Data visualizations</div>
+        <div class="usecase-desc">Turn statistics into animated videos. AnimStats transforms data into captivating GIFs and videos. Electricity Maps visualizes real-time grid emissions across Europe.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">Ecommerce ads</div>
+        <div class="usecase-desc">AdmoveAI uses Remotion to build and render high-performing ecommerce video ads automatically on their platform.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">Personalized campaigns</div>
+        <div class="usecase-desc">GitHub Unwrapped generates a unique year-in-review video for every user based on their GitHub activity. Same template, different data, thousands of unique videos.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">Music visuals</div>
+        <div class="usecase-desc">Banger.Show creates 3D music visuals without learning 3D or video editing software. Visuals match the sound and build the artist's brand.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">Automated daily content</div>
+        <div class="usecase-desc">Hello Meteo pulls OpenWeather data and renders a daily weather forecast video, then posts it to social media automatically. Same workflow, fresh data every day.</div>
+      </div>
+    </section>
+
+    <section class="before-section" aria-label="Before you start">
+      <h2>Before you start</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Claude Code requires a paid subscription.</strong> It's a CLI tool from Anthropic. You need an active subscription to use it.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Remotion is free for individuals and teams up to 3.</strong> Company license starts at $100/month for 4+ people. No sign-up needed to start.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>The Skills install matters.</strong> When scaffolding, say yes to install Skills. This gives Claude the documentation context it needs to write valid Remotion code. Without it, Claude guesses at the API and makes mistakes.</div>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools used in this guide</h2>
+
+      <a href="https://www.remotion.dev/" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Remotion</div>
+        <div class="tool-card-desc">Open-source React framework for creating real MP4 videos programmatically. 42k GitHub stars, 1.4M monthly npm installs, 800 pages of documentation, 35+ templates. Free for individuals and teams up to 3.</div>
+        <div class="tool-card-url">remotion.dev</div>
+      </a>
+
+      <a href="https://claude.com/product/claude-code" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Code</div>
+        <div class="tool-card-desc">Anthropic's CLI for Claude. Write and edit code by prompting in your terminal. Reads your project files and understands context. Paid subscription required.</div>
+        <div class="tool-card-url">claude.com/product/claude-code</div>
+      </a>
+
+      <a href="https://nodejs.org" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Node.js</div>
+        <div class="tool-card-desc">JavaScript runtime required to run Remotion projects. Download the LTS version. Free and open source.</div>
+        <div class="tool-card-url">nodejs.org</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Is Remotion free?</div>
+        <div class="faq-answer">Free for individuals and companies up to 3 people, including commercial use. Company license required at 4+ people, starting at $100/month for automators or $25/month per seat for creators.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need to know React?</div>
+        <div class="faq-answer">No. Claude Code writes the React components for you. You describe what you want in plain English and Claude handles the code.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What formats can Remotion render?</div>
+        <div class="faq-answer">MP4, WebM, GIF, and image sequences. You can render locally, on a server, or serverless via <a href="https://www.remotion.dev/" target="_blank" rel="noopener">Remotion Lambda</a>.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What are Remotion Skills?</div>
+        <div class="faq-answer">Documentation context files that Claude Code reads so it understands <a href="https://www.remotion.dev/" target="_blank" rel="noopener">Remotion's</a> API. Install them during project setup so Claude writes valid code instead of guessing. <a href="https://www.remotion.dev/docs/ai/claude-code" target="_blank" rel="noopener">More details in the docs.</a></div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Learn how to scale ads with AI tools like this.</p>
+      <a href="https://www.skool.com/ai-ads-with-roman/about" class="footer-link" target="_blank" rel="noopener">Join the waitlist</a>
+    </div>
+  </footer>
+
+</body>
+</html>
