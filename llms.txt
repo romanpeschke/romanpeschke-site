@@ -16,6 +16,7 @@ Roman Peschke creates daily Instagram Reels breaking down AI tools and workflows
 - [How to Install Superpowers for Claude Code](/guides/superpowers-claude-code/): Free plugin that turns your coding agent into an autonomous dev team. Brainstorming, design docs, sub-agent dispatch, TDD, and code review. Works on Claude Code, Cursor, Codex, Gemini CLI, and OpenCode.
 - [How to Get OpenAI Codex Inside Your Claude Code Session](/guides/codex-inside-claude-code/): Install the official Codex plugin for Claude Code. Code reviews, adversarial challenges, and task handoff from a second AI agent without leaving your workflow.
 - [How to Make Videos with Remotion and Claude Code](/guides/make-videos-remotion/): Scaffold a React video project, prompt what you want, render real MP4s. Use cases: social content, product demos, data visualizations, ecommerce ads, personalized campaigns.
+- [How to Automate Your Business with Claude Code Routines](/guides/claude-code-routines-for-business/): Turn any local workflow into a cloud routine that runs on a schedule, webhook, or GitHub event. Non-technical walkthrough driven by Claude Code prompts.
 
 ## Links
 

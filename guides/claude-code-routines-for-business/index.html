@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Automate Your Business with Claude Code Routines | Roman Peschke</title>
+  <meta name="description" content="Step-by-step guide to automating your business workflows with Claude Code Routines. Run prompts on a schedule, trigger from webhooks, or react to GitHub events. No laptop required.">
+  <meta property="og:title" content="How to Automate Your Business with Claude Code Routines">
+  <meta property="og:description" content="Turn any local workflow into a hands-off cloud routine. Prompt, pick a trigger, let it run. No servers, no glue code.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-04-14">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/claude-code-routines-for-business/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Automate Your Business with Claude Code Routines",
+    "description": "Step-by-step guide to turning a local workflow into a Claude Code Routine that runs autonomously in the cloud on a schedule, webhook trigger, or GitHub event.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-04-14",
+    "totalTime": "PT10M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://claude.com/product/claude-code" },
+      { "@type": "HowToTool", "name": "Claude Code Routines", "url": "https://claude.ai/code/routines" },
+      { "@type": "HowToTool", "name": "GitHub", "url": "https://github.com" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Confirm your plan and turn on Claude Code on the web", "text": "In claude.ai Settings, confirm a Pro, Max, Team, or Enterprise plan and enable Claude Code on the web under Feature previews." },
+      { "@type": "HowToStep", "position": 2, "name": "Push your project to a private GitHub repo", "text": "In Claude Code, prompt Claude to create a private repo, set up .gitignore for .env and secrets, and push the project." },
+      { "@type": "HowToStep", "position": 3, "name": "Scrub local paths so it runs in the cloud", "text": "Prompt Claude to replace every hardcoded local path with repo-relative paths and confirm no secrets are in git history." },
+      { "@type": "HowToStep", "position": 4, "name": "Create a cloud environment with your secrets", "text": "In claude.ai/code, create a new environment. Add every variable from your local .env as an environment variable." },
+      { "@type": "HowToStep", "position": 5, "name": "Add a setup script", "text": "Ask Claude for the exact install command for your stack. Paste into the environment's Setup script field. Set network access to Full." },
+      { "@type": "HowToStep", "position": 6, "name": "Connect your MCP tools", "text": "In claude.ai Settings > Connectors, connect every external service the routine will use (Gmail, Slack, Linear, Drive, etc.)." },
+      { "@type": "HowToStep", "position": 7, "name": "Turn your workflow into a routine prompt", "text": "Ask Claude to rewrite your main script as a routine prompt: explicit numbered steps plus success criteria." },
+      { "@type": "HowToStep", "position": 8, "name": "Create the routine and attach a trigger", "text": "At claude.ai/code/routines, click New routine. Paste the prompt, add your repo and environment, pick a schedule, API, or GitHub trigger." },
+      { "@type": "HowToStep", "position": 9, "name": "Test before enabling", "text": "Click Run now, watch the session live. Fix any errors by prompting Claude Code, push the fix, and re-run until clean." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does my laptop need to stay on for a routine to run?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Routines execute on Anthropic-managed cloud infrastructure, so they keep running when your laptop is closed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What plan do I need to use Routines?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Routines are available on Pro, Max, Team, and Enterprise plans with Claude Code on the web enabled."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to know how to code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If you already have a working local workflow, Claude Code can handle the setup, GitHub push, path cleanup, and prompt conversion. You drive it with plain English. For triggers, schedule is pure point-and-click. API and GitHub triggers take a bit more familiarity."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the minimum interval for a scheduled routine?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "One hour. Runs more frequent than hourly are rejected. Runs may also start a few minutes after the scheduled time due to stagger."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .hero-cta { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; min-height: 44px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 14px; border-radius: 8px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .hero-cta:hover, .hero-cta:active { opacity: 0.9; }
+
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    .step-content a, .why-section a, .faq-answer a, .usecase-desc a, .before-text a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .usecase-desc a:hover, .before-text a:hover { text-decoration-color: var(--accent); }
+
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+    .why-section p + p { margin-top: 12px; }
+
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content p:last-child { margin-bottom: 0; }
+    .step-content ul { list-style: none; padding: 0; margin-bottom: 8px; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+    .step-content code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+    .prompt-box { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin: 10px 0; font-size: 14px; color: var(--text); line-height: 1.6; font-style: italic; }
+
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    .usecases-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .usecases-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .usecases-intro { font-size: 15px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+    .usecase { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .usecase:last-child { margin-bottom: 0; }
+    .usecase-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .usecase-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    .quickwin { background: var(--green-dim); border: 1px solid rgba(5,150,105,0.20); border-radius: 12px; padding: 14px 16px; margin-top: 20px; }
+    .quickwin-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--green); margin-bottom: 6px; }
+    .quickwin p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .quickwin code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: rgba(255,255,255,0.6); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(5,150,105,0.20); }
+
+    .assumptions-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .assumptions-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .assumptions-list { list-style: none; padding: 0; }
+    .assumptions-list li { font-size: 15px; color: var(--text-muted); padding: 6px 0; padding-left: 22px; position: relative; line-height: 1.6; }
+    .assumptions-list li::before { content: '✓'; position: absolute; left: 0; top: 6px; color: var(--green); font-weight: 700; font-size: 14px; }
+    .assumptions-list li strong { color: var(--text); }
+
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
+        api_host: 'https://t.romanpeschke.com',
+        ui_host: 'https://us.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'always',
+    })
+  </script>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Automate Your Business with Claude Code Routines</h1>
+      <p class="subtitle" itemprop="description">Take any workflow you run locally and turn it into a hands-off cloud routine. No laptop, no servers, no glue code.</p>
+      <a href="https://www.skool.com/ai-ads-with-roman/about" class="hero-cta" target="_blank" rel="noopener">Scale your ads with AI</a>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools you'll use</div>
+      <div class="tools-list">
+        <a href="https://claude.com/product/claude-code" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+        <a href="https://claude.ai/code/routines" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Routines</a>
+        <a href="https://github.com" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> GitHub</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>Anthropic just turned autonomous work into a setup form.</strong> Before <a href="https://claude.ai/code/routines" target="_blank" rel="noopener">Routines</a>, running a workflow on a schedule meant keeping your laptop open, paying for a server, or duct-taping cron jobs together. Now you write a prompt, pick a trigger, and it runs on Anthropic's cloud.</p>
+      <p>This is <strong>The Autonomous Loop</strong>: <em>Prompt → Trigger → Run</em>. Do it once, it runs forever.</p>
+    </section>
+
+    <section class="assumptions-section" aria-label="Assumptions">
+      <h2>What this guide assumes</h2>
+      <ul class="assumptions-list">
+        <li><strong>You have a Claude Pro, Max, Team, or Enterprise subscription.</strong> Routines are only on paid plans.</li>
+        <li><strong>You have a GitHub account.</strong> Free is fine. <a href="https://github.com/signup" target="_blank" rel="noopener">Sign up here</a> if you don't.</li>
+        <li><strong>You have a working local workflow.</strong> A project folder on your Mac that already runs (a cron job, a launchd task, or a script you run manually).</li>
+        <li><strong>You have <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> installed.</strong> Claude will do the terminal work for you.</li>
+        <li><strong>Your API keys live in a local <code>.env</code> file</strong> (or somewhere you can copy them from).</li>
+      </ul>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Prep</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Turn on Claude Code on the web</h3>
+            <p>Go to <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>. Click your avatar in the top right, then <strong>Settings</strong>.</p>
+            <ul>
+              <li>Under <strong>Billing</strong>, confirm your plan is Pro, Max, Team, or Enterprise.</li>
+              <li>Under <strong>Feature previews</strong>, toggle on <strong>Claude Code on the web</strong>.</li>
+            </ul>
+            <p>Open a new tab and go to <a href="https://claude.ai/code" target="_blank" rel="noopener">claude.ai/code</a>. If you see the session list, you're in.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Push your project to a private GitHub repo</h3>
+            <p>Routines need your code in a GitHub repo so they can clone it at the start of every run. Open <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> in your project folder (<code>cd</code> in, then <code>claude</code>), and paste:</p>
+            <div class="prompt-box">Create a private GitHub repo for this project called <code>[your-project-name]</code> and push the code up. First, write a <code>.gitignore</code> that excludes <code>.env</code> and anything with secrets. Don't commit any keys. Tell me when the repo is live.</div>
+            <p>Claude handles the git init, the push, and GitHub auth if needed.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Scrub local paths so it runs in the cloud</h3>
+            <p>Anything hardcoded to your Mac (<code>/Users/...</code>, <code>~/</code>) won't exist in the cloud. Still in <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a>, paste:</p>
+            <div class="prompt-box">Find every hardcoded local path in this project (anything starting with <code>/Users/</code>, <code>~/</code>, or referencing my home directory). Replace with repo-relative paths. Confirm <code>.env</code> is gitignored and no secrets are in the git history. Push the cleanups.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Configure</div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>List your secrets</h3>
+            <p>Ask Claude Code:</p>
+            <div class="prompt-box">List every variable in my <code>.env</code> file. Names only, not values. I need the list to set up a cloud environment.</div>
+            <p>Keep the list handy. You'll paste the actual values into the web UI yourself.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Create a cloud environment</h3>
+            <p>In your browser, go to <a href="https://claude.ai/code" target="_blank" rel="noopener">claude.ai/code</a>. In the left sidebar, click <strong>Environments</strong>, then <strong>New environment</strong>. Give it a name.</p>
+            <ul>
+              <li><strong>Environment variables:</strong> click <strong>Add variable</strong> for each name from Step 4. Open your local <code>.env</code> in a text editor, copy each value, paste it into the web form.</li>
+              <li><strong>Setup script:</strong> back in Claude Code, paste:
+                <div class="prompt-box">Look at this project and write the exact setup script I need to paste into Claude Code's cloud environment so a fresh clone is runnable. Install all my dependencies, nothing else.</div>
+                Paste Claude's output into the <strong>Setup script</strong> field in the browser.
+              </li>
+              <li><strong>Network access:</strong> set to <strong>Full</strong>. Your routine will hit external APIs.</li>
+            </ul>
+            <p>Click <strong>Save</strong>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Connect your MCP tools</h3>
+            <p>If your routine sends emails, posts to Slack, writes to a CRM, or hits anything outside your repo — connect it as an <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">MCP connector</a>.</p>
+            <p>On <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>, go to <strong>Settings → Connectors</strong>. Click <strong>Connect</strong> on each service you need (Gmail, Slack, Linear, Google Drive, Notion, and more). Authenticate through each one's OAuth flow.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Ship</div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Turn your workflow into a routine prompt</h3>
+            <p>A routine prompt is instructions to an autonomous agent, not code. Back in Claude Code, paste:</p>
+            <div class="prompt-box">Look at the main script in this project (the one my cron or launchd runs). Rewrite it as a routine prompt for Claude Code — instructions to an autonomous agent, not code. Include numbered steps, explicit success criteria at the bottom, and any file paths it should read or write.</div>
+            <p>Copy the prompt Claude gives you.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <h3>Create the routine and attach a trigger</h3>
+            <p>Go to <a href="https://claude.ai/code/routines" target="_blank" rel="noopener">claude.ai/code/routines</a> and click <strong>New routine</strong>.</p>
+            <ul>
+              <li><strong>Name:</strong> something clear, like "Morning Ad Report."</li>
+              <li><strong>Prompt:</strong> paste the prompt from Step 7.</li>
+              <li><strong>Repositories:</strong> click <strong>Add repository</strong>, pick the repo from Step 2.</li>
+              <li><strong>Environment:</strong> pick the one from Step 5.</li>
+              <li><strong>Connectors:</strong> uncheck any this routine doesn't need.</li>
+              <li><strong>Select a trigger:</strong> pick one (details below).</li>
+            </ul>
+            <p>Click <strong>Create</strong>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">9</div>
+          <div class="step-content">
+            <h3>Test before enabling</h3>
+            <p>On the routine detail page, click <strong>Run now</strong>. A session opens — watch it execute live.</p>
+            <p>If anything fails, copy the error, jump back to <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a>, and paste:</p>
+            <div class="prompt-box">My routine run just failed with this error: <code>[paste]</code>. Here's the prompt I used: <code>[paste]</code>. Figure out what's wrong, fix it in the repo, push the change, and tell me what you changed.</div>
+            <p>Re-run until clean. Only then do you trust the trigger.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="usecases-section" aria-label="Trigger use cases">
+      <h2>The three triggers</h2>
+      <p class="usecases-intro">Every routine needs at least one trigger. Here's how to pick the right one for your workflow.</p>
+
+      <div class="usecase">
+        <div class="usecase-name">Schedule — for anything on a clock</div>
+        <div class="usecase-desc">Daily, weekly, weekdays, or a custom cron expression (minimum 1 hour). Good for: morning performance reports, nightly data backfills, weekly review digests, end-of-month reconciliation. Anything you'd set a recurring calendar reminder for.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">API — for anything triggered by another tool</div>
+        <div class="usecase-desc">Every routine gets a unique URL and bearer token. POST to it from any webhook, alert, or form submit. Good for: new lead hits your CRM → enrich and personalize outreach, monitoring alert → triage the error, deploy finishes → run smoke checks. Any event in another platform becomes a Claude run.</div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase-name">GitHub — for anything tied to code</div>
+        <div class="usecase-desc">React to PRs, pushes, issues, releases, check runs, and more. Filter by author, label, branch, or draft state. Good for: custom PR reviewers, auto-labeling issues, porting merged changes to other repos. You only need this if your workflow lives around a codebase.</div>
+      </div>
+    </section>
+
+    <section class="before-section" aria-label="Pitfalls">
+      <h2>Pitfalls</h2>
+
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Don't enable "Allow unrestricted branch pushes" unless you need it.</strong> By default, routines can only push to branches prefixed with <code>claude/</code>. That's your guardrail — it stops a routine from clobbering <code>main</code>.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Don't assume the <code>/schedule</code> CLI command does everything.</strong> It only creates schedule triggers. API and GitHub triggers have to be added in the web UI after the routine is saved.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Don't lose the API bearer token.</strong> It's shown once. You can't retrieve it later. Paste it straight into your webhook tool's secret manager the moment it's generated.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">!</div>
+        <div class="before-text"><strong>Don't skip the test run.</strong> A silent failure at 6am looks identical to the routine working. "Run now" with eyes on the live session is the only way to catch missing env vars or broken paths before they matter.</div>
+      </div>
+
+      <div class="quickwin">
+        <div class="quickwin-label">Quick win</div>
+        <p>Want to feel it work in 30 seconds? Open <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> in any folder and type <code>/schedule tomorrow at 8am summarize my GitHub notifications</code>. One live Autonomous Loop, no repo required.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools used in this guide</h2>
+
+      <a href="https://claude.ai/code/routines" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Code Routines</div>
+        <div class="tool-card-desc">Saved Claude Code configurations — prompt, repos, connectors — that execute on Anthropic-managed cloud infrastructure. Triggered by schedule, API call, or GitHub event. In research preview on Pro, Max, Team, and Enterprise plans.</div>
+        <div class="tool-card-url">claude.ai/code/routines</div>
+      </a>
+
+      <a href="https://claude.com/product/claude-code" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Code</div>
+        <div class="tool-card-desc">Anthropic's agentic coding CLI. Runs in your terminal with full access to your project files. Used here to set up GitHub, scrub local paths, and rewrite your scripts as routine prompts.</div>
+        <div class="tool-card-url">claude.com/product/claude-code</div>
+      </a>
+
+      <a href="https://github.com" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">GitHub</div>
+        <div class="tool-card-desc">Where your code has to live so Routines can clone it every run. Free accounts support private repos. The Claude GitHub App is required for GitHub event triggers.</div>
+        <div class="tool-card-url">github.com</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Does my laptop have to stay on?</div>
+        <div class="faq-answer">No. Routines run on Anthropic-managed cloud infrastructure. They keep going when your laptop is closed or your internet is off.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What plan do I need?</div>
+        <div class="faq-answer">Pro, Max, Team, or Enterprise — with <a href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">Claude Code on the web</a> enabled in Feature previews.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need to know how to code?</div>
+        <div class="faq-answer">If you already have a working local workflow, <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> handles the GitHub setup, path cleanup, and prompt conversion for you. Scheduled triggers are pure point-and-click. API and GitHub triggers take slightly more familiarity.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What's the minimum run interval?</div>
+        <div class="faq-answer">One hour. Schedules more frequent than hourly are rejected. Runs may also start a few minutes after the scheduled time due to stagger.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What if my routine fails silently?</div>
+        <div class="faq-answer">Every run creates a session you can open after the fact. Click the routine, then any past run, to see exactly what Claude did, what errored, and where. Treat it like reviewing a recording.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Learn how to scale ads with AI tools like this.</p>
+      <a href="https://www.skool.com/ai-ads-with-roman/about" class="footer-link" target="_blank" rel="noopener">Join the community</a>
+    </div>
+  </footer>
+
+</body>
+</html>
