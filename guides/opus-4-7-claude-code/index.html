@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Stop Claude Opus 4.7 from Burning Your Tokens in Claude Code | Roman Peschke</title>
+  <meta name="description" content="Claude Opus 4.7 burns up to 35% more tokens by default. Effort settings, session structure, and adaptive thinking fixes from the Claude Code team.">
+  <meta property="og:title" content="How to Stop Claude Opus 4.7 from Burning Your Tokens in Claude Code">
+  <meta property="og:description" content="Two changes silently increase your token usage. Effort settings, session structure, and adaptive thinking fixes from the Claude Code team.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-04-16">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/opus-4-7-claude-code/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Stop Claude Opus 4.7 from Burning Your Tokens in Claude Code",
+    "description": "Claude Opus 4.7 burns up to 35% more tokens by default. Effort settings, session structure, and adaptive thinking fixes from the Claude Code team.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-04-16",
+    "totalTime": "PT5M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude Code", "url": "https://claude.ai/code" },
+      { "@type": "HowToTool", "name": "Claude Opus 4.7", "url": "https://www.anthropic.com/news/claude-opus-4-7" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Understand the tokenizer change", "text": "Same pricing, but the same input now maps to 1.0-1.35x more tokens depending on content type." },
+      { "@type": "HowToStep", "position": 2, "name": "Know your new default effort level", "text": "xhigh is now the default for all plans. If you had medium before, you jumped two levels without doing anything." },
+      { "@type": "HowToStep", "position": 3, "name": "Check the benchmark gains", "text": "Opus 4.7 outperforms 4.6 across every effort level. 3x better vision, strict instruction following, better memory across sessions." },
+      { "@type": "HowToStep", "position": 4, "name": "Start a new session for each task", "text": "Every user turn adds reasoning overhead. Longer sessions compound the 35% tokenizer increase. Clean context per task means less waste." },
+      { "@type": "HowToStep", "position": 5, "name": "Match effort to the task", "text": "low/medium for simple edits, high for defined projects, xhigh for multi-step work, max for deep investigation only." },
+      { "@type": "HowToStep", "position": 6, "name": "Specify the full task in turn 1", "text": "Include intent, constraints, acceptance criteria, and relevant file locations. Fewer turns means fewer reasoning passes." },
+      { "@type": "HowToStep", "position": 7, "name": "Use adaptive thinking prompts", "text": "Fixed thinking budgets are gone. Prompt for more or less thinking depending on the task." },
+      { "@type": "HowToStep", "position": 8, "name": "Toggle effort mid-task", "text": "Switch between effort levels during the same task. Use xhigh for the hard part, drop to high or medium for cleanup." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does Claude Opus 4.7 cost more per token?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Same pricing as Opus 4.6 ($5 per million input tokens, $25 per million output tokens). But the new tokenizer means the same text maps to up to 35% more tokens."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is xhigh effort in Claude Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A new effort level between high and max, introduced with Opus 4.7. It's the recommended default for most coding and agentic work."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I still use Extended Thinking with a fixed budget in Opus 4.7?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Opus 4.7 uses adaptive thinking only. The model decides when and how much to think based on context. You can prompt it to think more or less."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Opus 4.7 better than Opus 4.6 at every effort level?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. According to Anthropic's internal evals, Opus 4.7 outperforms 4.6 across the full effort range, with the largest gains at high and above."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Skool CTA */
+    .skool-cta { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .skool-cta-card { display: block; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 16px 18px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .skool-cta-card:hover, .skool-cta-card:active { border-color: var(--accent); background: rgba(99,102,241,0.10); }
+    .skool-cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .skool-cta-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .skool-cta-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Tools bar */
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    /* Inline links */
+    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
+
+    /* Context */
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+
+    /* Steps */
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+
+    /* Effort table */
+    .effort-table { width: 100%; border-collapse: collapse; margin: 12px 0 8px; }
+    .effort-table td { padding: 10px 12px; font-size: 14px; color: var(--text-muted); line-height: 1.5; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .effort-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; width: 100px; }
+    .effort-table tr:last-child td { border-bottom: none; }
+    .effort-table .recommended { background: var(--accent-dim); }
+    .effort-table .recommended td:first-child { color: var(--accent); }
+
+    /* Callout */
+    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Before you start */
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    /* Start here */
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* Tools section */
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Footer */
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
+        api_host: 'https://t.romanpeschke.com',
+        ui_host: 'https://us.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'always',
+    })
+  </script>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Stop Claude Opus 4.7 from Burning Your Tokens in Claude Code</h1>
+      <p class="subtitle" itemprop="description">Every change, the two features that eat tokens, and how the Claude Code team says to fix it.</p>
+    </section>
+
+    <section class="skool-cta" aria-label="Community">
+      <a href="https://www.skool.com/ai-ads-with-roman" class="skool-cta-card" target="_blank" rel="noopener">
+        <div class="skool-cta-label">Free community</div>
+        <div class="skool-cta-title">AI Ads with Roman</div>
+        <div class="skool-cta-desc">Ready-made Claude skills, AI ad workflows, weekly Q&A, and playbooks for scaling ad creative with AI.</div>
+      </a>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools covered</div>
+      <div class="tools-list">
+        <a href="https://claude.ai/code" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code</a>
+        <a href="https://www.anthropic.com/news/claude-opus-4-7" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Opus 4.7</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>Opus 4.7 is the most capable model in <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a> today, but two changes silently increase your token usage.</strong> An updated tokenizer maps the same prompts to up to 35% more tokens. And the new default effort level (xhigh) jumped everyone up two levels of reasoning without asking. Here's every change, what actually burns tokens, and how to fix it.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">What's new in Opus 4.7</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Instruction following got way more literal</h3>
+            <p><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener">Opus 4.7</a> takes your instructions at face value. Where older models interpreted prompts loosely or skipped parts entirely, 4.7 follows them exactly. This means old prompts written for 4.6 can produce unexpected results if they were vaguely worded. Re-test any prompts you rely on.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>3x better vision</h3>
+            <p>The model now accepts images up to 2,576 pixels on the long edge (~3.75 megapixels), more than 3x the previous limit. Better for reading dense screenshots, extracting data from diagrams, and anything that needs pixel-level detail. Higher-res images consume more tokens, so downsample if you don't need the extra fidelity.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Better memory across sessions</h3>
+            <p>Opus 4.7 is better at using file system-based memory. It remembers important notes across long, multi-session work and uses them to pick up new tasks with less context needed up front.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Response length scales to complexity</h3>
+            <p>4.7 isn't as default-verbose as 4.6. You get shorter answers on simple lookups and longer ones on open-ended analysis. If you need a specific length or style, state it explicitly in your prompt. Positive examples of the voice you want work better than "Don't do this" instructions.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>It calls tools less and reasons more</h3>
+            <p>The model thinks before reaching for tools. This produces better results in many cases, but if you want more aggressive file reading or searching, tell it explicitly when and why to use tools.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Fewer subagents by default</h3>
+            <p>Opus 4.7 is more selective about delegating to subagents. If your workflow benefits from parallel subagents (fanning out across files or independent items), spell that out in your prompt.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>New /ultrareview command</h3>
+            <p>A dedicated review session that reads through your changes and flags bugs and design issues a careful human reviewer would catch. Pro and Max <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a> users get three free ultrareviews to try it out.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <h3>Auto mode expanded to Max users</h3>
+            <p>A permissions option where Claude makes decisions without frequent check-ins. Toggle with Shift+Tab. Good for long-running tasks where you've given full context up front. Available in research preview for Claude Code Max users.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">The two things that burn tokens</div>
+
+        <div class="step">
+          <div class="step-num">9</div>
+          <div class="step-content">
+            <h3>The updated tokenizer</h3>
+            <p>Same pricing ($5 per million input tokens, $25 per million output tokens). But the same text now maps to 1.0-1.35x more tokens depending on content type. Your prompts didn't change, but they cost more to process.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">10</div>
+          <div class="step-content">
+            <h3>xhigh effort is now the default</h3>
+            <p>A new effort level between high and max, turned on for all plans automatically. If you had medium set before, you jumped two levels without doing anything. The model also thinks more at higher effort levels on later turns in longer sessions, so token usage compounds over time.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">How to fix it</div>
+
+        <div class="step">
+          <div class="step-num">11</div>
+          <div class="step-content">
+            <h3>Start a new session for each task</h3>
+            <p>Every user turn adds reasoning overhead. The model reasons more after each turn, especially at xhigh. Longer sessions compound the 35% tokenizer increase. Clean context per task = less waste.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">12</div>
+          <div class="step-content">
+            <h3>Match effort to the task</h3>
+            <table class="effort-table">
+              <tr>
+                <td>low / medium</td>
+                <td>Drafting a social caption. Summarizing meeting notes. Writing a product description. Cleaning up a CSV before import. Anything you could explain in one sentence.</td>
+              </tr>
+              <tr>
+                <td>high</td>
+                <td>Writing a full blog post. Building a content calendar for the month. Turning a podcast transcript into a newsletter. Repurposing a webinar into social clips with scripts. Solid projects with a clear deliverable.</td>
+              </tr>
+              <tr class="recommended">
+                <td>xhigh</td>
+                <td>Building a landing page from a sales call transcript. Creating a multi-step onboarding automation. Analyzing a month of ad data and recommending budget shifts. Writing and deploying a lead magnet. Projects where Claude needs to read, think, and make judgment calls.</td>
+              </tr>
+              <tr>
+                <td>max</td>
+                <td>Auditing your entire marketing stack for leaks. Rebuilding a broken attribution system across Meta, your CRM, and Stripe. Researching a new market and producing a full competitive analysis. Deep work where you don't know the answer yet and need Claude to go find it.</td>
+              </tr>
+            </table>
+            <p>Drop a level from what you'd normally use. Low-effort Opus 4.7 is roughly equivalent to medium-effort Opus 4.6. Same quality, fewer tokens.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">13</div>
+          <div class="step-content">
+            <h3>Specify the full task in turn 1</h3>
+            <p>Treat Claude like an engineer you're delegating to, not a pair programmer you're guiding line by line. Include the intent, constraints, acceptance criteria, and relevant file locations up front. Ambiguous prompts spread across many turns reduce both token efficiency and output quality.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">14</div>
+          <div class="step-content">
+            <h3>Use adaptive thinking prompts</h3>
+            <p>Fixed thinking budgets are gone. The model now decides when to think deeply and when to respond quickly. You can steer it:</p>
+            <ul>
+              <li><strong>Want more thinking:</strong> "Think carefully and step-by-step before responding; this problem is harder than it looks."</li>
+              <li><strong>Want less thinking:</strong> "Prioritize responding quickly rather than thinking deeply. When in doubt, respond directly."</li>
+            </ul>
+            <p>You save tokens on the less-thinking side but may lose accuracy on harder steps.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">15</div>
+          <div class="step-content">
+            <h3>Toggle effort mid-task</h3>
+            <p>You can switch between effort levels during the same task. Use xhigh for the hard part (architecture, debugging, analysis), then drop to high or medium for cleanup and simple follow-ups.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="before-section" aria-label="Before you start">
+      <h2>Watch out for</h2>
+
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>Don't port old prompts without re-testing.</strong> 4.7 follows instructions so literally that loosely-written prompts break in new ways. What 4.6 interpreted loosely, 4.7 takes at face value.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>Don't use max effort for everyday work.</strong> It overthinks and burns tokens with diminishing returns. xhigh is the sweet spot for most projects.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>Don't assume Extended Thinking works the same.</strong> Fixed thinking budgets are not supported in 4.7. Adaptive thinking replaced it. The model decides when and how much to think based on context.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>Higher-res images cost more tokens.</strong> 4.7 processes images at up to 3.75 megapixels by default. If you're sending screenshots and don't need pixel-level detail, downsample before sending.</div>
+      </div>
+
+      <div class="start-here">
+        <div class="start-here-label">Start here</div>
+        <p>Open <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a>, check your effort level. If it's max, switch to xhigh. If you've been running one long session all day, start a fresh one for your next task. Two changes, instant savings.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools covered in this guide</h2>
+
+      <a href="https://claude.ai/code" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Code</div>
+        <div class="tool-card-desc">Anthropic's official CLI for Claude. Available as a terminal CLI, desktop app (Mac/Windows), web app, and IDE extensions for VS Code and JetBrains.</div>
+        <div class="tool-card-url">claude.ai/code</div>
+      </a>
+
+      <a href="https://www.anthropic.com/news/claude-opus-4-7" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude Opus 4.7</div>
+        <div class="tool-card-desc">Anthropic's most capable generally available model. State-of-the-art on advanced software engineering, with particular gains on the most difficult tasks. Same pricing as Opus 4.6.</div>
+        <div class="tool-card-url">anthropic.com/news/claude-opus-4-7</div>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Does Claude Opus 4.7 cost more per token?</div>
+        <div class="faq-answer">No. Same pricing as Opus 4.6: $5 per million input tokens and $25 per million output tokens. But the new tokenizer means the same text maps to up to 35% more tokens, so the effective cost per prompt can be higher.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What is xhigh effort in Claude Code?</div>
+        <div class="faq-answer">A new effort level between high and max, introduced with <a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener">Opus 4.7</a>. It's the recommended default for most coding and agentic work. It provides strong autonomy and intelligence without the runaway token usage that max can produce on long runs.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can I still use Extended Thinking with a fixed budget?</div>
+        <div class="faq-answer">No. <a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener">Opus 4.7</a> uses adaptive thinking only. The model decides when and how much to think based on context. You can prompt it to think more or less, but you can't set a fixed token budget for thinking.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Is Opus 4.7 better than Opus 4.6 at every effort level?</div>
+        <div class="faq-answer">Yes. According to Anthropic's internal evals, Opus 4.7 outperforms 4.6 across the full effort range, with the largest gains at high and above. Low-effort 4.7 is roughly equivalent to medium-effort 4.6.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Get ready-made Claude skills, AI ad workflows, and weekly playbooks.</p>
+      <a href="https://www.skool.com/ai-ads-with-roman" class="footer-link" target="_blank" rel="noopener">Join AI Ads with Roman</a>
+    </div>
+  </footer>
+
+</body>
+</html>
