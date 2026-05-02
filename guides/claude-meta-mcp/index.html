@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Connect Claude to Meta Ads Without Getting Banned | Roman Peschke</title>
+  <meta name="description" content="The official Meta Ads MCP server and CLI are here. The 60-second connect, the MCP vs CLI vs raw API decision, and the local-business targeting trap.">
+  <meta property="og:title" content="How to Connect Claude to Meta Ads Without Getting Banned">
+  <meta property="og:description" content="The official Meta Ads MCP and CLI just dropped. Connect Claude in 60 seconds, plus how to pick MCP vs CLI vs raw API.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-05-02">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/claude-meta-mcp/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Connect Claude to Meta Ads Without Getting Banned",
+    "description": "Connect Claude to your Meta ad account using the official MCP server in 60 seconds, plus how to pick MCP vs CLI vs raw API.",
+    "author": {
+      "@type": "Person",
+      "name": "Roman Peschke",
+      "url": "https://instagram.com/roman.peschke"
+    },
+    "datePublished": "2026-05-02",
+    "totalTime": "PT5M",
+    "tool": [
+      { "@type": "HowToTool", "name": "Claude", "url": "https://claude.ai" },
+      { "@type": "HowToTool", "name": "Meta Ads MCP server", "url": "https://www.facebook.com/business/help/1456422242197840" },
+      { "@type": "HowToTool", "name": "Meta Ads CLI", "url": "https://developers.facebook.com/blog/post/2026/04/29/introducing-ads-cli/" }
+    ],
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Pick the right path", "text": "Claude Desktop = MCP. Claude Code with scripts = CLI. CAPI, offline conversions, webhooks, or local targeting = raw Marketing API." },
+      { "@type": "HowToStep", "position": 2, "name": "Open Claude and add a custom connector", "text": "In Claude, click + in any chat or go Customize → Connectors, then click Add custom connector." },
+      { "@type": "HowToStep", "position": 3, "name": "Paste the Meta MCP URL", "text": "Paste https://mcp.facebook.com/ads and click Add." },
+      { "@type": "HowToStep", "position": 4, "name": "Sign into Meta and pick your ad account", "text": "Authorize through OAuth, pick the ad account you want connected, and review the requested permissions." },
+      { "@type": "HowToStep", "position": 5, "name": "Toggle the connector on in your chat", "text": "Open the + menu in your chat, find Meta under Connectors, and toggle it on." },
+      { "@type": "HowToStep", "position": 6, "name": "Confirm anything you create stays paused", "text": "MCP creates new resources in PAUSED status. Confirm in Ads Manager before flipping anything live." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Will using the Meta MCP server get my ad account banned?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The MCP server is the official Meta-built integration. The accounts that were getting flagged before this were running janky scripts against the Marketing API the wrong way. The MCP is the sanctioned path."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between the Meta Ads MCP and the Meta Ads CLI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The MCP is a remote connector you paste into Claude. Zero code. Best for chatting with your account. The CLI is a Python tool you install in your terminal. Best for scripts, cron jobs, and CI/CD. The MCP also exposes a few endpoints the CLI does not, like Signal Diagnostics and Help Center search."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need a developer app or app review to use the Meta MCP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The MCP uses Business OAuth or a token link. No developer app required. The CLI may need a developer app for system-token automation. The raw Marketing API requires a full developer app and tokens."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use the Meta MCP on the free Claude plan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, but the free plan caps you at one custom connector total. If you have used your one slot, the Meta MCP will not fit until you remove the existing one or upgrade."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the Meta MCP send Conversions API events or upload offline conversions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. CAPI server events, offline conversions, and webhooks are not in the MCP or CLI tool sets. Use the raw Marketing API for those."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use the Meta MCP for local business targeting (city, ZIP, radius)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Verify before you trust it. The current public CLI docs show country-level targeting for ad set creation, and the MCP is similar. The underlying Marketing API supports city, ZIP, and radius targeting. Draft paused with the MCP, then patch targeting in Ads Manager or use the raw API before going live."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --surface-2: #f3f4f6;
+      --border: #e5e7eb;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --accent: #6366f1;
+      --accent-dim: rgba(99,102,241,0.06);
+      --accent-border: rgba(99,102,241,0.20);
+      --green: #059669;
+      --green-dim: rgba(5,150,105,0.08);
+      --amber: #d97706;
+      --amber-dim: rgba(217,119,6,0.08);
+      --amber-border: rgba(217,119,6,0.25);
+      --red: #dc2626;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
+    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
+    .ig-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
+    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Tools bar */
+    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
+    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    /* Inline links */
+    .step-content a, .why-section a, .faq-answer a, .callout a, .ps-card a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .callout a:hover, .ps-card a:hover { text-decoration-color: var(--accent); }
+
+    /* Context */
+    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .why-section p strong { color: var(--text); }
+
+    /* Steps */
+    .steps { padding: 32px 0; }
+    .phase { margin-bottom: 36px; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
+    .step { display: flex; gap: 14px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
+    .step-content { min-width: 0; }
+    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
+    .step-content code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; color: var(--text); }
+    .step-content ul { list-style: none; padding: 0; }
+    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
+    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+
+    /* Capability table */
+    .cap-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .cap-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .cap-section .cap-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+    .cap-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .cap-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 14px; }
+    .cap-table th { text-align: left; padding: 10px 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); font-size: 13px; }
+    .cap-table td { padding: 10px 12px; color: var(--text-muted); border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.4; }
+    .cap-table tr:last-child td { border-bottom: none; }
+    .cap-table td:first-child { color: var(--text); font-weight: 500; }
+    .cap-yes { color: var(--green); font-weight: 600; }
+    .cap-no { color: var(--red); font-weight: 600; }
+    .cap-partial { color: var(--amber); font-weight: 600; }
+    .cap-best { color: var(--accent); font-weight: 600; }
+
+    /* Callout (warning) */
+    .callout { background: var(--amber-dim); border: 1px solid var(--amber-border); border-radius: 12px; padding: 16px 18px; margin: 24px 0 0; }
+    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--amber); margin-bottom: 6px; }
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--text); }
+
+    /* Watch out for */
+    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .before-item:last-of-type { margin-bottom: 0; }
+    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
+    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .before-text strong { color: var(--text); }
+
+    /* Start here */
+    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
+    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
+    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .start-here code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; background: rgba(255,255,255,0.6); border: 1px solid rgba(5,150,105,0.18); border-radius: 4px; padding: 1px 6px; }
+
+    /* Tools section */
+    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
+    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
+
+    /* PS / Skool card */
+    .ps-section { padding: 32px 0 0; }
+    .ps-card { display: block; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 18px 20px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
+    .ps-card:hover, .ps-card:active { border-color: var(--accent); background: rgba(99,102,241,0.10); }
+    .ps-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 8px; }
+    .ps-text { font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 12px; }
+    .ps-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--accent); }
+    .ps-cta::after { content: '→'; transition: transform 0.15s; }
+    .ps-card:hover .ps-cta::after { transform: translateX(2px); }
+
+    /* FAQ */
+    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Footer */
+    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
+    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
+    .footer-link:hover, .footer-link:active { opacity: 0.9; }
+
+    @media (min-width: 480px) {
+      h1 { font-size: 32px; }
+      .hero { padding: 48px 0 40px; }
+      .steps { padding: 40px 0; }
+      .tools-section { padding: 40px 0; }
+    }
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
+        api_host: 'https://t.romanpeschke.com',
+        ui_host: 'https://us.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'always',
+    })
+  </script>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <a href="/" class="brand">Roman Peschke</a>
+      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+
+    <section class="hero" aria-label="Guide overview">
+      <span class="hero-label">Free Guide</span>
+      <h1 itemprop="name">How to Connect Claude to Meta Ads Without Getting Banned</h1>
+      <p class="subtitle" itemprop="description">The official MCP, the new CLI, the raw API, and how to pick the right one for your account.</p>
+    </section>
+
+    <section class="tools-bar" aria-label="Tools used">
+      <div class="tools-bar-label">Tools covered</div>
+      <div class="tools-list">
+        <a href="https://claude.ai" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude</a>
+        <a href="https://www.facebook.com/business/help/1456422242197840" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Meta Ads MCP</a>
+        <a href="https://developers.facebook.com/blog/post/2026/04/29/introducing-ads-cli/" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Meta Ads CLI</a>
+      </div>
+    </section>
+
+    <section class="why-section" aria-label="Context">
+      <p><strong>The official Meta Ads MCP server and CLI are here.</strong> That means you can fully manage your accounts with AI without getting banned. Below is the connect, plus how to pick MCP vs CLI vs raw API for your situation.</p>
+    </section>
+
+    <section class="steps" aria-label="Step-by-step instructions">
+
+      <div class="phase">
+        <div class="phase-label">Pick your path</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Working in Claude Desktop or chat? Use the MCP.</h3>
+            <p>Fastest setup. No developer app. Best for analysis, reporting, and supervised changes. The MCP also exposes a few endpoints the CLI does not, like Signal Diagnostics and Help Center search.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Working in Claude Code with scripted reporting and QA? Use the CLI.</h3>
+            <p>Same tool coverage as the MCP. Runs in your terminal, in cron, in CI/CD. Use this when you want repeatable account ops without building the full API stack.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Need CAPI, offline conversions, webhooks, or local targeting? Use the raw Marketing API.</h3>
+            <p>The MCP and CLI are a curated tool set. Anything outside it (Conversions API server events, offline conversion uploads, webhooks, batch jobs, local geo targeting) needs the raw API. Highest setup burden, full surface, full control.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Need IG DMs, organic IG publishing, FB Page posts, or WhatsApp?</h3>
+            <p>Different APIs entirely. None of these are in the Meta Ads MCP or CLI. They each have separate API surfaces, permissions, and usually a separate developer app.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">Connect the MCP in 60 seconds</div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Open Claude and add a custom connector</h3>
+            <p>Click <code>+</code> in any chat, or go to Customize → Connectors. Then click <em>Add custom connector</em>. Free <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> users only get one custom connector total, so make sure your slot is open.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Paste the Meta MCP URL</h3>
+            <p>Paste <code>https://mcp.facebook.com/ads</code> and click <em>Add</em>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h3>Sign into Meta and pick your ad account</h3>
+            <p>Authorize through Business OAuth. Pick the ad account you want connected. Read the requested permissions before you approve. You can revoke access in your Meta Business settings any time.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <h3>Toggle the connector on in your chat</h3>
+            <p>Open the <code>+</code> menu in your chat, find Meta under Connectors, and toggle it on for that conversation.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">9</div>
+          <div class="step-content">
+            <h3>Confirm anything you create stays paused</h3>
+            <p>Anything new you build through the MCP comes through paused. Confirm it in <a href="https://business.facebook.com/adsmanager" target="_blank" rel="noopener">Ads Manager</a> before flipping anything live.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-label">First prompts to try</div>
+
+        <div class="step">
+          <div class="step-num">10</div>
+          <div class="step-content">
+            <h3>Pull last 7 days of spend, CTR, and CPA by ad set.</h3>
+            <p>Confirms the connection works and gives you a clean baseline read.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">11</div>
+          <div class="step-content">
+            <h3>Find my worst-performing ad set in the last 14 days and tell me what to do.</h3>
+            <p>Tests the model's ability to reason on your account, not just report numbers back.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">12</div>
+          <div class="step-content">
+            <h3>Draft a new campaign targeting [audience] with a $50/day budget. Don't launch it.</h3>
+            <p>Tests the write path. The MCP creates everything paused, so this is safe to run without risk.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="cap-section" aria-label="Capability comparison">
+      <h2>What each path can and cannot do</h2>
+      <p class="cap-sub">Capability map across the three options. Use this to pick the lane that actually covers your workflow.</p>
+
+      <div class="cap-table-wrap">
+        <table class="cap-table">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>MCP</th>
+              <th>CLI</th>
+              <th>Raw API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Performance reporting</td>
+              <td><span class="cap-yes">Yes</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Budget and status updates</td>
+              <td><span class="cap-yes">Yes</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Campaign creation</td>
+              <td><span class="cap-yes">Yes</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Local business targeting</td>
+              <td><span class="cap-partial">Verify first</span></td>
+              <td><span class="cap-partial">Weak</span></td>
+              <td><span class="cap-best">Best</span></td>
+            </tr>
+            <tr>
+              <td>Custom audiences and lookalikes</td>
+              <td><span class="cap-partial">Limited</span></td>
+              <td><span class="cap-partial">Limited</span></td>
+              <td><span class="cap-yes">Full</span></td>
+            </tr>
+            <tr>
+              <td>Conversions API server events</td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Offline conversions</td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Batch and async jobs</td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-partial">Partial</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Webhooks</td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Unsupported / custom workflows</td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-partial">Limited</span></td>
+              <td><span class="cap-yes">Yes</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">Local business warning</div>
+        <p><strong>Do not rely on country-only targeting for live local-business launches.</strong></p>
+        <p>The underlying Marketing API supports city, ZIP, radius, and geo exclusions. Current public CLI docs show country-level targeting for ad set creation. If you run a restaurant, dentist, gym, home service, real estate, or multi-location franchise account: use the CLI for reports and QA, draft paused only, then patch targeting in <a href="https://business.facebook.com/adsmanager" target="_blank" rel="noopener">Ads Manager</a> or use the raw API before going live.</p>
+      </div>
+    </section>
+
+    <section class="before-section" aria-label="Watch out for">
+      <h2>Watch out for</h2>
+
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>Free Claude plans cap you at one custom connector total.</strong> If you have already used your slot for something else, the Meta MCP will not fit until you remove the existing one or upgrade.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>On Team and Enterprise plans, only Owners can add the connector.</strong> Members will not see Meta in the connector list until an Owner adds it at the org level.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>Custom connectors are still in beta.</strong> Tool behavior, OAuth scopes, and permissions can change. Re-check the doc before relying on the MCP for anything mission-critical.</div>
+      </div>
+      <div class="before-item">
+        <div class="before-icon">X</div>
+        <div class="before-text"><strong>"Allow always" hands the agent autonomous access.</strong> Per-action approval is the default safety. If you click Allow always for a tool, that tool will fire without asking. Read each scope first.</div>
+      </div>
+
+      <div class="start-here">
+        <div class="start-here-label">Start here</div>
+        <p>Open <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a>. Hit <code>+</code> in any chat → Add custom connector. Paste <code>https://mcp.facebook.com/ads</code>. Sign into Meta. Toggle it on. Sixty seconds and you are in.</p>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-label="Tool details">
+      <h2>Tools covered in this guide</h2>
+
+      <a href="https://claude.ai" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Claude</div>
+        <div class="tool-card-desc">Anthropic's AI assistant. Custom connectors are available on Free, Pro, Max, Team, and Enterprise plans (currently in beta). Free plans are capped at one custom connector.</div>
+        <div class="tool-card-url">claude.ai</div>
+      </a>
+
+      <a href="https://www.facebook.com/business/help/1456422242197840" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Meta Ads MCP server</div>
+        <div class="tool-card-desc">Meta's official remote MCP server for ad management. Connect URL is <code>https://mcp.facebook.com/ads</code>. Covers reporting, ad and campaign creation and edits, catalogs, signal diagnostics, and Help Center search. Every action requires your authorization through the agent.</div>
+        <div class="tool-card-url">facebook.com/business/help</div>
+      </a>
+
+      <a href="https://developers.facebook.com/blog/post/2026/04/29/introducing-ads-cli/" class="tool-card" target="_blank" rel="noopener">
+        <div class="tool-card-name">Meta Ads CLI</div>
+        <div class="tool-card-desc">Meta's official command-line tool for ad management. Requires Python 3.12+ and pip or uv. Covers campaigns, ad sets, ads, creatives, insights, catalogs, products, and datasets. New resources are created in PAUSED status by default.</div>
+        <div class="tool-card-url">developers.facebook.com/blog</div>
+      </a>
+    </section>
+
+    <section class="ps-section" aria-label="Skool community">
+      <a href="https://www.skool.com/ai-ads-with-roman/about" class="ps-card" target="_blank" rel="noopener">
+        <div class="ps-label">P.S.</div>
+        <p class="ps-text">If you want to learn how to automate your Meta ads and build a system that cranks out infinite static ads on demand, join the waitlist for my Skool community.</p>
+        <span class="ps-cta">Join the waitlist</span>
+      </a>
+    </section>
+
+    <section class="faq-section" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Will using the Meta MCP server get my ad account banned?</div>
+        <div class="faq-answer">No. The MCP server is the official Meta-built integration. The accounts that were getting flagged before this were running janky scripts against the Marketing API the wrong way. The MCP is the sanctioned path.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What is the difference between the MCP and the CLI?</div>
+        <div class="faq-answer">The MCP is a remote connector you paste into <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a>. Zero code. Best for chatting with your account. The CLI is a Python tool you install in your terminal. Best for scripts, cron jobs, and CI/CD. The MCP also exposes a few endpoints the CLI does not, like Signal Diagnostics and Help Center search.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Do I need a developer app or app review to use the Meta MCP?</div>
+        <div class="faq-answer">No. The MCP uses Business OAuth or a token link. No developer app required. The CLI may need a developer app for system-token automation. The raw Marketing API requires a full developer app and tokens.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can I use the Meta MCP on the free Claude plan?</div>
+        <div class="faq-answer">Yes, but the free plan caps you at one custom connector total. If you have used your one slot, the Meta MCP will not fit until you remove the existing one or upgrade.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can the Meta MCP send Conversions API events or upload offline conversions?</div>
+        <div class="faq-answer">No. CAPI server events, offline conversions, and webhooks are not in the MCP or CLI tool sets. Use the raw Marketing API for those.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Can I use the Meta MCP for local business targeting (city, ZIP, radius)?</div>
+        <div class="faq-answer">Verify before you trust it. The current public CLI docs show country-level targeting for ad set creation, and the MCP is similar. The underlying Marketing API supports city, ZIP, and radius targeting. Draft paused with the MCP, then patch targeting in <a href="https://business.facebook.com/adsmanager" target="_blank" rel="noopener">Ads Manager</a> or use the raw API before going live.</div>
+      </div>
+    </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-cta">Learn how to automate your Meta ads with AI. Ready-made workflows, weekly Q&A, and playbooks.</p>
+      <a href="https://www.skool.com/ai-ads-with-roman/about" class="footer-link" target="_blank" rel="noopener">Join AI Ads with Roman</a>
+    </div>
+  </footer>
+
+</body>
+</html>
