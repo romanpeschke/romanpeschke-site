@@ -190,29 +190,127 @@
     .decision-section { padding: 32px 0; border-top: 1px solid var(--border); }
     .decision-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
     .decision-section .ds-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
-    .decision-grid { display: grid; gap: 14px; }
-    .decision-card { border: 1px solid var(--border); border-left-width: 3px; border-radius: 12px; background: var(--surface); overflow: hidden; }
-    .dc-scenario { padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
-    .dc-scenario-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 4px; }
-    .dc-scenario-text { font-size: 14px; color: var(--text); font-weight: 500; line-height: 1.4; }
-    .dc-answer { padding: 14px 16px 16px; }
-    .dc-answer-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
-    .dc-answer-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; line-height: 1.25; letter-spacing: -0.01em; }
-    .dc-answer ul { list-style: none; padding: 0; }
-    .dc-answer li { font-size: 14px; color: var(--text-muted); padding: 3px 0 3px 16px; position: relative; line-height: 1.5; }
-    .dc-answer li::before { content: ''; position: absolute; left: 0; top: 10px; width: 5px; height: 5px; border-radius: 50%; }
-    .dc-mcp { border-left-color: #8b5cf6; }
-    .dc-mcp .dc-answer-label, .dc-mcp .dc-answer-title { color: #8b5cf6; }
-    .dc-mcp li::before { background: #8b5cf6; }
-    .dc-cli { border-left-color: #059669; }
-    .dc-cli .dc-answer-label, .dc-cli .dc-answer-title { color: #059669; }
-    .dc-cli li::before { background: #059669; }
-    .dc-api { border-left-color: #d97706; }
-    .dc-api .dc-answer-label, .dc-api .dc-answer-title { color: #d97706; }
-    .dc-api li::before { background: #d97706; }
-    .dc-beyond { border-left-color: #2563eb; }
-    .dc-beyond .dc-answer-label, .dc-beyond .dc-answer-title { color: #2563eb; }
-    .dc-beyond li::before { background: #2563eb; }
+
+    /* Root question node */
+    .tree-question {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+      max-width: 360px;
+      margin: 0 auto 4px;
+    }
+    .tq-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 4px; }
+    .tq-text { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; }
+
+    /* Trunk + branches */
+    .tree-trunk {
+      position: relative;
+      padding-left: 28px;
+      padding-top: 16px;
+    }
+    .tree-trunk::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .tree-trunk.is-nested {
+      padding-top: 8px;
+      padding-left: 24px;
+      margin-top: 4px;
+    }
+    .tree-trunk.is-nested::before {
+      left: 8px;
+    }
+
+    .tree-branch {
+      position: relative;
+      margin-bottom: 22px;
+    }
+    .tree-branch:last-child { margin-bottom: 0; }
+    .tree-branch::before {
+      /* L-connector: horizontal line into the branch */
+      content: '';
+      position: absolute;
+      top: 11px;
+      width: 18px;
+      height: 2px;
+      background: var(--border);
+    }
+    .tree-trunk > .tree-branch::before { left: -16px; }
+    .tree-trunk.is-nested > .tree-branch::before { left: -16px; width: 16px; }
+    /* Mask the trunk past the last branch's connector */
+    .tree-trunk > .tree-branch:last-child::after {
+      content: '';
+      position: absolute;
+      left: -17px;
+      top: 12px;
+      bottom: -2px;
+      width: 4px;
+      background: var(--bg);
+    }
+
+    .tb-condition {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.4;
+      padding: 0 0 8px 0;
+    }
+    .tb-condition .tb-cond-label {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-right: 6px;
+    }
+
+    .tb-leaf {
+      border: 1px solid var(--border);
+      border-left-width: 3px;
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 12px 14px;
+      position: relative;
+    }
+    .tb-leaf-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+    .tb-leaf-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.25; letter-spacing: -0.01em; }
+    .tb-leaf ul { list-style: none; padding: 0; }
+    .tb-leaf li { font-size: 13px; color: var(--text-muted); padding: 2px 0 2px 14px; position: relative; line-height: 1.45; }
+    .tb-leaf li::before { content: ''; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; border-radius: 50%; }
+
+    .tb-leaf.tl-mcp { border-left-color: #8b5cf6; }
+    .tb-leaf.tl-mcp .tb-leaf-label, .tb-leaf.tl-mcp .tb-leaf-title { color: #8b5cf6; }
+    .tb-leaf.tl-mcp li::before { background: #8b5cf6; }
+
+    .tb-leaf.tl-cli { border-left-color: #059669; }
+    .tb-leaf.tl-cli .tb-leaf-label, .tb-leaf.tl-cli .tb-leaf-title { color: #059669; }
+    .tb-leaf.tl-cli li::before { background: #059669; }
+
+    .tb-leaf.tl-api { border-left-color: #d97706; }
+    .tb-leaf.tl-api .tb-leaf-label, .tb-leaf.tl-api .tb-leaf-title { color: #d97706; }
+    .tb-leaf.tl-api li::before { background: #d97706; }
+
+    .tb-leaf.tl-beyond { border-left-color: #2563eb; }
+    .tb-leaf.tl-beyond .tb-leaf-label, .tb-leaf.tl-beyond .tb-leaf-title { color: #2563eb; }
+    .tb-leaf.tl-beyond li::before { background: #2563eb; }
+
+    /* MCP exclusives section */
+    .mcp-only-section { padding: 32px 0; border-top: 1px solid var(--border); }
+    .mcp-only-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .mcp-only-section .mo-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .mo-card { border: 1px solid var(--border); border-left: 3px solid #8b5cf6; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; background: var(--surface); }
+    .mo-name { font-size: 15px; font-weight: 700; color: #8b5cf6; margin-bottom: 4px; }
+    .mo-what { font-size: 14px; color: var(--text); line-height: 1.55; margin-bottom: 6px; }
+    .mo-why { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .mo-why strong { color: var(--text); }
 
     /* Capability table */
     .cap-section { padding: 32px 0; border-top: 1px solid var(--border); }
@@ -334,77 +432,98 @@
 
     <section class="decision-section" aria-label="Pick your path">
       <h2>Pick your path</h2>
-      <p class="ds-sub">Match your setup to the right tool. Each card below is one branch of the decision.</p>
+      <p class="ds-sub">Walk the tree from the top question to the leaf that matches you.</p>
 
-      <div class="decision-grid">
+      <div class="tree-question">
+        <div class="tq-label">Question</div>
+        <div class="tq-text">How do you want to interact with Meta Ads?</div>
+      </div>
 
-        <div class="decision-card dc-mcp">
-          <div class="dc-scenario">
-            <div class="dc-scenario-label">If you</div>
-            <div class="dc-scenario-text">work in Claude Desktop, the Claude web app, or any chat-based Claude</div>
-          </div>
-          <div class="dc-answer">
-            <div class="dc-answer-label">→ Use</div>
-            <div class="dc-answer-title">Meta Ads MCP</div>
+      <div class="tree-trunk">
+
+        <div class="tree-branch">
+          <div class="tb-condition"><span class="tb-cond-label">A.</span> Conversationally, through an AI agent (Claude Desktop, Claude Code, Cowork, ChatGPT, Perplexity)</div>
+          <div class="tb-leaf tl-mcp">
+            <div class="tb-leaf-label">→ Use</div>
+            <div class="tb-leaf-title">Meta Ads MCP</div>
             <ul>
-              <li>Fastest setup, zero code</li>
-              <li>No developer app required</li>
-              <li>Best for analysis, reporting, and supervised changes</li>
-              <li>Exposes Signal Diagnostics and Help Center search (MCP-only)</li>
+              <li>One URL paste, no code, no developer app</li>
+              <li>Read and write to ads, ad sets, campaigns, catalogs (paused by default)</li>
+              <li>MCP-only tools: Signal Diagnostics, Help Center search, catalog troubleshooting</li>
             </ul>
           </div>
         </div>
 
-        <div class="decision-card dc-cli">
-          <div class="dc-scenario">
-            <div class="dc-scenario-label">If you</div>
-            <div class="dc-scenario-text">work in Claude Code, scripts, cron, or CI/CD pipelines</div>
-          </div>
-          <div class="dc-answer">
-            <div class="dc-answer-label">→ Use</div>
-            <div class="dc-answer-title">Meta Ads CLI</div>
-            <ul>
-              <li>Same tool coverage as the MCP</li>
-              <li>Runs in terminal, cron, and CI/CD</li>
-              <li>Three output formats (table, JSON, plain) for piping to other tools</li>
-              <li>System-token auth for unattended automation</li>
-            </ul>
+        <div class="tree-branch">
+          <div class="tb-condition"><span class="tb-cond-label">B.</span> Programmatically, from terminal, cron, CI/CD, or shell scripts</div>
+
+          <div class="tree-trunk is-nested">
+            <div class="tree-branch">
+              <div class="tb-condition"><span class="tb-cond-label">B1.</span> Standard ad ops: reports, campaigns, ad sets, ads, catalogs, QA</div>
+              <div class="tb-leaf tl-cli">
+                <div class="tb-leaf-label">→ Use</div>
+                <div class="tb-leaf-title">Meta Ads CLI</div>
+                <ul>
+                  <li>Same core coverage as the MCP</li>
+                  <li>Runs unattended in cron and CI/CD</li>
+                  <li>Three output formats (table, JSON, plain) for piping</li>
+                  <li>System-token auth + standard exit codes</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tree-branch">
+              <div class="tb-condition"><span class="tb-cond-label">B2.</span> CAPI server events, offline conversions, webhooks, batch jobs, or city/ZIP/radius targeting</div>
+              <div class="tb-leaf tl-api">
+                <div class="tb-leaf-label">→ Use</div>
+                <div class="tb-leaf-title">Raw Marketing API</div>
+                <ul>
+                  <li>Full Marketing API surface</li>
+                  <li>Required for CAPI, offline conversions, webhooks</li>
+                  <li>Required for accurate local geo targeting</li>
+                  <li>Highest setup burden: app, tokens, glue</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="decision-card dc-api">
-          <div class="dc-scenario">
-            <div class="dc-scenario-label">If you need</div>
-            <div class="dc-scenario-text">CAPI server events, offline conversions, webhooks, batch jobs, or local geo targeting (city, ZIP, radius)</div>
-          </div>
-          <div class="dc-answer">
-            <div class="dc-answer-label">→ Use</div>
-            <div class="dc-answer-title">Raw Marketing API</div>
-            <ul>
-              <li>Full Marketing API surface</li>
-              <li>Required for CAPI, offline conv, webhooks</li>
-              <li>Required for accurate local targeting</li>
-              <li>Highest setup burden: app, app review, tokens, glue</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="decision-card dc-beyond">
-          <div class="dc-scenario">
-            <div class="dc-scenario-label">If you need</div>
-            <div class="dc-scenario-text">Instagram DMs, organic IG publishing, Facebook Page posts and comments, or WhatsApp messaging</div>
-          </div>
-          <div class="dc-answer">
-            <div class="dc-answer-label">→ Different APIs</div>
-            <div class="dc-answer-title">Not in the Meta Ads stack</div>
+        <div class="tree-branch">
+          <div class="tb-condition"><span class="tb-cond-label">C.</span> Non-Ads workflows (Instagram DMs, organic IG publishing, Facebook Page posts, WhatsApp messaging)</div>
+          <div class="tb-leaf tl-beyond">
+            <div class="tb-leaf-label">→ Different APIs</div>
+            <div class="tb-leaf-title">Not in the Meta Ads stack</div>
             <ul>
               <li>Each has its own API surface and permissions</li>
-              <li>Usually requires a separate developer app and review</li>
+              <li>Usually a separate developer app and app review</li>
               <li>Not covered by the MCP or CLI</li>
             </ul>
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <section class="mcp-only-section" aria-label="What only the MCP can do">
+      <h2>What only the MCP can do</h2>
+      <p class="mo-sub">Most of the API surface overlaps. These three are first-class tools in the MCP that the CLI does not have and that the raw Marketing API doesn't expose as a single endpoint.</p>
+
+      <div class="mo-card">
+        <div class="mo-name">Signal Diagnostics</div>
+        <div class="mo-what">The agent reads your Pixel and CAPI signal health, scores it, and tells you exactly where to invest first.</div>
+        <div class="mo-why"><strong>Why it matters:</strong> Meta's algorithm weights ad delivery on signal quality. If your Purchase event is duplicated, your CAPI match rate is weak, or your dataset is firing wrong, you're paying more per result without knowing why. The MCP surfaces it conversationally instead of you digging through Events Manager tabs.</div>
+      </div>
+
+      <div class="mo-card">
+        <div class="mo-name">Help Center search</div>
+        <div class="mo-what">The agent can search Meta's Business Help Center on your behalf inside the chat.</div>
+        <div class="mo-why"><strong>Why it matters:</strong> When you hit a permissions error, a rejected ad, or a Business Manager step you don't recognize, the MCP grounds the answer in Meta's official doc instead of guessing or sending you to Google. Faster fix, no hallucinated steps.</div>
+      </div>
+
+      <div class="mo-card">
+        <div class="mo-name">Catalog creation, management, and troubleshooting</div>
+        <div class="mo-what">The agent can create catalogs, add product data, and diagnose data feed problems and item visibility issues.</div>
+        <div class="mo-why"><strong>Why it matters:</strong> For DPA, commerce, and Advantage+ Catalog campaigns, broken or invisible products silently kill performance. Diagnosing feeds usually means clicking into Commerce Manager and reading error tables. The MCP can pull the same diagnostics into the chat and tell you what to fix.</div>
       </div>
     </section>
 
@@ -615,6 +734,24 @@
               <td><span class="cap-partial">Limited</span></td>
               <td><span class="cap-yes">Yes</span></td>
             </tr>
+            <tr>
+              <td>Signal Diagnostics (Pixel + CAPI health)</td>
+              <td><span class="cap-best">Built-in</span></td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-partial">Build it</span></td>
+            </tr>
+            <tr>
+              <td>Help Center search inside chat</td>
+              <td><span class="cap-best">Built-in</span></td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-no">No</span></td>
+            </tr>
+            <tr>
+              <td>Catalog troubleshooting</td>
+              <td><span class="cap-best">Built-in</span></td>
+              <td><span class="cap-no">No</span></td>
+              <td><span class="cap-partial">Build it</span></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -663,7 +800,7 @@
 
       <a href="https://www.facebook.com/business/help/1456422242197840" class="tool-card" target="_blank" rel="noopener">
         <div class="tool-card-name">Meta Ads MCP server</div>
-        <div class="tool-card-desc">Meta's official remote MCP server for ad management. Connect URL is <code>https://mcp.facebook.com/ads</code>. Covers reporting, ad and campaign creation and edits, catalogs, signal diagnostics, and Help Center search. Every action requires your authorization through the agent.</div>
+        <div class="tool-card-desc">Meta's official remote MCP server for ad management. Connect URL is <code>https://mcp.facebook.com/ads</code>. Same URL works in any MCP-aware AI agent: Claude Desktop, Claude Code, Cowork, ChatGPT, Perplexity. Five tool surfaces: Comprehensive Reporting, Ad Creation and Management, Catalog Creation and Management (with troubleshooting), Signal Diagnostics, and Help Center search. Every action requires your authorization through the agent.</div>
         <div class="tool-card-url">facebook.com/business/help</div>
       </a>
 
@@ -692,7 +829,7 @@
 
       <div class="faq-item">
         <div class="faq-question">What is the difference between the MCP and the CLI?</div>
-        <div class="faq-answer">The MCP is a remote connector you paste into <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a>. Zero code. Best for chatting with your account. The CLI is a Python tool you install in your terminal. Best for scripts, cron jobs, and CI/CD. The MCP also exposes a few endpoints the CLI does not, like Signal Diagnostics and Help Center search.</div>
+        <div class="faq-answer">The MCP is a remote connector you paste into any MCP-aware AI agent (Claude Desktop, Claude Code, Cowork, ChatGPT, Perplexity). Zero code. Best for chatting with your account. The CLI is a Python tool you install in your terminal. Best for scripts, cron jobs, and CI/CD. Three tools are MCP-only and not in the CLI: <strong>Signal Diagnostics</strong> (read your Pixel and CAPI signal health and get investment recommendations), <strong>Help Center search</strong> (the agent searches Meta's official docs inside the chat), and <strong>catalog troubleshooting</strong> (diagnose feed errors and item visibility for DPA / commerce accounts).</div>
       </div>
 
       <div class="faq-item">
