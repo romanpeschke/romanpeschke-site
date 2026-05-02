@@ -186,121 +186,62 @@
     .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
     .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
 
-    /* Decision tree */
+    /* Decision flow */
     .decision-section { padding: 32px 0; border-top: 1px solid var(--border); }
     .decision-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .decision-section .ds-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .decision-section .ds-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
 
-    /* Root question node */
-    .tree-question {
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
+    .df-question {
+      background: #1a1a1a;
+      color: #fff;
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 14px 18px;
       text-align: center;
-      max-width: 360px;
-      margin: 0 auto 4px;
+      margin-bottom: 24px;
     }
-    .tq-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 4px; }
-    .tq-text { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .df-question-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.55); margin-bottom: 4px; }
+    .df-question-text { font-size: 15px; font-weight: 600; line-height: 1.3; }
 
-    /* Trunk + branches */
-    .tree-trunk {
-      position: relative;
-      padding-left: 28px;
-      padding-top: 16px;
-    }
-    .tree-trunk::before {
-      content: '';
-      position: absolute;
-      left: 12px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--border);
-    }
-    .tree-trunk.is-nested {
-      padding-top: 8px;
-      padding-left: 24px;
-      margin-top: 4px;
-    }
-    .tree-trunk.is-nested::before {
-      left: 8px;
-    }
+    .df-branch { margin-bottom: 24px; }
+    .df-branch:last-child { margin-bottom: 0; }
 
-    .tree-branch {
-      position: relative;
-      margin-bottom: 22px;
-    }
-    .tree-branch:last-child { margin-bottom: 0; }
-    .tree-branch::before {
-      /* L-connector: horizontal line into the branch */
-      content: '';
-      position: absolute;
-      top: 11px;
-      width: 18px;
-      height: 2px;
-      background: var(--border);
-    }
-    .tree-trunk > .tree-branch::before { left: -16px; }
-    .tree-trunk.is-nested > .tree-branch::before { left: -16px; width: 16px; }
-    /* Mask the trunk past the last branch's connector */
-    .tree-trunk > .tree-branch:last-child::after {
-      content: '';
-      position: absolute;
-      left: -17px;
-      top: 12px;
-      bottom: -2px;
-      width: 4px;
-      background: var(--bg);
+    .df-divider { display: flex; align-items: center; gap: 12px; margin: 0 0 24px; color: var(--text-dim); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; }
+    .df-divider::before, .df-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .df-condition { text-align: center; font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.35; margin-bottom: 10px; padding: 0 8px; }
+    .df-condition .df-cond-sub { display: block; font-size: 13px; font-weight: 400; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+
+    .df-arrow { text-align: center; font-size: 16px; color: var(--text-dim); margin-bottom: 10px; line-height: 1; }
+
+    .df-leaf { border: 1px solid var(--border); border-left-width: 4px; border-radius: 12px; background: var(--surface); padding: 14px 16px; }
+    .df-leaf-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; line-height: 1.2; letter-spacing: -0.015em; }
+    .df-leaf ul { list-style: none; padding: 0; }
+    .df-leaf li { font-size: 13px; color: var(--text-muted); padding: 3px 0 3px 14px; position: relative; line-height: 1.5; }
+    .df-leaf li::before { content: ''; position: absolute; left: 0; top: 10px; width: 5px; height: 5px; border-radius: 50%; }
+
+    .df-split { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .df-path { display: flex; flex-direction: column; }
+    .df-path .df-condition { font-size: 14px; margin-bottom: 8px; }
+
+    @media (min-width: 540px) {
+      .df-split { grid-template-columns: 1fr 1fr; }
     }
 
-    .tb-condition {
-      font-size: 13px;
-      color: var(--text);
-      font-weight: 500;
-      line-height: 1.4;
-      padding: 0 0 8px 0;
-    }
-    .tb-condition .tb-cond-label {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-dim);
-      margin-right: 6px;
-    }
+    .df-leaf.dl-mcp { border-left-color: #8b5cf6; }
+    .df-leaf.dl-mcp .df-leaf-title { color: #8b5cf6; }
+    .df-leaf.dl-mcp li::before { background: #8b5cf6; }
 
-    .tb-leaf {
-      border: 1px solid var(--border);
-      border-left-width: 3px;
-      border-radius: 10px;
-      background: var(--surface);
-      padding: 12px 14px;
-      position: relative;
-    }
-    .tb-leaf-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
-    .tb-leaf-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.25; letter-spacing: -0.01em; }
-    .tb-leaf ul { list-style: none; padding: 0; }
-    .tb-leaf li { font-size: 13px; color: var(--text-muted); padding: 2px 0 2px 14px; position: relative; line-height: 1.45; }
-    .tb-leaf li::before { content: ''; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; border-radius: 50%; }
+    .df-leaf.dl-cli { border-left-color: #059669; }
+    .df-leaf.dl-cli .df-leaf-title { color: #059669; }
+    .df-leaf.dl-cli li::before { background: #059669; }
 
-    .tb-leaf.tl-mcp { border-left-color: #8b5cf6; }
-    .tb-leaf.tl-mcp .tb-leaf-label, .tb-leaf.tl-mcp .tb-leaf-title { color: #8b5cf6; }
-    .tb-leaf.tl-mcp li::before { background: #8b5cf6; }
+    .df-leaf.dl-api { border-left-color: #d97706; }
+    .df-leaf.dl-api .df-leaf-title { color: #d97706; }
+    .df-leaf.dl-api li::before { background: #d97706; }
 
-    .tb-leaf.tl-cli { border-left-color: #059669; }
-    .tb-leaf.tl-cli .tb-leaf-label, .tb-leaf.tl-cli .tb-leaf-title { color: #059669; }
-    .tb-leaf.tl-cli li::before { background: #059669; }
-
-    .tb-leaf.tl-api { border-left-color: #d97706; }
-    .tb-leaf.tl-api .tb-leaf-label, .tb-leaf.tl-api .tb-leaf-title { color: #d97706; }
-    .tb-leaf.tl-api li::before { background: #d97706; }
-
-    .tb-leaf.tl-beyond { border-left-color: #2563eb; }
-    .tb-leaf.tl-beyond .tb-leaf-label, .tb-leaf.tl-beyond .tb-leaf-title { color: #2563eb; }
-    .tb-leaf.tl-beyond li::before { background: #2563eb; }
+    .df-leaf.dl-beyond { border-left-color: #2563eb; }
+    .df-leaf.dl-beyond .df-leaf-title { color: #2563eb; }
+    .df-leaf.dl-beyond li::before { background: #2563eb; }
 
     /* MCP exclusives section */
     .mcp-only-section { padding: 32px 0; border-top: 1px solid var(--border); }
@@ -483,75 +424,88 @@
 
     <section class="decision-section" aria-label="Pick your path">
       <h2>Pick your path</h2>
-      <p class="ds-sub">Walk the tree from the top question to the leaf that matches you.</p>
+      <p class="ds-sub">Find the scenario that fits, follow the arrow to the right tool.</p>
 
-      <div class="tree-question">
-        <div class="tq-label">Question</div>
-        <div class="tq-text">How do you want to interact with Meta Ads?</div>
+      <div class="df-question">
+        <div class="df-question-label">Question</div>
+        <div class="df-question-text">How do you want to interact with Meta Ads?</div>
       </div>
 
-      <div class="tree-trunk">
-
-        <div class="tree-branch">
-          <div class="tb-condition"><span class="tb-cond-label">A.</span> Conversationally, through an AI agent (Claude Desktop, Claude Code, Cowork, ChatGPT, Perplexity)</div>
-          <div class="tb-leaf tl-mcp">
-            <div class="tb-leaf-label">→ Use</div>
-            <div class="tb-leaf-title">Meta Ads MCP</div>
-            <ul>
-              <li>One URL paste, no code, no developer app</li>
-              <li>Read and write to ads, ad sets, campaigns, catalogs (paused by default)</li>
-              <li>MCP-only tools: Signal Diagnostics, Help Center search, catalog troubleshooting</li>
-            </ul>
-          </div>
+      <div class="df-branch">
+        <div class="df-condition">
+          You're inside an AI chat agent
+          <span class="df-cond-sub">Claude Desktop, Claude Code, Cowork, ChatGPT, Perplexity</span>
         </div>
+        <div class="df-arrow">↓</div>
+        <div class="df-leaf dl-mcp">
+          <div class="df-leaf-title">Meta Ads MCP</div>
+          <ul>
+            <li>One URL paste, no code, no developer app</li>
+            <li>Read and write to ads, ad sets, campaigns, catalogs (paused by default)</li>
+            <li>MCP-only tools: Signal Diagnostics, Help Center search, catalog troubleshooting</li>
+          </ul>
+        </div>
+      </div>
 
-        <div class="tree-branch">
-          <div class="tb-condition"><span class="tb-cond-label">B.</span> Programmatically, from terminal, cron, CI/CD, or shell scripts</div>
+      <div class="df-divider">or</div>
 
-          <div class="tree-trunk is-nested">
-            <div class="tree-branch">
-              <div class="tb-condition"><span class="tb-cond-label">B1.</span> Standard ad ops: reports, campaigns, ad sets, ads, catalogs, QA</div>
-              <div class="tb-leaf tl-cli">
-                <div class="tb-leaf-label">→ Use</div>
-                <div class="tb-leaf-title">Meta Ads CLI</div>
-                <ul>
-                  <li>Same core coverage as the MCP</li>
-                  <li>Runs unattended in cron and CI/CD</li>
-                  <li>Three output formats (table, JSON, plain) for piping</li>
-                  <li>System-token auth + standard exit codes</li>
-                </ul>
-              </div>
+      <div class="df-branch">
+        <div class="df-condition">
+          You're in the terminal, cron, CI/CD, or scripts
+          <span class="df-cond-sub">Pick one of two paths based on what you need</span>
+        </div>
+        <div class="df-arrow">↓</div>
+        <div class="df-split">
+          <div class="df-path">
+            <div class="df-condition">
+              Standard ad ops
+              <span class="df-cond-sub">Reports, campaigns, catalogs, QA</span>
             </div>
-
-            <div class="tree-branch">
-              <div class="tb-condition"><span class="tb-cond-label">B2.</span> CAPI server events, offline conversions, webhooks, batch jobs, or city/ZIP/radius targeting</div>
-              <div class="tb-leaf tl-api">
-                <div class="tb-leaf-label">→ Use</div>
-                <div class="tb-leaf-title">Raw Marketing API</div>
-                <ul>
-                  <li>Full Marketing API surface</li>
-                  <li>Required for CAPI, offline conversions, webhooks</li>
-                  <li>Required for accurate local geo targeting</li>
-                  <li>Highest setup burden: app, tokens, glue</li>
-                </ul>
-              </div>
+            <div class="df-arrow">↓</div>
+            <div class="df-leaf dl-cli">
+              <div class="df-leaf-title">Meta Ads CLI</div>
+              <ul>
+                <li>Same core coverage as the MCP</li>
+                <li>Runs unattended in cron and CI/CD</li>
+                <li>Three output formats for piping</li>
+                <li>System-token auth + standard exit codes</li>
+              </ul>
             </div>
           </div>
-        </div>
-
-        <div class="tree-branch">
-          <div class="tb-condition"><span class="tb-cond-label">C.</span> Non-Ads workflows (Instagram DMs, organic IG publishing, Facebook Page posts, WhatsApp messaging)</div>
-          <div class="tb-leaf tl-beyond">
-            <div class="tb-leaf-label">→ Different APIs</div>
-            <div class="tb-leaf-title">Not in the Meta Ads stack</div>
-            <ul>
-              <li>Each has its own API surface and permissions</li>
-              <li>Usually a separate developer app and app review</li>
-              <li>Not covered by the MCP or CLI</li>
-            </ul>
+          <div class="df-path">
+            <div class="df-condition">
+              Advanced needs
+              <span class="df-cond-sub">CAPI, offline conv, webhooks, city/ZIP/radius</span>
+            </div>
+            <div class="df-arrow">↓</div>
+            <div class="df-leaf dl-api">
+              <div class="df-leaf-title">Raw Marketing API</div>
+              <ul>
+                <li>Full Marketing API surface</li>
+                <li>Required for CAPI and accurate local targeting</li>
+                <li>Highest setup burden: app, tokens, glue</li>
+              </ul>
+            </div>
           </div>
         </div>
+      </div>
 
+      <div class="df-divider">or</div>
+
+      <div class="df-branch">
+        <div class="df-condition">
+          You need non-Ads workflows
+          <span class="df-cond-sub">Instagram DMs, organic IG, Facebook Page, WhatsApp</span>
+        </div>
+        <div class="df-arrow">↓</div>
+        <div class="df-leaf dl-beyond">
+          <div class="df-leaf-title">Different APIs entirely</div>
+          <ul>
+            <li>Each has its own API surface and permissions</li>
+            <li>Usually a separate developer app and app review</li>
+            <li>Not covered by the MCP or CLI</li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -842,7 +796,7 @@
 
     <section class="ps-loud-section" aria-label="Skool community">
       <div class="ps-loud-card">
-        <div class="ps-loud-label">P.S. — From Roman</div>
+        <div class="ps-loud-label">P.S.</div>
         <h2 class="ps-loud-title">Want to automate your Meta ads end-to-end?</h2>
         <p class="ps-loud-text">Connecting Claude is the first 60 seconds. Building a system that cranks out infinite static ads on demand is the rest of the work. That's what AI Ads with Roman is for.</p>
         <a href="https://www.skool.com/ai-ads-with-roman/about" class="ps-loud-button" target="_blank" rel="noopener">Join the waitlist</a>
