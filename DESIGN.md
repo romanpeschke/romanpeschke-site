@@ -304,6 +304,9 @@ Ordered list without markers. Each step is a two-column grid: a 30px Ink circle 
 ### Copyable values
 Any `code.copy` (URLs, slash commands, snippets over 40 characters) is wrapped in an unstyled button at runtime by /assets/guide.js. It shows a 1px dotted Ink underline at rest, a Selection Wash background on hover and after copy, and a 13px 600 Ink "Copied" word beside it for 1.6s. Inside the ink callout the underline and word use the band accent tint and the hover fill is #333.
 
+### Guide-specific patterns
+Migrated guides use a small set of extra components, all in /assets/guide.css: `.toolcards` (linked tool descriptions with a name, a Mute description, and an Ink-accent URL), `code.prompt` (block-level copyable prompts, gray code ground, wraps), `.cards` (single-column named cards, `.grid-2` for pairs), `.cmds` (command reference rows, mono name beside a description), `.plain` (hairline-separated paragraphs), `.quote` and `.ex-k` (italic quotes with small ink group labels inside an example card), `.table-wrap`/`.table` (hairline table with a mono first column). Legacy callouts with a label become a `.note` starting with a bold label; "Quick win" and "Start here" become the ink `.callout`.
+
 ### Tips and Phases (signature)
 Phase headers are 22px to 26px with a hairline underline. Each tip opens with a baseline-aligned head: a mono Ink "#n" at 13px beside a 20px title. Below it, running text, then an unboxed do-list (600 h4 "What to do", 16px bullets), then either a compare pair or an example card.
 

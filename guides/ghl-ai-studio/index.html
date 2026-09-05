@@ -83,114 +83,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #ffffff;
-      --surface: #f9fafb;
-      --surface-2: #f3f4f6;
-      --border: #e5e7eb;
-      --text: #1a1a1a;
-      --text-muted: #6b7280;
-      --text-dim: #9ca3af;
-      --accent: #6366f1;
-      --accent-dim: rgba(99,102,241,0.06);
-      --accent-border: rgba(99,102,241,0.20);
-      --green: #059669;
-      --green-dim: rgba(5,150,105,0.08);
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-
-    header {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      z-index: 10;
-    }
-    header .container { display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
-    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
-    .ig-link:hover { text-decoration: underline; }
-
-    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
-    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
-    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
-    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
-
-    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
-    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
-    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
-    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
-    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-
-    .step-content a, .why-section a, .faq-answer a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
-    .step-content a:hover, .why-section a:hover, .faq-answer a:hover { text-decoration-color: var(--accent); }
-
-    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
-    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
-    .why-section p:last-child { margin-bottom: 0; }
-    .why-section p strong { color: var(--text); }
-
-    .steps { padding: 32px 0; }
-    .phase { margin-bottom: 36px; }
-    .phase:last-child { margin-bottom: 0; }
-    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
-    .step { display: flex; gap: 14px; margin-bottom: 24px; }
-    .step:last-child { margin-bottom: 0; }
-    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
-    .step-content { min-width: 0; }
-    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
-    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
-    .step-content ul { list-style: none; padding: 0; }
-    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
-    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
-
-    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
-    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
-    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
-
-    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
-    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
-    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
-    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
-
-    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .faq-item { margin-bottom: 20px; }
-    .faq-item:last-child { margin-bottom: 0; }
-    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-
-    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
-    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
-    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
-    .footer-link:hover, .footer-link:active { opacity: 0.9; }
-
-    @media (min-width: 480px) {
-      h1 { font-size: 32px; }
-      .hero { padding: 48px 0 40px; }
-      .steps { padding: 40px 0; }
-      .tools-section { padding: 40px 0; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/guide.css?v=4">
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
@@ -202,186 +96,78 @@
   </script>
 </head>
 <body>
-
-  <header>
-    <div class="container">
-      <a href="/" class="brand">Roman Peschke</a>
-      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
-    </div>
-  </header>
-
-  <main class="container">
-    <article itemscope itemtype="https://schema.org/HowTo">
-
-    <section class="hero" aria-label="Guide overview">
-      <span class="hero-label">Free Guide</span>
+<!--
+THESIS: A guide page that opens dark and reads light. The band holds the promise, the white ground holds the work. Refuses the docs-site default of a thin header over an endless white column with a floating CTA.
+OWN-WORLD: Near-black band (#111) over near-white (#fafafa). Figtree only, JetBrains Mono for pasted values. One indigo accent (#6366f1) reserved for pointers: step numerals, focus, the offer note, warning glyphs, tip numbers. Cards are white with hairline borders and a soft offset shadow; no colored bars, no eyebrows.
+STORY: You came for the thing the Reel promised. The band names it. The white page hands it to you in numbered steps. The offer sits above and below, never between you and a step.
+FIRST VIEWPORT: Top bar (name left, handle right) and hero inside the band: title at 31 to 50px, subtitle in band gray, tool chips. Below the band edge, the offer card with its Join button is the first white element.
+FORM: Monochrome plus dark opening band. Catalog challenger challenger-mono fused with the product, chosen by the user after 27 previews; seed key c8601eaf.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <div class="band">
+    <div class="container topbar"><a href="/">Roman Peschke</a><a class="ig" href="https://instagram.com/roman.peschke" target="_blank" rel="noopener">@roman.peschke</a></div>
+    <header class="container hero">
       <h1 itemprop="name">How to Enable AI Studio in GoHighLevel</h1>
       <p class="subtitle" itemprop="description">GHL just launched a vibe coding tool built into the CRM. Build websites, funnels, and apps by describing what you want. Clone any site from a URL. Free during the Labs phase.</p>
-    </section>
-
-    <section class="tools-bar" aria-label="Tools used">
-      <div class="tools-bar-label">Tools you'll use</div>
-      <div class="tools-list">
-        <a href="https://www.gohighlevel.com/?fp_ref=romanpeschke" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> GoHighLevel</a>
-      </div>
-    </section>
-
-    <section class="why-section" aria-label="Context">
-      <p><strong>AI Studio is GoHighLevel's built-in AI builder.</strong> Instead of dragging and dropping elements onto a blank page, you describe what you want and it builds it. Need a landing page for a roofing company? Just say that. Want to clone a competitor's site? Paste the URL. It handles layout, content, images, and structure in one shot.</p>
-      <p>The real power is that it's inside the CRM. Forms connect directly to your contacts and workflows. Calendars pull from your existing booking setup. You're not building a standalone page and then trying to wire it into your system. It's already there.</p>
-    </section>
-
-    <section class="steps" aria-label="Step-by-step instructions">
-
-      <div class="phase">
-        <div class="phase-label">Get access</div>
-
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h3>Enable AI Studio in Labs</h3>
-            <p>In your <a href="https://www.gohighlevel.com/?fp_ref=romanpeschke" target="_blank" rel="noopener">GoHighLevel</a> sub-account, go to <strong>Settings > Labs</strong>. Scroll down until you see <strong>AI Studio</strong> and toggle it on.</p>
-            <p>This is a Labs feature, which means it's free during this phase. No hosting charges, no token costs. After the full launch, there will be a free tier with transparent pricing for anything beyond the included limits.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h3>Open AI Studio</h3>
-            <p>Once enabled, <strong>AI Studio (Beta)</strong> appears in the left sidebar of your sub-account. Click it to open the project dashboard where you can create new projects, reopen existing ones, or clone and share them.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="phase">
-        <div class="phase-label">Build something</div>
-
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h3>Start a new project</h3>
-            <p>You have three ways to start:</p>
-            <ul>
-              <li><strong>Describe it</strong> - "Build a landing page for a roofing company" or "Create a booking page for a dental clinic"</li>
-              <li><strong>Clone from a URL</strong> - Paste any website URL and AI Studio recreates the structure and style</li>
-              <li><strong>Upload a screenshot</strong> - Use an image as design direction</li>
-            </ul>
-            <p>If your prompt is broad, AI Studio asks follow-up questions before building. You don't need a perfect prompt to get started.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <h3>Refine through conversation</h3>
-            <p>After the first version generates, keep talking to it. Type what you want changed:</p>
-            <ul>
-              <li>"Change the headline"</li>
-              <li>"Add a testimonials section below the hero"</li>
-              <li>"Make this look more modern"</li>
-              <li>"Add a contact form"</li>
-              <li>"Rewrite this section in Spanish"</li>
-            </ul>
-            <p>Every change creates a restore point, so you can go back to any earlier version if you don't like a later edit.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="phase">
-        <div class="phase-label">Connect it to your CRM</div>
-
-        <div class="step">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <h3>Connect forms</h3>
-            <p>AI Studio creates the form layout on the page, but submissions don't save automatically. You need to connect the form to your CRM.</p>
-            <p>Click <strong>Connect to CRM</strong> to wire it up. Once connected:</p>
-            <ul>
-              <li>Form submissions create contacts in your sub-account</li>
-              <li>Submissions appear in <strong>Contacts</strong> and <strong>Sites > Forms > Submissions</strong></li>
-              <li>You can trigger workflows from form submission events</li>
-            </ul>
-
-            <div class="callout">
-              <div class="callout-label">Important</div>
-              <p>Until you connect the form, it looks right on the page but doesn't actually save responses. This is the one step people miss.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">6</div>
-          <div class="step-content">
-            <h3>Connect a calendar</h3>
-            <p>For booking pages, AI Studio pulls calendars from your existing sub-account setup. Ask it to add an appointment booking section and it'll let you select which calendar to connect.</p>
-            <p>The calendar itself stays in your sub-account. AI Studio just places it on the page and connects it.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="phase">
-        <div class="phase-label">Go live</div>
-
-        <div class="step">
-          <div class="step-num">7</div>
-          <div class="step-content">
-            <h3>Publish</h3>
-            <ul>
-              <li>Preview across devices to check how it looks</li>
-              <li>Connect a domain in <strong>Domain Hub</strong> if you want a custom URL</li>
-              <li>Hit publish</li>
-            </ul>
-            <p>After publishing, you can keep editing. Changes stay in draft until you publish again, so you won't break the live page while you're tweaking things.</p>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="tools-section" aria-label="Tool details">
-      <h2>Tools used in this guide</h2>
-
-      <a href="https://www.gohighlevel.com/?fp_ref=romanpeschke" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">GoHighLevel</div>
-        <div class="tool-card-desc">All-in-one CRM with built-in AI website builder, funnel builder, workflow automations, call recording, form handling, and calendar booking. AI Studio is a new Labs feature for building pages through conversation.</div>
-        <div class="tool-card-url">gohighlevel.com</div>
-      </a>
-    </section>
-
-    <section class="faq-section" aria-label="FAQ">
-      <h2>FAQ</h2>
-
-      <div class="faq-item">
-        <div class="faq-question">Is AI Studio free?</div>
-        <div class="faq-answer">Yes, during the Labs phase. No hosting charges, no token costs. After the full launch, a free tier will be available with transparent, pass-through pricing for any usage beyond the included limits.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Can AI Studio clone any website?</div>
-        <div class="faq-answer">You can paste a URL or upload a screenshot and AI Studio will recreate the structure and style. It gives you a strong starting point that you refine through conversation. It's not a pixel-perfect copy, but it gets you 80% of the way in under a minute.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Do forms automatically save submissions?</div>
-        <div class="faq-answer">Not until you connect them. AI Studio creates the form layout on the page, but you need to click Connect to CRM to wire submissions into your contacts and workflows. Without that step, the form looks right but doesn't save anything.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">What can I build with AI Studio?</div>
-        <div class="faq-answer">Websites, landing pages, funnels, lead capture pages, appointment booking pages, registration pages, and interactive applications. You describe what you want, refine it through conversation, and connect it to your existing CRM data.</div>
-      </div>
-    </section>
-
+      <ul class="tools" aria-label="Tools you'll use"><li><a class="tool" href="https://www.gohighlevel.com/?fp_ref=romanpeschke" target="_blank" rel="noopener">GoHighLevel</a></li></ul>
+    </header>
+  </div>
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+    <div class="offer">
+      <span class="sheen" aria-hidden="true"></span>
+      <p class="offer-title">Join AI Ads w/ Roman</p>
+      <p class="offer-desc">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+      <p class="offer-row"><a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">Learn more</a></p>
+    </div>
+    <section class="intro" aria-label="Context"><p><strong>AI Studio is GoHighLevel's built-in AI builder.</strong> Instead of dragging and dropping elements onto a blank page, you describe what you want and it builds it. Need a landing page for a roofing company? Just say that. Want to clone a competitor's site? Paste the URL. It handles layout, content, images, and structure in one shot.</p>
+<p>The real power is that it's inside the CRM. Forms connect directly to your contacts and workflows. Calendars pull from your existing booking setup. You're not building a standalone page and then trying to wire it into your system. It's already there.</p></section>
+    <section class="section"><div class="phase"><h2>Get access</h2><ol class="steps"><li class="step"><div class="step-num">1</div><div><h3>Enable AI Studio in Labs</h3>
+<p>In your <a href="https://www.gohighlevel.com/?fp_ref=romanpeschke" rel="noopener" target="_blank">GoHighLevel</a> sub-account, go to <strong>Settings &gt; Labs</strong>. Scroll down until you see <strong>AI Studio</strong> and toggle it on.</p>
+<p>This is a Labs feature, which means it's free during this phase. No hosting charges, no token costs. After the full launch, there will be a free tier with transparent pricing for anything beyond the included limits.</p></div></li><li class="step"><div class="step-num">2</div><div><h3>Open AI Studio</h3>
+<p>Once enabled, <strong>AI Studio (Beta)</strong> appears in the left sidebar of your sub-account. Click it to open the project dashboard where you can create new projects, reopen existing ones, or clone and share them.</p></div></li></ol></div><div class="phase"><h2>Build something</h2><ol class="steps"><li class="step"><div class="step-num">3</div><div><h3>Start a new project</h3>
+<p>You have three ways to start:</p>
+<ul>
+<li><strong>Describe it</strong> - "Build a landing page for a roofing company" or "Create a booking page for a dental clinic"</li>
+<li><strong>Clone from a URL</strong> - Paste any website URL and AI Studio recreates the structure and style</li>
+<li><strong>Upload a screenshot</strong> - Use an image as design direction</li>
+</ul>
+<p>If your prompt is broad, AI Studio asks follow-up questions before building. You don't need a perfect prompt to get started.</p></div></li><li class="step"><div class="step-num">4</div><div><h3>Refine through conversation</h3>
+<p>After the first version generates, keep talking to it. Type what you want changed:</p>
+<ul>
+<li>"Change the headline"</li>
+<li>"Add a testimonials section below the hero"</li>
+<li>"Make this look more modern"</li>
+<li>"Add a contact form"</li>
+<li>"Rewrite this section in Spanish"</li>
+</ul>
+<p>Every change creates a restore point, so you can go back to any earlier version if you don't like a later edit.</p></div></li></ol></div><div class="phase"><h2>Connect it to your CRM</h2><ol class="steps"><li class="step"><div class="step-num">5</div><div><h3>Connect forms</h3>
+<p>AI Studio creates the form layout on the page, but submissions don't save automatically. You need to connect the form to your CRM.</p>
+<p>Click <strong>Connect to CRM</strong> to wire it up. Once connected:</p>
+<ul>
+<li>Form submissions create contacts in your sub-account</li>
+<li>Submissions appear in <strong>Contacts</strong> and <strong>Sites &gt; Forms &gt; Submissions</strong></li>
+<li>You can trigger workflows from form submission events</li>
+</ul>
+<div class="note"><strong>Important.</strong> Until you connect the form, it looks right on the page but doesn't actually save responses. This is the one step people miss.</div></div></li><li class="step"><div class="step-num">6</div><div><h3>Connect a calendar</h3>
+<p>For booking pages, AI Studio pulls calendars from your existing sub-account setup. Ask it to add an appointment booking section and it'll let you select which calendar to connect.</p>
+<p>The calendar itself stays in your sub-account. AI Studio just places it on the page and connects it.</p></div></li></ol></div><div class="phase"><h2>Go live</h2><ol class="steps"><li class="step"><div class="step-num">7</div><div><h3>Publish</h3>
+<ul>
+<li>Preview across devices to check how it looks</li>
+<li>Connect a domain in <strong>Domain Hub</strong> if you want a custom URL</li>
+<li>Hit publish</li>
+</ul>
+<p>After publishing, you can keep editing. Changes stay in draft until you publish again, so you won't break the live page while you're tweaking things.</p></div></li></ol></div></section>
+    <section class="section"><h2>Tools used in this guide</h2><ul class="toolcards"><li><a href="https://www.gohighlevel.com/?fp_ref=romanpeschke" target="_blank" rel="noopener"><span class="tc-name">GoHighLevel</span><p class="tc-desc">All-in-one CRM with built-in AI website builder, funnel builder, workflow automations, call recording, form handling, and calendar booking. AI Studio is a new Labs feature for building pages through conversation.</p><span class="tc-url">gohighlevel.com</span></a></li></ul></section>
+    <section class="section"><h2>FAQ</h2><ul class="faq"><li><h3>Is AI Studio free?</h3><p>Yes, during the Labs phase. No hosting charges, no token costs. After the full launch, a free tier will be available with transparent, pass-through pricing for any usage beyond the included limits.</p></li><li><h3>Can AI Studio clone any website?</h3><p>You can paste a URL or upload a screenshot and AI Studio will recreate the structure and style. It gives you a strong starting point that you refine through conversation. It's not a pixel-perfect copy, but it gets you 80% of the way in under a minute.</p></li><li><h3>Do forms automatically save submissions?</h3><p>Not until you connect them. AI Studio creates the form layout on the page, but you need to click Connect to CRM to wire submissions into your contacts and workflows. Without that step, the form looks right but doesn't save anything.</p></li><li><h3>What can I build with AI Studio?</h3><p>Websites, landing pages, funnels, lead capture pages, appointment booking pages, registration pages, and interactive applications. You describe what you want, refine it through conversation, and connect it to your existing CRM data.</p></li></ul></section>
     </article>
   </main>
-
-  <footer>
-    <div class="container">
-      <p class="footer-cta">Follow for more AI automation breakdowns.</p>
-      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
-    </div>
-  </footer>
-
+  <footer><div class="container">
+    <p class="footer-title">Join AI Ads w/ Roman</p>
+    <p class="footer-cta">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+    <a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">See the community</a>
+    <div class="footer-meta"><a href="/">romanpeschke.com</a><a href="https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ" target="_blank" rel="noopener">YouTube</a></div>
+  </div></footer>
+  <script src="/assets/guide.js?v=3" defer></script>
 </body>
 </html>

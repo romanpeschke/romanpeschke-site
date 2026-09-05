@@ -66,78 +66,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #ffffff; --surface: #f9fafb; --surface-2: #f3f4f6; --border: #e5e7eb; --text: #1a1a1a; --text-muted: #6b7280; --text-dim: #9ca3af; --accent: #6366f1; --accent-dim: rgba(99,102,241,0.06); --accent-border: rgba(99,102,241,0.20); --green: #059669; --green-dim: rgba(5,150,105,0.08); }
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
-    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
-    header .container { display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
-    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
-    .ig-link:hover { text-decoration: underline; }
-    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
-    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
-    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
-    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
-    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
-    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
-    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
-    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
-    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-    .step-content a, .why-section a, .faq-answer a, .before-text a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
-    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .before-text a:hover { text-decoration-color: var(--accent); }
-    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
-    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
-    .why-section p strong { color: var(--text); }
-    .steps { padding: 32px 0; }
-    .phase { margin-bottom: 36px; }
-    .phase:last-child { margin-bottom: 0; }
-    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
-    .step { display: flex; gap: 14px; margin-bottom: 24px; }
-    .step:last-child { margin-bottom: 0; }
-    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
-    .step-content { min-width: 0; }
-    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
-    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
-    .step-content ul { list-style: none; padding: 0; }
-    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
-    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
-    .step-content code { font-size: 13px; background: var(--surface); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Menlo, monospace; }
-    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
-    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
-    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
-    .before-item:last-of-type { margin-bottom: 0; }
-    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
-    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
-    .before-text strong { color: var(--text); }
-    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
-    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
-    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
-    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
-    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
-    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
-    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .faq-item { margin-bottom: 20px; }
-    .faq-item:last-child { margin-bottom: 0; }
-    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
-    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
-    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
-    .footer-link:hover, .footer-link:active { opacity: 0.9; }
-    @media (min-width: 480px) { h1 { font-size: 32px; } .hero { padding: 48px 0 40px; } .steps { padding: 40px 0; } .tools-section { padding: 40px 0; } }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/guide.css?v=4">
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
@@ -149,192 +79,63 @@
   </script>
 </head>
 <body>
-
-  <header>
-    <div class="container">
-      <a href="/" class="brand">Roman Peschke</a>
-      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
-    </div>
-  </header>
-
-  <main class="container">
-    <article itemscope itemtype="https://schema.org/HowTo">
-
-    <section class="hero" aria-label="Guide overview">
-      <span class="hero-label">Free Guide</span>
+<!--
+THESIS: A guide page that opens dark and reads light. The band holds the promise, the white ground holds the work. Refuses the docs-site default of a thin header over an endless white column with a floating CTA.
+OWN-WORLD: Near-black band (#111) over near-white (#fafafa). Figtree only, JetBrains Mono for pasted values. One indigo accent (#6366f1) reserved for pointers: step numerals, focus, the offer note, warning glyphs, tip numbers. Cards are white with hairline borders and a soft offset shadow; no colored bars, no eyebrows.
+STORY: You came for the thing the Reel promised. The band names it. The white page hands it to you in numbered steps. The offer sits above and below, never between you and a step.
+FIRST VIEWPORT: Top bar (name left, handle right) and hero inside the band: title at 31 to 50px, subtitle in band gray, tool chips. Below the band edge, the offer card with its Join button is the first white element.
+FORM: Monochrome plus dark opening band. Catalog challenger challenger-mono fused with the product, chosen by the user after 27 previews; seed key c8601eaf.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <div class="band">
+    <div class="container topbar"><a href="/">Roman Peschke</a><a class="ig" href="https://instagram.com/roman.peschke" target="_blank" rel="noopener">@roman.peschke</a></div>
+    <header class="container hero">
       <h1 itemprop="name">How to Set Up iMessage for Claude Code</h1>
       <p class="subtitle" itemprop="description">Text yourself to talk to Claude Code. No bots, no tokens, no external services. Just your Apple ID.</p>
-    </section>
-
-    <section class="tools-bar" aria-label="What you need">
-      <div class="tools-bar-label">What you need</div>
-      <div class="tools-list">
-        <a href="https://code.claude.com/docs/en/overview" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Code (v2.1.80+)</a>
-        <a href="https://bun.sh" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Bun</a>
-        <span class="tool-pill"><span class="dot"></span> macOS</span>
-      </div>
-    </section>
-
-    <section class="why-section" aria-label="Context">
-      <p><strong>Claude Code channels let you message a running session from Telegram, Discord, or iMessage.</strong> Telegram and Discord need bot tokens and external setup. iMessage is different. It reads your Mac's Messages database directly and sends replies via AppleScript. No accounts to create, no servers to run, no tokens to manage. You text yourself and Claude responds.</p>
-    </section>
-
-    <section class="steps" aria-label="Step-by-step instructions">
-
-      <div class="phase">
-        <div class="phase-label">Setup</div>
-
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h3>Grant Full Disk Access to your terminal</h3>
-            <p>The iMessage plugin reads <code>~/Library/Messages/chat.db</code>, which is protected by macOS. The first time the server reads it, macOS pops a prompt asking if your terminal can access Messages.</p>
-            <ul>
-              <li>Click <strong>Allow</strong> when the prompt appears</li>
-              <li>If you click Don't Allow or the prompt never shows, grant it manually: <strong>System Settings > Privacy & Security > Full Disk Access</strong> and add your terminal app (Terminal, iTerm, Ghostty, etc.)</li>
-            </ul>
-            <p>Without this, the server exits immediately with <code>authorization denied</code>.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h3>Install the iMessage plugin</h3>
-            <p>Open <a href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">Claude Code</a> and run:</p>
-            <p><code>/plugin install imessage@claude-plugins-official</code></p>
-            <p>If it says plugin not found, run <code>/plugin marketplace update claude-plugins-official</code> first, then retry.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h3>Relaunch with the channel flag</h3>
-            <p>Exit Claude Code and restart with:</p>
-            <p><code>claude --channels plugin:imessage@claude-plugins-official</code></p>
-            <p>The server won't connect without this flag. Check that <code>/imessage:configure</code> tab-completes to confirm it's running.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <h3>Text yourself</h3>
-            <p>Open Messages on any device signed into your Apple ID and send a message to yourself. It reaches Claude immediately. Self-chat bypasses access control with no setup.</p>
-            <p>The first reply Claude sends triggers a macOS <strong>Automation</strong> prompt asking if your terminal can control Messages. Click <strong>OK</strong>.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <h3>Allow other senders</h3>
-            <p>By default, only your own messages get through. Everyone else is dropped silently. To let another contact reach Claude:</p>
-            <p><code>/imessage:access allow +15551234567</code></p>
-            <p>Handles are phone numbers in <code>+country</code> format or Apple ID emails like <code>them@icloud.com</code>.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="phase">
-        <div class="phase-label">After setup</div>
-
-        <div class="step">
-          <div class="step-num">6</div>
-          <div class="step-content">
-            <h3>Disable the "Sent by Claude" signature</h3>
-            <p>Every outbound message appends "Sent by Claude" by default. To turn it off, set this in your shell environment before launching Claude Code:</p>
-            <p><code>export IMESSAGE_APPEND_SIGNATURE=false</code></p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">7</div>
-          <div class="step-content">
-            <h3>Approve permission prompts from your phone</h3>
-            <p>When Claude hits a permission prompt while you're away from the terminal, it forwards the prompt to your iMessage. Reply <strong>yes</strong> or <strong>no</strong> to approve or deny remotely. Only allowlisted senders can approve permissions.</p>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="before-section" aria-label="Before you start">
-      <h2>Before you start</h2>
-
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>macOS only.</strong> The plugin reads the native Apple Messages database at <code>~/Library/Messages/chat.db</code>. There's no Windows or Linux equivalent.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong><a href="https://bun.sh" target="_blank" rel="noopener">Bun</a> is required.</strong> The plugin is a Bun script. Check with <code>bun --version</code>. If missing, <a href="https://bun.sh/docs/installation" target="_blank" rel="noopener">install Bun</a> first.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>Claude Code v2.1.80+ required.</strong> Channels are a research preview feature. Check with <code>claude --version</code>.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>If you click "Don't Allow" on the Full Disk Access prompt, the server dies.</strong> You have to grant it manually in System Settings. There's no second prompt.</div>
-      </div>
-
-      <div class="start-here">
-        <div class="start-here-label">Start here</div>
-        <p>Run <code>/plugin install imessage@claude-plugins-official</code> in Claude Code, exit, relaunch with <code>claude --channels plugin:imessage@claude-plugins-official</code>, then text yourself. Working in under 2 minutes.</p>
-      </div>
-    </section>
-
-    <section class="tools-section" aria-label="Sources">
-      <h2>Sources</h2>
-
-      <a href="https://code.claude.com/docs/en/channels#imessage" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">iMessage channel docs</div>
-        <div class="tool-card-desc">Official setup guide. Full Disk Access, plugin install, pairing, allowlists, and security model.</div>
-        <div class="tool-card-url">code.claude.com/docs/en/channels#imessage</div>
-      </a>
-
-      <a href="https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/imessage" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">iMessage plugin source</div>
-        <div class="tool-card-desc">Full source code. server.ts reads chat.db directly, sends via AppleScript. Access control, environment variables, and tool reference.</div>
-        <div class="tool-card-url">github.com/anthropics/claude-plugins-official</div>
-      </a>
-    </section>
-
-    <section class="faq-section" aria-label="FAQ">
-      <h2>FAQ</h2>
-
-      <div class="faq-item">
-        <div class="faq-question">Do I need a bot or API token?</div>
-        <div class="faq-answer">No. The iMessage channel reads your Mac's Messages database directly and sends replies via AppleScript. No external server, no bot token, no third-party service.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Does this work on Windows?</div>
-        <div class="faq-answer">No. iMessage is macOS only. It reads the native Apple Messages database. For Windows or Linux, use the <a href="https://code.claude.com/docs/en/channels#telegram" target="_blank" rel="noopener">Telegram</a> or <a href="https://code.claude.com/docs/en/channels#discord" target="_blank" rel="noopener">Discord</a> channel plugins instead.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Can other people text my Claude Code?</div>
-        <div class="faq-answer">Only if you explicitly allowlist them with <code>/imessage:access allow</code>. By default, only your own messages (self-chat) get through. Everyone else is dropped silently with no auto-reply.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Can Claude send images through iMessage?</div>
-        <div class="faq-answer">Yes. Files are sent as separate messages after the text. Inbound images are also surfaced to Claude as local file paths it can read.</div>
-      </div>
-    </section>
-
+      <ul class="tools" aria-label="What you need"><li><a class="tool" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">Claude Code (v2.1.80+)</a></li><li><a class="tool" href="https://bun.sh" target="_blank" rel="noopener">Bun</a></li><li><span class="tool">macOS</span></li></ul>
+    </header>
+  </div>
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+    <div class="offer">
+      <span class="sheen" aria-hidden="true"></span>
+      <p class="offer-title">Join AI Ads w/ Roman</p>
+      <p class="offer-desc">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+      <p class="offer-row"><a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">Learn more</a></p>
+    </div>
+    <section class="intro" aria-label="Context"><p><strong>Claude Code channels let you message a running session from Telegram, Discord, or iMessage.</strong> Telegram and Discord need bot tokens and external setup. iMessage is different. It reads your Mac's Messages database directly and sends replies via AppleScript. No accounts to create, no servers to run, no tokens to manage. You text yourself and Claude responds.</p></section>
+    <section class="section"><div class="phase"><h2>Setup</h2><ol class="steps"><li class="step"><div class="step-num">1</div><div><h3>Grant Full Disk Access to your terminal</h3>
+<p>The iMessage plugin reads <code>~/Library/Messages/chat.db</code>, which is protected by macOS. The first time the server reads it, macOS pops a prompt asking if your terminal can access Messages.</p>
+<ul>
+<li>Click <strong>Allow</strong> when the prompt appears</li>
+<li>If you click Don't Allow or the prompt never shows, grant it manually: <strong>System Settings &gt; Privacy &amp; Security &gt; Full Disk Access</strong> and add your terminal app (Terminal, iTerm, Ghostty, etc.)</li>
+</ul>
+<p>Without this, the server exits immediately with <code>authorization denied</code>.</p></div></li><li class="step"><div class="step-num">2</div><div><h3>Install the iMessage plugin</h3>
+<p>Open <a href="https://code.claude.com/docs/en/overview" rel="noopener" target="_blank">Claude Code</a> and run:</p>
+<p><code>/plugin install imessage@claude-plugins-official</code></p>
+<p>If it says plugin not found, run <code>/plugin marketplace update claude-plugins-official</code> first, then retry.</p></div></li><li class="step"><div class="step-num">3</div><div><h3>Relaunch with the channel flag</h3>
+<p>Exit Claude Code and restart with:</p>
+<p><code>claude --channels plugin:imessage@claude-plugins-official</code></p>
+<p>The server won't connect without this flag. Check that <code>/imessage:configure</code> tab-completes to confirm it's running.</p></div></li><li class="step"><div class="step-num">4</div><div><h3>Text yourself</h3>
+<p>Open Messages on any device signed into your Apple ID and send a message to yourself. It reaches Claude immediately. Self-chat bypasses access control with no setup.</p>
+<p>The first reply Claude sends triggers a macOS <strong>Automation</strong> prompt asking if your terminal can control Messages. Click <strong>OK</strong>.</p></div></li><li class="step"><div class="step-num">5</div><div><h3>Allow other senders</h3>
+<p>By default, only your own messages get through. Everyone else is dropped silently. To let another contact reach Claude:</p>
+<p><code>/imessage:access allow +15551234567</code></p>
+<p>Handles are phone numbers in <code>+country</code> format or Apple ID emails like <code>them@icloud.com</code>.</p></div></li></ol></div><div class="phase"><h2>After setup</h2><ol class="steps"><li class="step"><div class="step-num">6</div><div><h3>Disable the "Sent by Claude" signature</h3>
+<p>Every outbound message appends "Sent by Claude" by default. To turn it off, set this in your shell environment before launching Claude Code:</p>
+<p><code>export IMESSAGE_APPEND_SIGNATURE=false</code></p></div></li><li class="step"><div class="step-num">7</div><div><h3>Approve permission prompts from your phone</h3>
+<p>When Claude hits a permission prompt while you're away from the terminal, it forwards the prompt to your iMessage. Reply <strong>yes</strong> or <strong>no</strong> to approve or deny remotely. Only allowlisted senders can approve permissions.</p></div></li></ol></div></section>
+    <section class="section"><h2>Before you start</h2><ul class="warns"><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>macOS only.</strong> The plugin reads the native Apple Messages database at <code>~/Library/Messages/chat.db</code>. There's no Windows or Linux equivalent.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong><a href="https://bun.sh" rel="noopener" target="_blank">Bun</a> is required.</strong> The plugin is a Bun script. Check with <code>bun --version</code>. If missing, <a href="https://bun.sh/docs/installation" rel="noopener" target="_blank">install Bun</a> first.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Claude Code v2.1.80+ required.</strong> Channels are a research preview feature. Check with <code>claude --version</code>.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>If you click "Don't Allow" on the Full Disk Access prompt, the server dies.</strong> You have to grant it manually in System Settings. There's no second prompt.</div></li></ul><div class="callout"><h3>Start here</h3><p>Run <code>/plugin install imessage@claude-plugins-official</code> in Claude Code, exit, relaunch with <code>claude --channels plugin:imessage@claude-plugins-official</code>, then text yourself. Working in under 2 minutes.</p></div></section>
+    <section class="section"><h2>Sources</h2><ul class="toolcards"><li><a href="https://code.claude.com/docs/en/channels#imessage" target="_blank" rel="noopener"><span class="tc-name">iMessage channel docs</span><p class="tc-desc">Official setup guide. Full Disk Access, plugin install, pairing, allowlists, and security model.</p><span class="tc-url">code.claude.com/docs/en/channels#imessage</span></a></li><li><a href="https://github.com/anthropics/claude-plugins-official/tree/main/external_plugins/imessage" target="_blank" rel="noopener"><span class="tc-name">iMessage plugin source</span><p class="tc-desc">Full source code. server.ts reads chat.db directly, sends via AppleScript. Access control, environment variables, and tool reference.</p><span class="tc-url">github.com/anthropics/claude-plugins-official</span></a></li></ul></section>
+    <section class="section"><h2>FAQ</h2><ul class="faq"><li><h3>Do I need a bot or API token?</h3><p>No. The iMessage channel reads your Mac's Messages database directly and sends replies via AppleScript. No external server, no bot token, no third-party service.</p></li><li><h3>Does this work on Windows?</h3><p>No. iMessage is macOS only. It reads the native Apple Messages database. For Windows or Linux, use the <a href="https://code.claude.com/docs/en/channels#telegram" rel="noopener" target="_blank">Telegram</a> or <a href="https://code.claude.com/docs/en/channels#discord" rel="noopener" target="_blank">Discord</a> channel plugins instead.</p></li><li><h3>Can other people text my Claude Code?</h3><p>Only if you explicitly allowlist them with <code>/imessage:access allow</code>. By default, only your own messages (self-chat) get through. Everyone else is dropped silently with no auto-reply.</p></li><li><h3>Can Claude send images through iMessage?</h3><p>Yes. Files are sent as separate messages after the text. Inbound images are also surfaced to Claude as local file paths it can read.</p></li></ul></section>
     </article>
   </main>
-
-  <footer>
-    <div class="container">
-      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
-      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
-    </div>
-  </footer>
-
+  <footer><div class="container">
+    <p class="footer-title">Join AI Ads w/ Roman</p>
+    <p class="footer-cta">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+    <a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">See the community</a>
+    <div class="footer-meta"><a href="/">romanpeschke.com</a><a href="https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ" target="_blank" rel="noopener">YouTube</a></div>
+  </div></footer>
+  <script src="/assets/guide.js?v=3" defer></script>
 </body>
 </html>

@@ -57,82 +57,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #ffffff; --surface: #f9fafb; --surface-2: #f3f4f6; --border: #e5e7eb; --text: #1a1a1a; --text-muted: #6b7280; --text-dim: #9ca3af; --accent: #6366f1; --accent-dim: rgba(99,102,241,0.06); --accent-border: rgba(99,102,241,0.20); --green: #059669; --green-dim: rgba(5,150,105,0.08); }
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
-    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
-    header .container { display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
-    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
-    .ig-link:hover { text-decoration: underline; }
-    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
-    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
-    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
-    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
-    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
-    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
-    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
-    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
-    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-    .content-section a, .faq-answer a, .before-text a, .step-content a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
-    .content-section a:hover, .faq-answer a:hover, .before-text a:hover, .step-content a:hover { text-decoration-color: var(--accent); }
-    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
-    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
-    .why-section p strong { color: var(--text); }
-    .content-section { padding: 32px 0; border-bottom: 1px solid var(--border); }
-    .content-section:last-of-type { border-bottom: none; }
-    .content-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.01em; }
-    .content-section p { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.7; }
-    .content-section p strong { color: var(--text); }
-    .content-section ul { list-style: none; padding: 0; margin-bottom: 12px; }
-    .content-section li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
-    .content-section li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
-    .content-section li strong { color: var(--text); }
-    .steps { padding: 32px 0; border-bottom: 1px solid var(--border); }
-    .phase { margin-bottom: 36px; }
-    .phase:last-child { margin-bottom: 0; }
-    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
-    .step { display: flex; gap: 14px; margin-bottom: 24px; }
-    .step:last-child { margin-bottom: 0; }
-    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
-    .step-content { min-width: 0; }
-    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
-    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
-    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
-    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-    .feature-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-    .feature-card p { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 0; }
-    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
-    .before-item:last-of-type { margin-bottom: 0; }
-    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
-    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
-    .before-text strong { color: var(--text); }
-    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
-    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
-    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
-    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
-    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .faq-item { margin-bottom: 20px; }
-    .faq-item:last-child { margin-bottom: 0; }
-    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
-    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
-    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
-    .footer-link:hover, .footer-link:active { opacity: 0.9; }
-    @media (max-width: 479px) { .feature-grid { grid-template-columns: 1fr; } }
-    @media (min-width: 480px) { h1 { font-size: 32px; } .hero { padding: 48px 0 40px; } .steps { padding: 40px 0; } .tools-section { padding: 40px 0; } }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/guide.css?v=4">
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
@@ -144,195 +70,66 @@
   </script>
 </head>
 <body>
-
-  <header>
-    <div class="container">
-      <a href="/" class="brand">Roman Peschke</a>
-      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
-    </div>
-  </header>
-
-  <main class="container">
-    <article itemscope itemtype="https://schema.org/HowTo">
-
-    <section class="hero" aria-label="Guide overview">
-      <span class="hero-label">Free Guide</span>
+<!--
+THESIS: A guide page that opens dark and reads light. The band holds the promise, the white ground holds the work. Refuses the docs-site default of a thin header over an endless white column with a floating CTA.
+OWN-WORLD: Near-black band (#111) over near-white (#fafafa). Figtree only, JetBrains Mono for pasted values. One indigo accent (#6366f1) reserved for pointers: step numerals, focus, the offer note, warning glyphs, tip numbers. Cards are white with hairline borders and a soft offset shadow; no colored bars, no eyebrows.
+STORY: You came for the thing the Reel promised. The band names it. The white page hands it to you in numbered steps. The offer sits above and below, never between you and a step.
+FIRST VIEWPORT: Top bar (name left, handle right) and hero inside the band: title at 31 to 50px, subtitle in band gray, tool chips. Below the band edge, the offer card with its Join button is the first white element.
+FORM: Monochrome plus dark opening band. Catalog challenger challenger-mono fused with the product, chosen by the user after 27 previews; seed key c8601eaf.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <div class="band">
+    <div class="container topbar"><a href="/">Roman Peschke</a><a class="ig" href="https://instagram.com/roman.peschke" target="_blank" rel="noopener">@roman.peschke</a></div>
+    <header class="container hero">
       <h1 itemprop="name">Letting Claude Use Your Computer in Cowork and Claude Code</h1>
       <p class="subtitle" itemprop="description">Claude can navigate your screen, open apps, fill spreadsheets, and complete tasks on your desktop. When it doesn't have a connector or tool for what you need, it does it directly.</p>
-    </section>
-
-    <section class="tools-bar" aria-label="What you need">
-      <div class="tools-bar-label">What you need</div>
-      <div class="tools-list">
-        <a href="https://claude.com/download" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Claude Desktop (latest)</a>
-        <span class="tool-pill"><span class="dot"></span> Pro or Max plan</span>
-        <span class="tool-pill"><span class="dot"></span> macOS</span>
-      </div>
-    </section>
-
-    <section class="why-section" aria-label="Context">
-      <p><strong>When Claude doesn't have a connector or tool for what you need, it navigates your screen directly.</strong> It opens your apps, navigates your browser, fills in spreadsheets, and does anything you'd do sitting at your desk. Computer use is in research preview for Pro and Max plans.</p>
-    </section>
-
-    <section class="content-section">
-      <h2>1. How Claude Completes Tasks</h2>
-      <p>When you assign a task, Claude follows a specific order:</p>
-
-      <ul>
-        <li><strong>Connectors first.</strong> If a connector is available (Gmail, Google Drive, Slack, etc.), Claude uses it. This is the fastest and most reliable path.</li>
-        <li><strong>Browser second.</strong> When there isn't a connector, Claude navigates Chrome using Claude in Chrome.</li>
-        <li><strong>Screen interaction last.</strong> Claude uses computer use to interact directly with your screen by clicking, typing, and navigating your desktop apps.</li>
-      </ul>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h4>Remote Execution</h4>
-          <p>Assign a task from your phone, turn your attention to something else, and come back to finished work on your computer.</p>
-        </div>
-        <div class="feature-card">
-          <h4>Scheduled Tasks</h4>
-          <p>Tell Claude once to scan your email every morning or pull a report every Friday, and it handles it from there.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <h2>2. Permissions and Safeguards</h2>
-      <p>Computer use runs outside the virtual machine, meaning Claude interacts with your actual desktop and apps.</p>
-
-      <ul>
-        <li><strong>Per-app permissions.</strong> Claude asks for your permission before accessing each application. Some sensitive apps are blocked by default.</li>
-        <li><strong>App blocklist.</strong> You can prevent Claude from accessing certain apps by adding them to a blocklist. Requests to use blocked apps are automatically denied.</li>
-        <li><strong>Action review.</strong> The system scans for signs of prompt injection. You can stop Claude at any point.</li>
-      </ul>
-    </section>
-
-    <section class="content-section">
-      <h2>3. Best Practices</h2>
-
-      <ul>
-        <li><strong>Start simple.</strong> Begin with research or organizing rather than complex multi-step workflows.</li>
-        <li><strong>Protect sensitive data.</strong> Do not give computer use access to sensitive apps like banking, healthcare, or government portals.</li>
-        <li><strong>Be specific.</strong> Make sure your prompts are specific and carefully tailored to avoid Claude doing things you didn't intend.</li>
-      </ul>
-    </section>
-
-    <section class="steps">
-      <div class="phase">
-        <div class="phase-label">4. Quickstart</div>
-
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h3>Update Claude Desktop</h3>
-            <p>Download or update to the latest version at <a href="https://claude.com/download" target="_blank" rel="noopener">claude.com/download</a>.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h3>Pair with mobile</h3>
-            <p>Pair your updated desktop app with your mobile app to unlock remote task assignment.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h3>Start a session</h3>
-            <p>Open Cowork or Claude Code in the desktop app and start a session.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <h3>Ask Claude to perform a task</h3>
-            <p>Ask Claude to do something that involves an app on your computer.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <h3>Grant permission</h3>
-            <p>Claude will ask for permission to access the app. Approve the prompt to let Claude proceed.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="before-section" aria-label="Before you start">
-      <h2>Before you start</h2>
-
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>Pro or Max plan required.</strong> Computer use is in research preview for paid plans only.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>Desktop must be active.</strong> Your computer needs to be awake and the Claude Desktop app must be open.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>Latest macOS app required.</strong> Update at <a href="https://claude.com/download" target="_blank" rel="noopener">claude.com/download</a>.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>Mobile pairing for remote use.</strong> Pair your desktop app with your mobile app to assign tasks from your phone.</div>
-      </div>
-    </section>
-
-    <section class="tools-section" aria-label="Sources">
-      <h2>Sources</h2>
-
-      <a href="https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">Anthropic Support: Computer Use in Cowork</div>
-        <div class="tool-card-desc">Official guide covering setup, permissions, safeguards, and best practices for computer use.</div>
-        <div class="tool-card-url">support.claude.com</div>
-      </a>
-
-      <a href="https://x.com/claudeai/status/2036195789601374705" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">Claude AI announcement (X)</div>
-        <div class="tool-card-desc">Official announcement thread for computer use in Cowork and Claude Code.</div>
-        <div class="tool-card-url">x.com/claudeai</div>
-      </a>
-    </section>
-
-    <section class="faq-section" aria-label="FAQ">
-      <h2>FAQ</h2>
-
-      <div class="faq-item">
-        <div class="faq-question">What is computer use?</div>
-        <div class="faq-answer">When Claude doesn't have a connector or tool for what you need, it navigates your screen directly. It opens apps, navigates your browser, fills in spreadsheets, and does anything you'd do sitting at your desk.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Can I assign tasks from my phone?</div>
-        <div class="faq-answer">Yes. Pair your desktop app with your mobile app. Then assign a task from your phone, turn your attention to something else, and come back to finished work on your computer.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Is it safe?</div>
-        <div class="faq-answer">Claude asks for per-app permissions before accessing each application. Some sensitive apps are blocked by default. You can add apps to a blocklist, and the system scans for prompt injection. You can stop Claude at any point.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Does my computer need to be on?</div>
-        <div class="faq-answer">Yes. Your computer needs to be awake and the Claude Desktop app must be open for computer use to work.</div>
-      </div>
-    </section>
-
+      <ul class="tools" aria-label="What you need"><li><a class="tool" href="https://claude.com/download" target="_blank" rel="noopener">Claude Desktop (latest)</a></li><li><span class="tool">Pro or Max plan</span></li><li><span class="tool">macOS</span></li></ul>
+    </header>
+  </div>
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+    <div class="offer">
+      <span class="sheen" aria-hidden="true"></span>
+      <p class="offer-title">Join AI Ads w/ Roman</p>
+      <p class="offer-desc">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+      <p class="offer-row"><a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">Learn more</a></p>
+    </div>
+    <section class="intro" aria-label="Context"><p><strong>When Claude doesn't have a connector or tool for what you need, it navigates your screen directly.</strong> It opens your apps, navigates your browser, fills in spreadsheets, and does anything you'd do sitting at your desk. Computer use is in research preview for Pro and Max plans.</p></section>
+    <section class="section"><h2>1. How Claude Completes Tasks</h2><p>When you assign a task, Claude follows a specific order:</p>
+<ul>
+<li><strong>Connectors first.</strong> If a connector is available (Gmail, Google Drive, Slack, etc.), Claude uses it. This is the fastest and most reliable path.</li>
+<li><strong>Browser second.</strong> When there isn't a connector, Claude navigates Chrome using Claude in Chrome.</li>
+<li><strong>Screen interaction last.</strong> Claude uses computer use to interact directly with your screen by clicking, typing, and navigating your desktop apps.</li>
+</ul>
+<ul class="cards grid-2"><li><p class="c-name">Remote Execution</p><p>Assign a task from your phone, turn your attention to something else, and come back to finished work on your computer.</p></li><li><p class="c-name">Scheduled Tasks</p><p>Tell Claude once to scan your email every morning or pull a report every Friday, and it handles it from there.</p></li></ul></section>
+    <section class="section"><h2>2. Permissions and Safeguards</h2><p>Computer use runs outside the virtual machine, meaning Claude interacts with your actual desktop and apps.</p>
+<ul>
+<li><strong>Per-app permissions.</strong> Claude asks for your permission before accessing each application. Some sensitive apps are blocked by default.</li>
+<li><strong>App blocklist.</strong> You can prevent Claude from accessing certain apps by adding them to a blocklist. Requests to use blocked apps are automatically denied.</li>
+<li><strong>Action review.</strong> The system scans for signs of prompt injection. You can stop Claude at any point.</li>
+</ul></section>
+    <section class="section"><h2>3. Best Practices</h2><ul>
+<li><strong>Start simple.</strong> Begin with research or organizing rather than complex multi-step workflows.</li>
+<li><strong>Protect sensitive data.</strong> Do not give computer use access to sensitive apps like banking, healthcare, or government portals.</li>
+<li><strong>Be specific.</strong> Make sure your prompts are specific and carefully tailored to avoid Claude doing things you didn't intend.</li>
+</ul></section>
+    <section class="section"><div class="phase"><h2>4. Quickstart</h2><ol class="steps"><li class="step"><div class="step-num">1</div><div><h3>Update Claude Desktop</h3>
+<p>Download or update to the latest version at <a href="https://claude.com/download" rel="noopener" target="_blank">claude.com/download</a>.</p></div></li><li class="step"><div class="step-num">2</div><div><h3>Pair with mobile</h3>
+<p>Pair your updated desktop app with your mobile app to unlock remote task assignment.</p></div></li><li class="step"><div class="step-num">3</div><div><h3>Start a session</h3>
+<p>Open Cowork or Claude Code in the desktop app and start a session.</p></div></li><li class="step"><div class="step-num">4</div><div><h3>Ask Claude to perform a task</h3>
+<p>Ask Claude to do something that involves an app on your computer.</p></div></li><li class="step"><div class="step-num">5</div><div><h3>Grant permission</h3>
+<p>Claude will ask for permission to access the app. Approve the prompt to let Claude proceed.</p></div></li></ol></div></section>
+    <section class="section"><h2>Before you start</h2><ul class="warns"><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Pro or Max plan required.</strong> Computer use is in research preview for paid plans only.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Desktop must be active.</strong> Your computer needs to be awake and the Claude Desktop app must be open.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Latest macOS app required.</strong> Update at <a href="https://claude.com/download" rel="noopener" target="_blank">claude.com/download</a>.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Mobile pairing for remote use.</strong> Pair your desktop app with your mobile app to assign tasks from your phone.</div></li></ul></section>
+    <section class="section"><h2>Sources</h2><ul class="toolcards"><li><a href="https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork" target="_blank" rel="noopener"><span class="tc-name">Anthropic Support: Computer Use in Cowork</span><p class="tc-desc">Official guide covering setup, permissions, safeguards, and best practices for computer use.</p><span class="tc-url">support.claude.com</span></a></li><li><a href="https://x.com/claudeai/status/2036195789601374705" target="_blank" rel="noopener"><span class="tc-name">Claude AI announcement (X)</span><p class="tc-desc">Official announcement thread for computer use in Cowork and Claude Code.</p><span class="tc-url">x.com/claudeai</span></a></li></ul></section>
+    <section class="section"><h2>FAQ</h2><ul class="faq"><li><h3>What is computer use?</h3><p>When Claude doesn't have a connector or tool for what you need, it navigates your screen directly. It opens apps, navigates your browser, fills in spreadsheets, and does anything you'd do sitting at your desk.</p></li><li><h3>Can I assign tasks from my phone?</h3><p>Yes. Pair your desktop app with your mobile app. Then assign a task from your phone, turn your attention to something else, and come back to finished work on your computer.</p></li><li><h3>Is it safe?</h3><p>Claude asks for per-app permissions before accessing each application. Some sensitive apps are blocked by default. You can add apps to a blocklist, and the system scans for prompt injection. You can stop Claude at any point.</p></li><li><h3>Does my computer need to be on?</h3><p>Yes. Your computer needs to be awake and the Claude Desktop app must be open for computer use to work.</p></li></ul></section>
     </article>
   </main>
-
-  <footer>
-    <div class="container">
-      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
-      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
-    </div>
-  </footer>
-
+  <footer><div class="container">
+    <p class="footer-title">Join AI Ads w/ Roman</p>
+    <p class="footer-cta">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+    <a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">See the community</a>
+    <div class="footer-meta"><a href="/">romanpeschke.com</a><a href="https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ" target="_blank" rel="noopener">YouTube</a></div>
+  </div></footer>
+  <script src="/assets/guide.js?v=3" defer></script>
 </body>
 </html>

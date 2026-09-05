@@ -59,84 +59,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #ffffff; --surface: #f9fafb; --surface-2: #f3f4f6; --border: #e5e7eb; --text: #1a1a1a; --text-muted: #6b7280; --text-dim: #9ca3af; --accent: #6366f1; --accent-dim: rgba(99,102,241,0.06); --accent-border: rgba(99,102,241,0.20); --green: #059669; --green-dim: rgba(5,150,105,0.08); }
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
-    .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-    header { padding: 16px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
-    header .container { display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; padding: 8px 0; }
-    .ig-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; padding: 8px 0; min-height: 44px; display: flex; align-items: center; }
-    .ig-link:hover { text-decoration: underline; }
-    .hero { padding: 36px 0 32px; border-bottom: 1px solid var(--border); }
-    .hero-label { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); padding: 5px 10px; border-radius: 4px; margin-bottom: 14px; }
-    h1 { font-size: 28px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.02em; }
-    .subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.5; }
-    .tools-bar { padding: 20px 0; border-bottom: 1px solid var(--border); }
-    .tools-bar-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
-    .tools-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tool-pill { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; min-height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
-    .tool-pill:hover, .tool-pill:active { border-color: var(--accent-border); background: var(--surface-2); }
-    .tool-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-    .step-content a, .why-section a, .faq-answer a, .before-text a, .compare-text a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
-    .step-content a:hover, .why-section a:hover, .faq-answer a:hover, .before-text a:hover, .compare-text a:hover { text-decoration-color: var(--accent); }
-    .why-section { padding: 28px 0; border-bottom: 1px solid var(--border); }
-    .why-section p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
-    .why-section p strong { color: var(--text); }
-    .steps { padding: 32px 0; }
-    .phase { margin-bottom: 36px; }
-    .phase:last-child { margin-bottom: 0; }
-    .phase-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 18px; }
-    .step { display: flex; gap: 14px; margin-bottom: 24px; }
-    .step:last-child { margin-bottom: 0; }
-    .step-num { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 1px; }
-    .step-content { min-width: 0; }
-    .step-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
-    .step-content p { font-size: 15px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.6; }
-    .step-content ul { list-style: none; padding: 0; }
-    .step-content li { font-size: 15px; color: var(--text-muted); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.6; }
-    .step-content li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
-    .step-content code { font-size: 13px; background: var(--surface); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Menlo, monospace; }
-    .callout { background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
-    .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
-    .callout p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .compare-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .compare-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .compare-item { margin-bottom: 14px; }
-    .compare-item:last-child { margin-bottom: 0; }
-    .compare-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
-    .compare-text strong { color: var(--text); }
-    .before-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .before-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .before-item { display: flex; gap: 12px; margin-bottom: 14px; }
-    .before-item:last-of-type { margin-bottom: 0; }
-    .before-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 700; color: #dc2626; margin-top: 2px; }
-    .before-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
-    .before-text strong { color: var(--text); }
-    .start-here { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.18); border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; }
-    .start-here-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 6px; }
-    .start-here p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .tools-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .tools-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
-    .tool-card:hover, .tool-card:active { border-color: var(--accent-border); }
-    .tool-card-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .tool-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
-    .tool-card-url { font-size: 13px; color: var(--accent); margin-top: 5px; }
-    .faq-section { padding: 32px 0; border-top: 1px solid var(--border); }
-    .faq-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-    .faq-item { margin-bottom: 20px; }
-    .faq-item:last-child { margin-bottom: 0; }
-    .faq-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-    footer { padding: 36px 0 env(safe-area-inset-bottom, 48px); border-top: 1px solid var(--border); text-align: center; }
-    .footer-cta { font-size: 15px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
-    .footer-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 28px; min-height: 48px; background: var(--accent); color: #ffffff; font-weight: 600; font-size: 15px; border-radius: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; }
-    .footer-link:hover, .footer-link:active { opacity: 0.9; }
-    @media (min-width: 480px) { h1 { font-size: 32px; } .hero { padding: 48px 0 40px; } .steps { padding: 40px 0; } .tools-section { padding: 40px 0; } }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/guide.css?v=4">
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
@@ -148,160 +72,48 @@
   </script>
 </head>
 <body>
-
-  <header>
-    <div class="container">
-      <a href="/" class="brand">Roman Peschke</a>
-      <a href="https://instagram.com/roman.peschke" class="ig-link" target="_blank" rel="noopener">@roman.peschke</a>
-    </div>
-  </header>
-
-  <main class="container">
-    <article itemscope itemtype="https://schema.org/HowTo">
-
-    <section class="hero" aria-label="Guide overview">
-      <span class="hero-label">Free Guide</span>
+<!--
+THESIS: A guide page that opens dark and reads light. The band holds the promise, the white ground holds the work. Refuses the docs-site default of a thin header over an endless white column with a floating CTA.
+OWN-WORLD: Near-black band (#111) over near-white (#fafafa). Figtree only, JetBrains Mono for pasted values. One indigo accent (#6366f1) reserved for pointers: step numerals, focus, the offer note, warning glyphs, tip numbers. Cards are white with hairline borders and a soft offset shadow; no colored bars, no eyebrows.
+STORY: You came for the thing the Reel promised. The band names it. The white page hands it to you in numbered steps. The offer sits above and below, never between you and a step.
+FIRST VIEWPORT: Top bar (name left, handle right) and hero inside the band: title at 31 to 50px, subtitle in band gray, tool chips. Below the band edge, the offer card with its Join button is the first white element.
+FORM: Monochrome plus dark opening band. Catalog challenger challenger-mono fused with the product, chosen by the user after 27 previews; seed key c8601eaf.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <div class="band">
+    <div class="container topbar"><a href="/">Roman Peschke</a><a class="ig" href="https://instagram.com/roman.peschke" target="_blank" rel="noopener">@roman.peschke</a></div>
+    <header class="container hero">
       <h1 itemprop="name">How to Try UNI-1 by Luma Labs</h1>
       <p class="subtitle" itemprop="description">Luma's new reasoning-based image model. Free to try, no API key needed.</p>
-    </section>
-
-    <section class="tools-bar" aria-label="What you need">
-      <div class="tools-bar-label">What you need</div>
-      <div class="tools-list">
-        <a href="https://app.lumalabs.ai" class="tool-pill" target="_blank" rel="noopener"><span class="dot"></span> Luma app (free)</a>
-      </div>
-    </section>
-
-    <section class="why-section" aria-label="Context">
-      <p><strong>UNI-1 is a multimodal reasoning model that generates images.</strong> Unlike speed-first models like Nano Banana 2, UNI-1 is built around what Luma calls "Unified Intelligence." It understands intention and responds to direction. Feed it reference images and it maintains the subject. Give it a sketch and it turns it into a finished image. It ranks #1 in human preference (Elo score) for overall quality, style & editing, and reference-based generation.</p>
-    </section>
-
-    <section class="steps" aria-label="Step-by-step instructions">
-
-      <div class="phase">
-        <div class="phase-label">Try it</div>
-
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h3>Open the Luma app</h3>
-            <p>Go to <a href="https://app.lumalabs.ai" target="_blank" rel="noopener">app.lumalabs.ai</a> and create a free account. No API key needed.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h3>Generate from text</h3>
-            <p>Type a prompt. UNI-1 handles spatial reasoning and common-sense scene completion out of the box. It's culture-aware too. Manga, cinematic, meme aesthetics, multilingual text rendering, even Morse code.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h3>Use reference images</h3>
-            <p>This is where UNI-1 stands out. Upload one or more reference images and it maintains the subject across generations. Luma calls this "source-grounded controls." You can combine multiple people into a scene, transfer a style from one image to another, or keep a character consistent across outputs.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <h3>Try sketch-to-image</h3>
-            <p>Upload a rough sketch. UNI-1 turns it into a finished image while preserving your composition and layout. Works with pencil sketches, wireframes, or rough drawings.</p>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="compare-section" aria-label="Comparison with Nano Banana 2">
-      <h2>How it compares to Nano Banana 2</h2>
-
-      <div class="compare-item">
-        <p class="compare-text"><strong>Speed:</strong> Nano Banana 2 is faster. It's built on Google's Flash architecture for rapid iteration. UNI-1 is slower because it reasons about the image before generating.</p>
-      </div>
-      <div class="compare-item">
-        <p class="compare-text"><strong>Reference images:</strong> UNI-1 wins here. It can take multiple reference photos and maintain identity, style, and composition. Nano Banana 2 handles subject consistency (up to 5 characters) but UNI-1's reference-guided controls are more flexible.</p>
-      </div>
-      <div class="compare-item">
-        <p class="compare-text"><strong>Text rendering:</strong> Nano Banana 2 is better at precise text in images and even does in-image translation.</p>
-      </div>
-      <div class="compare-item">
-        <p class="compare-text"><strong>Ecosystem:</strong> Nano Banana 2 is available in the Gemini app, Google Search, AI Studio, Vertex AI, and Google Ads. UNI-1 is app-only right now.</p>
-      </div>
-      <div class="compare-item">
-        <p class="compare-text"><strong>API:</strong> Nano Banana 2 has full API access through AI Studio and Vertex AI. UNI-1's API is <a href="https://lumalabs.ai/uni-1" target="_blank" rel="noopener">waitlist-only</a>.</p>
-      </div>
-    </section>
-
-    <section class="before-section" aria-label="Before you start">
-      <h2>Before you start</h2>
-
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>Free to try in the app.</strong> No API key or payment needed to start generating.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>API is waitlist-only.</strong> You can't integrate UNI-1 into automated workflows yet. <a href="https://lumalabs.ai/uni-1" target="_blank" rel="noopener">Sign up for access</a>.</div>
-      </div>
-      <div class="before-item">
-        <div class="before-icon">!</div>
-        <div class="before-text"><strong>API pricing when it launches:</strong> ~$0.09 per text-to-image at 2048px. ~$0.11 for multi-reference with 8 images. Per-token billing (each image = 2,000 billing tokens).</div>
-      </div>
-
-      <div class="start-here">
-        <div class="start-here-label">Start here</div>
-        <p>Open <a href="https://app.lumalabs.ai" target="_blank" rel="noopener">app.lumalabs.ai</a>, type a prompt, generate. Then try uploading a reference image and generating with it. That's where UNI-1 clicks.</p>
-      </div>
-    </section>
-
-    <section class="tools-section" aria-label="Sources">
-      <h2>Sources</h2>
-
-      <a href="https://lumalabs.ai/uni-1" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">UNI-1 by Luma Labs</div>
-        <div class="tool-card-desc">Multimodal reasoning model for image generation. Intelligent scene completion, reference-guided generation, culture-aware output. Ranked #1 in human preference Elo for overall quality.</div>
-        <div class="tool-card-url">lumalabs.ai/uni-1</div>
-      </a>
-
-      <a href="https://app.lumalabs.ai" class="tool-card" target="_blank" rel="noopener">
-        <div class="tool-card-name">Luma app</div>
-        <div class="tool-card-desc">Free web app to try UNI-1. Text-to-image, reference-guided generation, sketch-to-image. No API key needed.</div>
-        <div class="tool-card-url">app.lumalabs.ai</div>
-      </a>
-    </section>
-
-    <section class="faq-section" aria-label="FAQ">
-      <h2>FAQ</h2>
-
-      <div class="faq-item">
-        <div class="faq-question">Is UNI-1 free?</div>
-        <div class="faq-answer">Free to try in the <a href="https://app.lumalabs.ai" target="_blank" rel="noopener">Luma app</a>. API pricing when it launches is per-token: ~$0.09 per text-to-image at 2048px, up to ~$0.11 for multi-reference with 8 images.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Can I use UNI-1 via API?</div>
-        <div class="faq-answer">Not yet. The API is waitlist-only. <a href="https://lumalabs.ai/uni-1" target="_blank" rel="noopener">Sign up at lumalabs.ai/uni-1</a>.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">What's the difference between UNI-1 and Nano Banana 2?</div>
-        <div class="faq-answer">Nano Banana 2 (Google) is faster with full API access and deep Google ecosystem integration. UNI-1 (Luma Labs) is more controllable with reference-guided generation and spatial reasoning, but slower and API is waitlist-only. Use Nano Banana 2 for speed and text rendering. Use UNI-1 for reference-based creative work.</div>
-      </div>
-    </section>
-
+      <ul class="tools" aria-label="What you need"><li><a class="tool" href="https://app.lumalabs.ai" target="_blank" rel="noopener">Luma app (free)</a></li></ul>
+    </header>
+  </div>
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+    <div class="offer">
+      <span class="sheen" aria-hidden="true"></span>
+      <p class="offer-title">Join AI Ads w/ Roman</p>
+      <p class="offer-desc">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+      <p class="offer-row"><a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">Learn more</a></p>
+    </div>
+    <section class="intro" aria-label="Context"><p><strong>UNI-1 is a multimodal reasoning model that generates images.</strong> Unlike speed-first models like Nano Banana 2, UNI-1 is built around what Luma calls "Unified Intelligence." It understands intention and responds to direction. Feed it reference images and it maintains the subject. Give it a sketch and it turns it into a finished image. It ranks #1 in human preference (Elo score) for overall quality, style &amp; editing, and reference-based generation.</p></section>
+    <section class="section"><div class="phase"><h2>Try it</h2><ol class="steps"><li class="step"><div class="step-num">1</div><div><h3>Open the Luma app</h3>
+<p>Go to <a href="https://app.lumalabs.ai" rel="noopener" target="_blank">app.lumalabs.ai</a> and create a free account. No API key needed.</p></div></li><li class="step"><div class="step-num">2</div><div><h3>Generate from text</h3>
+<p>Type a prompt. UNI-1 handles spatial reasoning and common-sense scene completion out of the box. It's culture-aware too. Manga, cinematic, meme aesthetics, multilingual text rendering, even Morse code.</p></div></li><li class="step"><div class="step-num">3</div><div><h3>Use reference images</h3>
+<p>This is where UNI-1 stands out. Upload one or more reference images and it maintains the subject across generations. Luma calls this "source-grounded controls." You can combine multiple people into a scene, transfer a style from one image to another, or keep a character consistent across outputs.</p></div></li><li class="step"><div class="step-num">4</div><div><h3>Try sketch-to-image</h3>
+<p>Upload a rough sketch. UNI-1 turns it into a finished image while preserving your composition and layout. Works with pencil sketches, wireframes, or rough drawings.</p></div></li></ol></div></section>
+    <section class="section"><h2>How it compares to Nano Banana 2</h2><ul class="plain"><li><p class="compare-text"><strong>Speed:</strong> Nano Banana 2 is faster. It's built on Google's Flash architecture for rapid iteration. UNI-1 is slower because it reasons about the image before generating.</p></li><li><p class="compare-text"><strong>Reference images:</strong> UNI-1 wins here. It can take multiple reference photos and maintain identity, style, and composition. Nano Banana 2 handles subject consistency (up to 5 characters) but UNI-1's reference-guided controls are more flexible.</p></li><li><p class="compare-text"><strong>Text rendering:</strong> Nano Banana 2 is better at precise text in images and even does in-image translation.</p></li><li><p class="compare-text"><strong>Ecosystem:</strong> Nano Banana 2 is available in the Gemini app, Google Search, AI Studio, Vertex AI, and Google Ads. UNI-1 is app-only right now.</p></li><li><p class="compare-text"><strong>API:</strong> Nano Banana 2 has full API access through AI Studio and Vertex AI. UNI-1's API is <a href="https://lumalabs.ai/uni-1" rel="noopener" target="_blank">waitlist-only</a>.</p></li></ul></section>
+    <section class="section"><h2>Before you start</h2><ul class="warns"><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Free to try in the app.</strong> No API key or payment needed to start generating.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>API is waitlist-only.</strong> You can't integrate UNI-1 into automated workflows yet. <a href="https://lumalabs.ai/uni-1" rel="noopener" target="_blank">Sign up for access</a>.</div></li><li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>API pricing when it launches:</strong> ~$0.09 per text-to-image at 2048px. ~$0.11 for multi-reference with 8 images. Per-token billing (each image = 2,000 billing tokens).</div></li></ul><div class="callout"><h3>Start here</h3><p>Open <a href="https://app.lumalabs.ai" rel="noopener" target="_blank">app.lumalabs.ai</a>, type a prompt, generate. Then try uploading a reference image and generating with it. That's where UNI-1 clicks.</p></div></section>
+    <section class="section"><h2>Sources</h2><ul class="toolcards"><li><a href="https://lumalabs.ai/uni-1" target="_blank" rel="noopener"><span class="tc-name">UNI-1 by Luma Labs</span><p class="tc-desc">Multimodal reasoning model for image generation. Intelligent scene completion, reference-guided generation, culture-aware output. Ranked #1 in human preference Elo for overall quality.</p><span class="tc-url">lumalabs.ai/uni-1</span></a></li><li><a href="https://app.lumalabs.ai" target="_blank" rel="noopener"><span class="tc-name">Luma app</span><p class="tc-desc">Free web app to try UNI-1. Text-to-image, reference-guided generation, sketch-to-image. No API key needed.</p><span class="tc-url">app.lumalabs.ai</span></a></li></ul></section>
+    <section class="section"><h2>FAQ</h2><ul class="faq"><li><h3>Is UNI-1 free?</h3><p>Free to try in the <a href="https://app.lumalabs.ai" rel="noopener" target="_blank">Luma app</a>. API pricing when it launches is per-token: ~$0.09 per text-to-image at 2048px, up to ~$0.11 for multi-reference with 8 images.</p></li><li><h3>Can I use UNI-1 via API?</h3><p>Not yet. The API is waitlist-only. <a href="https://lumalabs.ai/uni-1" rel="noopener" target="_blank">Sign up at lumalabs.ai/uni-1</a>.</p></li><li><h3>What's the difference between UNI-1 and Nano Banana 2?</h3><p>Nano Banana 2 (Google) is faster with full API access and deep Google ecosystem integration. UNI-1 (Luma Labs) is more controllable with reference-guided generation and spatial reasoning, but slower and API is waitlist-only. Use Nano Banana 2 for speed and text rendering. Use UNI-1 for reference-based creative work.</p></li></ul></section>
     </article>
   </main>
-
-  <footer>
-    <div class="container">
-      <p class="footer-cta">Follow for daily AI tool breakdowns and guides.</p>
-      <a href="https://instagram.com/roman.peschke" class="footer-link" target="_blank" rel="noopener">Follow @roman.peschke</a>
-    </div>
-  </footer>
-
+  <footer><div class="container">
+    <p class="footer-title">Join AI Ads w/ Roman</p>
+    <p class="footer-cta">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+    <a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">See the community</a>
+    <div class="footer-meta"><a href="/">romanpeschke.com</a><a href="https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ" target="_blank" rel="noopener">YouTube</a></div>
+  </div></footer>
+  <script src="/assets/guide.js?v=3" defer></script>
 </body>
 </html>
