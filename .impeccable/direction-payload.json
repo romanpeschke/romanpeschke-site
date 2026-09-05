@@ -1,0 +1,60 @@
+{
+  "title": "Choose the visual world for the guide pages",
+  "question": "The roll assigned Safety Card. Keep it, take an alternate, or re-roll. Sketches show the Meta guide's first viewport on a phone; gray bars stand in for copy.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Safety Card",
+      "kicker": "THE ROLL",
+      "lineage": "airline seat-pocket safety cards",
+      "thesis": "Every step is a panel you cannot misread, built for someone on a phone who has never done this before.",
+      "palette": ["#FFFFFF", "#E4002B", "#1E4FBF", "#FFC20E", "#111111"],
+      "materials": ["laminated card stock", "flat pictogram ink", "numbered panels", "thick rule borders"],
+      "viewport": "Red header band with the title in bold condensed caps, a pictogram row of what you need, then step 1 as a full-width panel with a monumental numeral and the command inside it. The Skool strip is a hazard-striped band at the bottom.",
+      "risk": "Reads as parody if the pictogram language is decorative instead of doing real work; screenshots and commands must live inside the panels.",
+      "sketch": ".impeccable/sketches/safety.webp"
+    },
+    {
+      "id": "challenger-zine",
+      "label": "Napkin Zine",
+      "lineage": "hand-drawn technical zines",
+      "thesis": "The guide as a friend sketching it for you: marker headings, doodle arrows, highlighter on the one line that matters.",
+      "case": "Fuses well with Roman's conversational voice. Risk: marker lettering on a phone, and the hand-drawn devices can tip into cringe if overused.",
+      "sketch": ".impeccable/sketches/zine.webp",
+      "hero": "https://impeccable.style/worlds/cards/hand-drawn-zine-explainer-hero.webp"
+    },
+    {
+      "id": "alt-carousel",
+      "label": "Carousel Slides",
+      "lineage": "Instagram educational carousel posts",
+      "thesis": "One idea per slide, huge numerals, the exact format the reader consumes every day in the app they came from.",
+      "case": "Strongest audience identification of the set. Risk: long steps with code fight the one-idea-per-slide rule, and a dark app frame can feel heavy for reading.",
+      "sketch": ".impeccable/sketches/carousel.webp"
+    },
+    {
+      "id": "alt-sop",
+      "label": "Agency SOP",
+      "lineage": "operations binder with tabbed dividers",
+      "thesis": "The guide as a live standard operating procedure from Roman's own agency: checklist first, numbered procedure, tabbed by topic.",
+      "case": "Carries the 'steal my automations' promise literally. Risk: can read as bureaucratic if the paper cues are heavy; the tab rail must do real navigation.",
+      "sketch": ".impeccable/sketches/sop.webp"
+    },
+    {
+      "id": "challenger-mono",
+      "label": "Monochrome Product Page",
+      "lineage": "monochrome SaaS marketing",
+      "thesis": "Near-black on near-white, one accent used sparingly, every step paired with a screenshot that proves it.",
+      "case": "Fuses cleanly and reads clearly, but it is close to the incumbent look and the category default. Wins clarity, loses identification.",
+      "sketch": ".impeccable/sketches/mono.webp",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-monochrome-product-marketing-hero.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A clean docs page: white ground, one accent, numbered steps, code blocks, executed impeccably.",
+    "viewport": "Header bar, title, subtitle, prerequisites, numbered steps with code, FAQ, footer CTA. What every guide site ships, at full craft."
+  },
+  "steer": true
+}

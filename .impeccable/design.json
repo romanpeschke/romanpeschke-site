@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-05T15:10:00+02:00",
+  "title": "Design System: romanpeschke.com guides",
+  "extensions": {
+    "colorMeta": {
+      "pointer": { "role": "primary", "displayName": "Pointer Indigo", "canonical": "#5457e3", "tonalRamp": ["oklch(22% 0.10 277)", "oklch(32% 0.15 277)", "oklch(42% 0.19 277)", "oklch(52% 0.21 277)", "oklch(59% 0.20 277)", "oklch(72% 0.14 277)", "oklch(85% 0.08 277)", "oklch(95% 0.03 277)"] },
+      "pointer-soft": { "role": "primary", "displayName": "Pointer Wash", "canonical": "#e0e7ff" },
+      "pointer-ink": { "role": "primary", "displayName": "Pointer Ink", "canonical": "#c7d2fe" },
+      "band": { "role": "neutral", "displayName": "Band", "canonical": "#111", "tonalRamp": ["#111", "#1c1c1c", "#2a2a2a", "#333", "#5f5f5f", "#b3b3b3", "#e4e4e4", "#fafafa"] },
+      "band-ink": { "role": "neutral", "displayName": "Band Ink", "canonical": "#fff" },
+      "band-mute": { "role": "neutral", "displayName": "Band Mute", "canonical": "#b3b3b3" },
+      "band-line": { "role": "neutral", "displayName": "Band Line", "canonical": "#2a2a2a" },
+      "band-card": { "role": "neutral", "displayName": "Band Card", "canonical": "#1c1c1c" },
+      "chip-line": { "role": "neutral", "displayName": "Chip Line", "canonical": "#333" },
+      "page": { "role": "neutral", "displayName": "Page", "canonical": "#fafafa" },
+      "card": { "role": "neutral", "displayName": "Card", "canonical": "#fff" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#111", "tonalRamp": ["#111", "#1c1c1c", "#2a2a2a", "#333", "#5f5f5f", "#b3b3b3", "#e4e4e4", "#fafafa"] },
+      "body": { "role": "neutral", "displayName": "Body", "canonical": "#222" },
+      "mute": { "role": "neutral", "displayName": "Mute", "canonical": "#5f5f5f" },
+      "line": { "role": "neutral", "displayName": "Line", "canonical": "#e4e4e4" },
+      "code": { "role": "neutral", "displayName": "Code", "canonical": "#ededed" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero title inside the band. One per page." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings on the reading ground, with an optional Mute subtitle below." },
+      "headline-phase": { "displayName": "Phase Headline", "purpose": "Grouping headers in tip guides, hairline underline 10px below." },
+      "title": { "displayName": "Title", "purpose": "Step, option, tip, and callout headings. Offer title at 21px, index title at 18px." },
+      "subhead": { "displayName": "Subhead", "purpose": "h4 inside do-lists, compare cards, example cards; FAQ questions at 700/16px." },
+      "lede": { "displayName": "Lede", "purpose": "Intro block (max 62ch) and hero subtitle in Band Mute." },
+      "body": { "displayName": "Body", "purpose": "Running text at 17px on a 680px measure." },
+      "body-small": { "displayName": "Body Small", "purpose": "Text inside cards, warnings, FAQ answers, offer description, footer." },
+      "label": { "displayName": "Label", "purpose": "Tool chips, top bar links, button text (15px), option bullets (400)." },
+      "meta": { "displayName": "Meta", "purpose": "Dates, footer meta, offer note (600, indigo), tip numeral (mono, indigo)." },
+      "mono": { "displayName": "Mono", "purpose": "Inline code for pasted values and tip numerals. Loaded at 500 only." }
+    },
+    "shadows": [
+      { "name": "offer-rest", "value": "0 8px 24px -16px rgba(0,0,0,.35)", "purpose": "The Skool offer card at rest; the only shadowed surface." },
+      { "name": "offer-hover", "value": "0 14px 32px -16px rgba(0,0,0,.35)", "purpose": "Offer card on hover, paired with translateY(-2px)." }
+    ],
+    "motion": [
+      { "name": "rise", "value": "0.7s cubic-bezier(.16,1,.3,1)", "purpose": "Hero children fade and rise 10px on load, staggered 0.08s and 0.16s; no-preference only." },
+      { "name": "lift", "value": "0.2s cubic-bezier(.2,.8,.2,1)", "purpose": "Offer card transform on hover." },
+      { "name": "tint", "value": "0.18s", "purpose": "Button background and chip border-color hover." },
+      { "name": "tint-fast", "value": "0.15s", "purpose": "Index title color hover." }
+    ],
+    "breakpoints": [
+      { "name": "compare", "value": "560px" },
+      { "name": "index", "value": "640px" },
+      { "name": "grid-3", "value": "720px" },
+      { "name": "wide", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ink-filled Join button used in the offer card and footer; hover turns indigo.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Join for $9/mo</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;border-radius:8px;background:var(--ink,#111);color:#fff;font-family:Figtree,system-ui,sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background .18s}.ds-btn:hover{background:var(--acc,#5457e3)}.ds-btn:focus-visible{outline:2px solid var(--acc,#5457e3);outline-offset:3px}"
+    },
+    {
+      "name": "Button on Band",
+      "kind": "button",
+      "refersTo": "button-on-band",
+      "description": "The same button inverted for the dark band: white fill, ink text, indigo-ink hover.",
+      "html": "<div class=\"ds-band-wrap\"><a class=\"ds-btn-band\" href=\"#\">Join for $9/mo</a></div>",
+      "css": ".ds-band-wrap{background:#111;padding:20px}.ds-btn-band{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;border-radius:8px;background:#fff;color:#111;font-family:Figtree,system-ui,sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background .18s}.ds-btn-band:hover{background:var(--acc-ink,#c7d2fe)}.ds-btn-band:focus-visible{outline:2px solid var(--acc,#5457e3);outline-offset:3px}"
+    },
+    {
+      "name": "Tool Chip",
+      "kind": "chip",
+      "refersTo": "tool-chip",
+      "description": "Link chip under the hero naming a tool the guide covers; lives inside the band.",
+      "html": "<div class=\"ds-band-wrap\"><a class=\"ds-tool\" href=\"#\">Claude Code</a> <a class=\"ds-tool\" href=\"#\">Meta Ads MCP</a></div>",
+      "css": ".ds-band-wrap{background:#111;padding:20px;display:flex;flex-wrap:wrap;gap:8px}.ds-tool{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 12px;border:1px solid #333;background:var(--band-card,#1c1c1c);border-radius:8px;color:#fff;font-family:Figtree,system-ui,sans-serif;font-size:14px;font-weight:600;text-decoration:none;transition:border-color .18s}.ds-tool:hover{border-color:#fff}.ds-tool:focus-visible{outline:2px solid var(--acc,#5457e3);outline-offset:3px}"
+    },
+    {
+      "name": "Offer Card",
+      "kind": "card",
+      "refersTo": "offer-card",
+      "description": "The Skool offer, first element under the band; the only shadowed surface. Copy is fixed product copy.",
+      "html": "<a class=\"ds-offer\" href=\"#\"><p class=\"ds-offer-title\">Automate your Meta ads end-to-end</p><p class=\"ds-offer-desc\">Steal my AI Automations that crank 1-200+ ads/week. First 10 members lock $9/mo for life and get me on the call while the course rolls out.</p><span class=\"ds-offer-row\"><span class=\"ds-offer-btn\">Join for $9/mo</span><span class=\"ds-offer-note\">Founding rate · 10 spots</span></span></a>",
+      "css": ".ds-offer{display:block;text-decoration:none;color:#222;background:#fff;border:1px solid var(--line,#e4e4e4);border-radius:12px;padding:20px;box-shadow:0 8px 24px -16px rgba(0,0,0,.35);font-family:Figtree,system-ui,sans-serif;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s}.ds-offer:hover{transform:translateY(-2px);box-shadow:0 14px 32px -16px rgba(0,0,0,.35)}.ds-offer:focus-visible{outline:2px solid var(--acc,#5457e3);outline-offset:3px;border-radius:12px}.ds-offer-title{font-size:21px;font-weight:700;letter-spacing:-.015em;line-height:1.2;margin:0 0 6px;color:#111}.ds-offer-desc{font-size:15px;color:var(--mute,#5f5f5f);margin:0;line-height:1.5}.ds-offer-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px}.ds-offer-btn{display:inline-flex;align-items:center;min-height:44px;padding:11px 18px;border-radius:8px;background:#111;color:#fff;font-weight:600;font-size:15px}.ds-offer:hover .ds-offer-btn{background:var(--acc,#5457e3)}.ds-offer-note{font-size:13px;font-weight:600;color:var(--acc,#5457e3)}"
+    },
+    {
+      "name": "Option Card",
+      "kind": "card",
+      "refersTo": "option-card",
+      "description": "Decision card in a three-up grid; flat white with a hairline border.",
+      "html": "<div class=\"ds-option\"><div class=\"ds-option-title\">Meta Ads MCP</div><p class=\"ds-option-when\">If you live in an AI chat.</p><ul><li>Zero code, no developer app</li><li>Read and write to ads and campaigns</li></ul></div>",
+      "css": ".ds-option{background:#fff;border:1px solid var(--line,#e4e4e4);border-radius:12px;padding:16px;font-family:Figtree,system-ui,sans-serif;color:#222;max-width:260px}.ds-option-title{font-size:19px;font-weight:700;letter-spacing:-.012em;color:#111;margin:0 0 4px}.ds-option-when{font-size:15px;margin:0 0 10px}.ds-option ul{margin:0;padding-left:16px;font-size:14px;line-height:1.5}.ds-option li{margin:4px 0}"
+    },
+    {
+      "name": "Numbered Step",
+      "kind": "custom",
+      "refersTo": "step-numeral",
+      "description": "Step row: 30px indigo circle numeral beside title and body, hairline between steps.",
+      "html": "<ol class=\"ds-steps\"><li class=\"ds-step\"><div class=\"ds-step-num\">1</div><div><h3>Open Claude and add a custom connector</h3><p>Click <code>+</code> in any chat, then <em>Add custom connector</em>.</p></div></li><li class=\"ds-step\"><div class=\"ds-step-num\">2</div><div><h3>Paste the Meta MCP URL</h3><p>Paste <code>https://mcp.facebook.com/ads</code> and click <em>Add</em>.</p></div></li></ol>",
+      "css": ".ds-steps{list-style:none;margin:0;padding:0;font-family:Figtree,system-ui,sans-serif;color:#222;font-size:17px;line-height:1.55}.ds-step{display:grid;grid-template-columns:36px 1fr;gap:14px;padding:18px 0;border-top:1px solid var(--line,#e4e4e4)}.ds-step:first-child{border-top:0;padding-top:4px}.ds-step-num{width:30px;height:30px;border-radius:50%;background:var(--acc,#5457e3);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px;margin-top:2px;font-variant-numeric:tabular-nums}.ds-step h3{font-size:19px;font-weight:700;letter-spacing:-.012em;color:#111;margin:4px 0 6px}.ds-step p{margin:6px 0}.ds-step code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;background:var(--code,#ededed);color:#111;padding:2px 6px;border-radius:5px}"
+    },
+    {
+      "name": "Tip Head",
+      "kind": "custom",
+      "refersTo": "tip-numeral",
+      "description": "Tip opener: mono indigo #n at the baseline of a 20px title.",
+      "html": "<div class=\"ds-tip-head\"><span class=\"ds-tip-num\">#4</span><h3>Start with a plan</h3></div>",
+      "css": ".ds-tip-head{display:flex;align-items:baseline;gap:12px;font-family:Figtree,system-ui,sans-serif}.ds-tip-num{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:13px;font-weight:600;color:var(--acc,#5457e3);font-variant-numeric:tabular-nums}.ds-tip-head h3{font-size:20px;font-weight:700;letter-spacing:-.014em;color:#111;margin:0}"
+    },
+    {
+      "name": "Compare Pair",
+      "kind": "card",
+      "refersTo": "inset-card",
+      "description": "Before/after distinguished by Mute text versus an Ink border; no hue.",
+      "html": "<div class=\"ds-compare\"><div class=\"ds-before\"><h4>Before</h4><p>30 messages, 1 chat</p><p><strong>15,000 tokens</strong></p></div><div class=\"ds-after\"><h4>After</h4><p>30 messages, 3 chats</p><p><strong>500 tokens each</strong></p></div></div>",
+      "css": ".ds-compare{display:grid;gap:10px;grid-template-columns:1fr 1fr;font-family:Figtree,system-ui,sans-serif}.ds-compare>div{border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.5;border:1px solid var(--line,#e4e4e4);background:#fff;color:#222}.ds-compare h4{font-size:15px;font-weight:600;color:#111;margin:0 0 6px}.ds-compare p{margin:2px 0}.ds-before{color:var(--mute,#5f5f5f)}.ds-after{border-color:#111!important}.ds-compare strong{color:#111}"
+    },
+    {
+      "name": "Warning",
+      "kind": "custom",
+      "refersTo": "inset-card",
+      "description": "Unboxed warning row with an inline SVG X in indigo stroke; the only icon in the system.",
+      "html": "<div class=\"ds-warn\"><svg viewBox=\"0 0 18 18\" aria-hidden=\"true\"><path d=\"M4 4l10 10M14 4L4 14\"/></svg><div><strong>Free Claude plans cap you at one custom connector total.</strong> If your slot is used, the Meta MCP will not fit until you remove the existing one or upgrade.</div></div>",
+      "css": ".ds-warn{display:grid;grid-template-columns:22px 1fr;gap:10px;font-family:Figtree,system-ui,sans-serif;font-size:15px;line-height:1.55;color:#222}.ds-warn svg{width:18px;height:18px;margin-top:4px;stroke:var(--acc,#5457e3);stroke-width:2.5;fill:none;stroke-linecap:round}.ds-warn strong{color:#111}"
+    },
+    {
+      "name": "Callout",
+      "kind": "card",
+      "refersTo": "callout",
+      "description": "Ink-filled closing card restating the steps in one breath.",
+      "html": "<div class=\"ds-callout\"><h3>Start here</h3><p>Open Claude. Hit <code>+</code> in any chat → Add custom connector. Paste <code>https://mcp.facebook.com/ads</code>. Sign into Meta. Toggle it on.</p></div>",
+      "css": ".ds-callout{background:#111;color:#fff;border-radius:12px;padding:18px;font-family:Figtree,system-ui,sans-serif;font-size:17px;line-height:1.55}.ds-callout h3{color:#fff;font-size:19px;font-weight:700;letter-spacing:-.012em;margin:0 0 8px}.ds-callout p{margin:0}.ds-callout code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;background:#333;color:#fff;padding:2px 6px;border-radius:5px}"
+    },
+    {
+      "name": "Top Bar",
+      "kind": "nav",
+      "refersTo": "tool-chip",
+      "description": "The only navigation: name left, Instagram handle right, hairline beneath, inside the band.",
+      "html": "<div class=\"ds-band\"><div class=\"ds-topbar\"><a href=\"#\">Roman Peschke</a><a class=\"ds-ig\" href=\"#\">@roman.peschke</a></div></div>",
+      "css": ".ds-band{background:#111;color:#fff;padding:0 22px}.ds-topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;font-family:Figtree,system-ui,sans-serif;font-size:14px;font-weight:600;border-bottom:1px solid var(--band-line,#2a2a2a)}.ds-topbar a{color:#fff;text-decoration:none}.ds-topbar .ds-ig{color:var(--band-mute,#b3b3b3)}.ds-topbar .ds-ig:hover{color:#fff}.ds-topbar a:focus-visible{outline:2px solid var(--acc,#5457e3);outline-offset:3px;border-radius:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Dark Band, Then the Work",
+    "overview": "Every page opens in a near-black band that holds the promise (name, handle, title, subtitle, tool chips) and then drops onto a near-white reading ground where the actual work happens: numbered steps, comparisons, commands. The memorable moment is the edge where black turns white as you scroll. Nothing else on the page tries to be memorable; the band has already done that job.\n\nThe world is monochrome by discipline. Ink, body, mute, and hairline are four steps of the same neutral, and every surface is either the page tint or plain white with a hairline border. One indigo exists, and it is never a fill for anything larger than a 30px numeral: it marks step numbers, tip numbers, focus rings, warning glyphs, and the offer note. It tells the reader where to look; it never decorates. Comparisons are told apart by weight and border darkness, not by red and green.\n\nDensity is phone-first reading density: a 680px measure, 17px body at 1.55, sections 44px apart, one column until 720px. The Skool offer card sits directly under the band and repeats in the footer; it never interrupts a step sequence.",
+    "keyCharacteristics": [
+      "Near-black opening band over a near-white reading ground; the switch is the signature.",
+      "Four-step neutral ramp, one indigo pointer; no status hues.",
+      "Figtree at three weights (400, 600, 700), JetBrains Mono for pasted values only.",
+      "White cards with 1px hairline borders; the offer card is the only shadowed surface.",
+      "Tight negative tracking on all headings, tabular numerals on every number.",
+      "One offer, top and bottom, never between steps."
+    ],
+    "rules": [
+      { "name": "The Pointer Rule", "body": "Indigo appears only where the reader needs to be pointed at something: numerals, focus, glyph strokes, one 13px note, hover. If a proposed use is wider than 30px or is a fill behind text, it is not a pointer and it is not allowed.", "section": "colors" },
+      { "name": "The No Status Hue Rule", "body": "Nothing is red, green, amber, or blue to mean bad, good, warning, or info. Warnings use an indigo X glyph; comparisons use mute text for before and an ink border for after.", "section": "colors" },
+      { "name": "The Band Is Ink Rule", "body": "The dark band, the callout, and the primary button share one value (#111). Dark surfaces are the ink made solid, not a second palette.", "section": "colors" },
+      { "name": "The Tight Heading Rule", "body": "Every heading carries negative tracking, tightening as it grows: -0.012em at 19px up to -0.028em at 50px. Body text is never tracked.", "section": "typography" },
+      { "name": "The Tabular Numbers Rule", "body": "Step numerals, tip numbers, and dates set font-variant-numeric: tabular-nums so numbered lists align.", "section": "typography" },
+      { "name": "The No Eyebrow Rule", "body": "No small-caps, uppercase, or letterspaced label sits above a heading. Section context goes in a Mute subtitle below the heading, never in a kicker above it.", "section": "typography" },
+      { "name": "The One Shadow Rule", "body": "Only the offer card is shadowed. Option cards, compare cards, example cards, notes, and the callout are flat with a hairline or a solid ink fill. Emphasis inside a comparison is a darker border (Ink), never a shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do open every page with the band (top bar, title, subtitle, chips) and return to #fafafa for everything that must be read.",
+      "Do use Pointer Indigo (#5457e3) only for step numerals, tip numbers, focus outlines, warning glyph strokes, the offer note, and hover color.",
+      "Do distinguish before/after by Mute text versus an Ink border; keep both cards white.",
+      "Do keep do-lists unboxed; reserve cards for option cards, compare pairs, example blocks, notes, and the callout.",
+      "Do set every heading in Figtree 700 with negative tracking, and every number in tabular numerals.",
+      "Do place the offer card first under the band and the footer CTA last, with the fixed Skool copy unchanged.",
+      "Do hold the 680px measure and 22px gutters at every width; widen vertical spacing at 900px, never the column."
+    ],
+    "donts": [
+      "Don't put an eyebrow, kicker, or uppercase label above any heading.",
+      "Don't use red, green, amber, or blue as status colors, and don't add a second accent.",
+      "Don't fill any surface larger than the 30px step numeral with indigo, or use indigo as a card border.",
+      "Don't add shadows to anything but the offer card; don't use hard offset shadows anywhere.",
+      "Don't use emoji, icon fonts, or image icons; the only icon is the inline SVG warning X.",
+      "Don't insert the offer between steps or tips; it lives above and below the work only.",
+      "Don't add per-page inline styles or a second stylesheet; every rule lives in /assets/guide.css.",
+      "Don't use the Reel sign-off (\"follow for more AI business education\") anywhere on the site."
+    ]
+  }
+}
