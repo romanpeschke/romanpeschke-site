@@ -280,7 +280,7 @@ Soft-cornered rectangles at four radii, scaled to the object: 5px on inline code
 
 ### Buttons
 - **Shape:** softly rounded (8px), 44px minimum height, 11px 18px padding, inline-flex centered.
-- **Primary:** Ink fill with white text, 600 weight at 15px. Used for "Join for $9/mo" in the offer card and footer.
+- **Primary:** Ink fill with white text, 600 weight at 15px. Used for "Learn more" in the offer card and "See the community" in the footer. No price on the button or anywhere on the site.
 - **Hover / Focus:** fill shifts to Ink over 0.18s; focus is the global 2px indigo outline at 3px offset.
 - **On band:** inverts to white fill with Ink text; hover fill becomes Pointer Ink (#c7d2fe).
 
