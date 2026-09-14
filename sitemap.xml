@@ -75,4 +75,19 @@
     <lastmod>2026-09-06</lastmod>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://romanpeschke.com/guides/claude-code-channels/</loc>
+    <lastmod>2026-03-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://romanpeschke.com/guides/claude-code-scheduled-tasks/</loc>
+    <lastmod>2026-03-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://romanpeschke.com/guides/claude-computer-use/</loc>
+    <lastmod>2026-03-29</lastmod>
+    <priority>0.8</priority>
+  </url>
 </urlset>
