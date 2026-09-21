@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KH8ZF9SF');</script>
+<!-- End Google Tag Manager -->
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <title>Meta's New Ads Creative Studio Is a Self-Improving Ad Machine | Roman Peschke</title>
+  <meta name="description" content="Ads Creative Studio explained for business owners: how Meta's new creative loop finds why ads win or lose, generates on-brand creatives, scales winners, and how to get in.">
+  <meta property="og:title" content="Meta's New Ads Creative Studio Is a Self-Improving Ad Machine">
+  <meta property="og:description" content="What Ads Creative Studio does, how the insights, suggestions, generate, optimize loop works, and how to access it in Meta Ads Manager.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-09-21">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/ads-creative-studio/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Meta's New Ads Creative Studio Is a Self-Improving Ad Machine",
+    "description": "How Meta Ads Creative Studio works: insights on underperforming creatives, suggestions, on-brand generation, and scaling top creatives, plus how to access it.",
+    "author": {"@type": "Person", "name": "Roman Peschke", "url": "https://romanpeschke.com"},
+    "datePublished": "2026-09-21",
+    "step": [
+      {"@type": "HowToStep", "name": "Insights", "text": "Improve creatives groups your images and videos into creative styles and shows which delivering ad sets fall under your performance limit and why, with demographic and video metrics."},
+      {"@type": "HowToStep", "name": "Suggestions", "text": "Each underperforming creative gets ideas to solve the problem, drawn from your styles, trends, and top performers in your industry."},
+      {"@type": "HowToStep", "name": "Generate", "text": "Generate image and video creatives from an idea using brand memory, edit them, then save, download, send to Ads Manager, or send for approval."},
+      {"@type": "HowToStep", "name": "Optimize", "text": "Scale top creatives ranks your best active ads and generates variations with new hooks, subtitles, narration, placements, or swapped products."}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "How is Ads Creative Studio different from the AI tools already in Ads Manager?", "acceptedAnswer": {"@type": "Answer", "text": "Ads Creative Studio is a separate, end-to-end surface for creative strategy that connects performance analysis to creative action. The Advantage+ creative enhancements still live in ad setup."}},
+      {"@type": "Question", "name": "What ad formats does Ads Creative Studio support?", "acceptedAnswer": {"@type": "Answer", "text": "Single image and single video ads only at launch. No carousel, collection, or catalog ads."}},
+      {"@type": "Question", "name": "Does Ads Creative Studio publish ads?", "acceptedAnswer": {"@type": "Answer", "text": "No. Generated creatives go to Saved creatives or the Ads Manager media library. You still create or update an ad to use them."}},
+      {"@type": "Question", "name": "Why is my Improve creatives tab empty?", "acceptedAnswer": {"@type": "Answer", "text": "Only active ad sets that have finished the learning phase and fall under your minimum performance threshold appear. The default threshold shows your lowest performing 25 percent of ad sets."}}
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/guide.css?v=4">
+  <style>
+  .loop{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0 6px;counter-reset:node}
+  .loop a{display:block;padding:14px 14px 12px;border:1px solid var(--line,#e6e6e6);border-radius:12px;text-decoration:none;color:inherit;background:var(--card,#fff)}
+  .loop a strong{display:block;font-size:15px;margin-bottom:3px}
+  .loop a strong::before{counter-increment:node;content:counter(node) ". ";opacity:.55}
+  .loop a span{font-size:13px;opacity:.75;line-height:1.35}
+  @media(min-width:560px){.loop{grid-template-columns:repeat(4,1fr)}}
+  .steps .step ul{margin:8px 0 0;padding-left:18px}
+  .steps .step ul li{margin:4px 0}
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
+        api_host: 'https://t.romanpeschke.com',
+        ui_host: 'https://us.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'always',
+    })
+  </script>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KH8ZF9SF"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<div class="band">
+    <div class="container topbar"><a href="/">Roman Peschke</a><a class="ig" href="https://instagram.com/roman.peschke" target="_blank" rel="noopener">@roman.peschke</a></div>
+    <header class="container hero">
+      <h1 itemprop="name">Meta&rsquo;s New Ads Creative Studio Is a Self-Improving Ad Machine</h1>
+      <p class="subtitle" itemprop="description">What Ads Creative Studio does, how the loop works, and how to get in.</p>
+      <ul class="tools" aria-label="Tools you'll use"><li><a class="tool" href="https://www.facebook.com/business/tools/ads-creative-studio" target="_blank" rel="noopener">Ads Creative Studio</a></li></ul>
+    </header>
+  </div>
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+    <div class="offer">
+      <span class="sheen" aria-hidden="true"></span>
+      <p class="offer-title">Join AI Ads w/ Roman</p>
+      <p class="offer-desc">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+      <p class="offer-row"><a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">Learn more</a></p>
+    </div>
+    <section class="intro" aria-label="Context"><p><strong>Meta just released <a href="https://www.facebook.com/business/tools/ads-creative-studio" rel="noopener" target="_blank">Ads Creative Studio</a>.</strong> It's a self-improving loop: it reads your ad performance, tells you why creatives are winning or losing, generates new ones from your brand, and keeps optimizing as data comes in. Nothing publishes without you. Here's each part of the loop and where to find it.</p>
+    <div class="callout"><h3>Try Ads Creative Studio</h3><p>Overview and the Try it now button are on <a href="https://www.facebook.com/business/tools/ads-creative-studio" rel="noopener" target="_blank">Meta's Ads Creative Studio page</a>. If your account is eligible, it opens straight into the tool.</p></div></section>
+
+    <section class="section" aria-label="The loop">
+      <h2>How the loop works</h2>
+      <p class="section-sub">Four parts. Every round builds on the last.</p>
+      <div class="loop">
+        <a href="#insights"><strong>Insights</strong><span>What's underperforming and why</span></a>
+        <a href="#suggestions"><strong>Suggestions</strong><span>Ideas to fix it</span></a>
+        <a href="#generate"><strong>Generate</strong><span>On-brand creatives from the ideas</span></a>
+        <a href="#optimize"><strong>Optimize</strong><span>Scale winners, make variations</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="insights"><h2>Insights</h2>
+      <p>This is the part that reads your account. Ads Creative Studio groups every image and video you're running by style: the visual, the text, the story it tells. Then it looks at how each style is doing and flags the ad sets that are dragging.</p>
+      <p>By default it shows your bottom 25% of active ad sets, which you can change. For each one it tells you why it's underperforming: whether the creative is landing with your core demographics, how it stacks up against the top advertisers in your industry, and for video, where people are dropping off (hook rate, hold rate, ThruPlays).</p>
+      <p>There's also a breakdown view if you'd rather see it as a table or a heatmap: every style across cost per result, click-through rate, frequency, and so on, split by age and gender.</p>
+    </section>
+
+    <section class="section" id="suggestions"><h2>Suggestions</h2>
+      <p>For every creative it flagged, it gives you a few concrete ideas to fix it: a UGC testimonial, opening on the product in motion, layering in beat-matched music, that level of specific.</p>
+      <p>The ideas come from three places: what's worked in your own account before, current seasonal and paid trends, and what's working right now for the top businesses in your industry. You pick which of your existing ads it uses as the starting point.</p>
+    </section>
+
+    <section class="section" id="generate"><h2>Generate</h2>
+      <p>Pick an idea and it makes the ad. Images and video, generated with Meta's AI using brand memory, which learns your brand's look and tone from the ads you've already run so the output doesn't come back looking like someone else's company.</p>
+      <p>You can edit what it gives you: touch up a region, add text, or just type what you want changed. From there it goes wherever you want it: saved in the studio, downloaded, sent to your Ads Manager media library, or sent to a teammate for approval.</p>
+      <p>It lands in your library and you still build the ad. Anything Meta's AI made or materially edited gets an "AI info" label on the ad, and it tells you that before you publish.</p>
+    </section>
+
+    <section class="section" id="optimize"><h2>Optimize</h2>
+      <p>Scale top creatives is the other half of the loop: a leaderboard of your best active ads over the last 30 days, ranked by purchase ROAS by default (you can change the metric, the minimum spend, and the date range, and group by product, funnel stage, or audience).</p>
+      <p>Next to each winner is a button to generate variations. It keeps the format and structure that worked and changes the rest: new hooks, subtitles, narration, different placements, or swap the product and seasonal details to carry the same winning ad into another campaign.</p>
+      <p>As new performance data comes in, it keeps recommending what to refresh, scale, or replace.</p>
+    </section>
+
+    <section class="section" aria-label="Access"><h2>How to get in</h2>
+      <p>It's rolling out now, so you may not see it yet. Three ways to check:</p>
+      <ol class="steps">
+        <li class="step"><div class="step-num">1</div><div><h3>All tools</h3><p>In <a href="https://adsmanager.facebook.com/adsmanager/manage/" rel="noopener" target="_blank">Ads Manager</a>, click All tools on the left, then Ads Creative Studio.</p></div></li>
+        <li class="step"><div class="step-num">2</div><div><h3>From a performance indicator</h3><p>In the Campaign, Ad sets, or Ads table, find a row with a creative fatigue or low performance flag in the Actions column. Click it, then See all ideas. This opens Ads Creative Studio scoped to that creative.</p></div></li>
+        <li class="step"><div class="step-num">3</div><div><h3>Direct link</h3><p><a href="https://www.facebook.com/adscreativestudio" rel="noopener" target="_blank">facebook.com/adscreativestudio</a>. To use a different ad account, switch it in the Ads Manager business asset dropdown first.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="section"><h2>Before you use it</h2><ul class="warns">
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Single image and single video only.</strong> Carousel, collection, and catalog ads aren't supported at launch.</div></li>
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>An empty Improve creatives tab isn't a bug.</strong> Nothing shows until an active ad set clears the learning phase and dips under your performance limit. Raise the limit if you want to see more.</div></li>
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Regulated verticals may not get the generative features.</strong> Financial services, pharma and health, housing, employment, credit, and social or political ads, plus some countries, are rolling out later.</div></li>
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Style grouping is automatic.</strong> If it lumps unrelated ads into one style, the insights for that style are muddy. Fix the assignments in Saved creatives.</div></li>
+    </ul></section>
+
+    <section class="section"><h2>Sources</h2><ul class="toolcards">
+      <li><a href="https://www.facebook.com/business/tools/ads-creative-studio" target="_blank" rel="noopener"><span class="tc-name">Ads Creative Studio</span><p class="tc-desc">Meta's product page: overview, benefits, and the launch FAQ.</p><span class="tc-url">facebook.com/business/tools/ads-creative-studio</span></a></li>
+      <li><a href="https://www.facebook.com/business/help/1270229187942739" target="_blank" rel="noopener"><span class="tc-name">About Ads Creative Studio</span><p class="tc-desc">Help Center: how it works, access paths, and the FAQ.</p><span class="tc-url">facebook.com/business/help</span></a></li>
+      <li><a href="https://www.facebook.com/business/help/28239889202316009" target="_blank" rel="noopener"><span class="tc-name">Improve creatives</span><p class="tc-desc">Help Center: the Insights, Ideas, and Breakdown views step by step.</p><span class="tc-url">facebook.com/business/help</span></a></li>
+      <li><a href="https://www.facebook.com/business/help/2262449427634246" target="_blank" rel="noopener"><span class="tc-name">Scale top creatives</span><p class="tc-desc">Help Center: the leaderboard and generating variations.</p><span class="tc-url">facebook.com/business/help</span></a></li>
+    </ul></section>
+
+    <section class="section"><h2>FAQ</h2><ul class="faq">
+      <li><h3>How is this different from the AI tools already in Ads Manager?</h3><p>Ads Creative Studio is a separate, end-to-end surface for creative strategy that connects performance analysis to creative action. The Advantage+ creative enhancements (animation, overlays, music, translations) still live in ad setup.</p></li>
+      <li><h3>What ad formats does it support?</h3><p>Single image and single video only at launch.</p></li>
+      <li><h3>Does it publish ads?</h3><p>No. Generated creatives go to Saved creatives or your Ads Manager media library. You still create or update an ad to use them.</p></li>
+      <li><h3>Why is my Improve creatives tab empty?</h3><p>Only active ad sets that finished the learning phase and fall under your minimum performance threshold appear. The default shows your lowest performing 25% of ad sets, and you can change it.</p></li>
+    </ul></section>
+    </article>
+  </main>
+  <footer><div class="container">
+    <p class="footer-title">Join AI Ads w/ Roman</p>
+    <p class="footer-cta">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+    <a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">See the community</a>
+    <div class="footer-meta"><a href="/">romanpeschke.com</a><a href="https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ" target="_blank" rel="noopener">YouTube</a></div>
+  </div></footer>
+  <script src="/assets/guide.js?v=3" defer></script>
+</body>
+</html>
