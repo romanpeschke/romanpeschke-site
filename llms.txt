@@ -6,6 +6,7 @@ Roman Peschke creates daily Instagram Reels breaking down AI marketing, AI agent
 
 ## Guides
 
+- [How to Run Hermes Agent on Your Claude Subscription](/guides/hermes-claude-subscription/): Install the Claude Subscription DirectSDK plugin in Hermes Desktop, log in with Claude Code, pick a Claude model, and run Hermes on a Pro or Max plan. Models, usage rate, and limits.
 - [Meta's New Ads Creative Studio Is a Self-Improving Ad Machine](/guides/ads-creative-studio/): How Meta Ads Creative Studio works as a loop (insights, suggestions, generate, optimize), how to access it in Ads Manager, and its limits at launch.
 - [Meta's New "Meta One" Subscription Is a Game-Changer for Business Owners](/guides/meta-one-deep-dive/): Every feature in all four Meta One tiers (Essential, Advanced, Expert, Max) for Instagram, Facebook and WhatsApp Business, per-profile pricing, and which plan to get.
 - [How to Turn Off Advantage+ Creative Translation in Meta Ads Manager](/guides/turn-off-meta-advantage-creative-translation/): Meta translates ads into 12 languages by default. The exact ad-level click path to turn it off, and why it re-enables after every edit.

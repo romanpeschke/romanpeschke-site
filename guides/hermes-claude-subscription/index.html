@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KH8ZF9SF');</script>
+<!-- End Google Tag Manager -->
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <title>How to Run Hermes Agent on Your Claude Subscription | Roman Peschke</title>
+  <meta name="description" content="Set up the Claude Subscription DirectSDK plugin in Hermes Desktop so Hermes Agent runs on your Claude Pro or Max plan through Claude Code, no API key. Steps, limits, and pitfalls.">
+  <meta property="og:title" content="How to Run Hermes Agent on Your Claude Subscription">
+  <meta property="og:description" content="Install the Claude Subscription DirectSDK plugin in Hermes Desktop, log in with Claude Code, pick Sonnet 5 or Opus 5, and run Hermes on your Claude Pro or Max plan.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Roman Peschke">
+  <meta property="article:author" content="Roman Peschke">
+  <meta property="article:published_time" content="2026-09-21">
+  <meta name="author" content="Roman Peschke">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://romanpeschke.com/guides/hermes-claude-subscription/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Run Hermes Agent on Your Claude Subscription",
+    "description": "Install the Claude Subscription DirectSDK plugin in Hermes Desktop, log in with the Claude Code CLI, and pick a Claude model so Hermes Agent runs on a Claude Pro or Max subscription.",
+    "author": {"@type": "Person", "name": "Roman Peschke", "url": "https://romanpeschke.com"},
+    "datePublished": "2026-09-21",
+    "tool": [
+      {"@type": "HowToTool", "name": "Hermes Desktop"},
+      {"@type": "HowToTool", "name": "Claude Code CLI"},
+      {"@type": "HowToTool", "name": "Claude Subscription DirectSDK plugin"}
+    ],
+    "step": [
+      {"@type": "HowToStep", "name": "Open the plugin page", "text": "Open the Claude Subscription DirectSDK page on the Hermes plugin catalog."},
+      {"@type": "HowToStep", "name": "Click Open in Hermes Desktop", "text": "Hermes Desktop opens with the plugin loaded."},
+      {"@type": "HowToStep", "name": "Click Install", "text": "Click Install."},
+      {"@type": "HowToStep", "name": "Restart Hermes", "text": "Restart Hermes."},
+      {"@type": "HowToStep", "name": "Log into Claude Code", "text": "If Claude Code is not installed and logged in, run npm install -g @anthropic-ai/claude-code and claude auth login."},
+      {"@type": "HowToStep", "name": "Click the model dropdown", "text": "In the chat composer, next to the microphone."},
+      {"@type": "HowToStep", "name": "Select Claude Subscription DirectSDK (Experimental)", "text": "Pick Sonnet 5, Opus 5, Opus 4.8, Fable 5.1, or Haiku 4.5."},
+      {"@type": "HowToStep", "name": "Set it as the default", "text": "Optional. Settings, Model."}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "Does this use my Claude subscription or an API key?", "acceptedAnswer": {"@type": "Answer", "text": "Your subscription. The plugin has no credentials of its own and sends no API key. Every request goes through the official Claude Code CLI you logged into."}},
+      {"@type": "Question", "name": "Which Claude models can Hermes use through the plugin?", "acceptedAnswer": {"@type": "Answer", "text": "Sonnet 5, Haiku 4.5, Opus 5, Opus 4.8, and Fable 5.1. Sonnet, Opus, and Fable run on their 1M-token routes; Haiku has a 200K window."}},
+      {"@type": "Question", "name": "Does Hermes burn my Claude usage faster than Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "It meters at the same rate as claude -p and the Agent SDK, about 1.7x the interactive Claude Code terminal. Plan for roughly 60% of the terminal's throughput per 5-hour window."}},
+      {"@type": "Question", "name": "Is running Hermes on a Claude subscription allowed?", "acceptedAnswer": {"@type": "Answer", "text": "Anthropic's help center says Agent SDK, claude -p, and third-party app usage draw from your subscription's usage limits. A planned change to move that usage to a separate monthly credit was paused on June 15, 2026."}}
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/guide.css?v=4">
+  <style>
+  .steps .step ul{margin:8px 0 0;padding-left:18px}
+  .steps .step ul li{margin:4px 0}
+  .steps .step pre{margin:10px 0 0;padding:12px 14px;border-radius:10px;background:var(--ink);color:#fff;font-family:var(--mono);font-size:13.5px;line-height:1.5;overflow-x:auto;white-space:pre}
+  .steps .step>div:last-child{min-width:0}
+  .models{width:100%;border-collapse:collapse;font-size:14.5px;margin:0}
+  .table-wrap{margin-top:12px}
+  .models th,.models td{text-align:left;padding:9px 12px;border-top:1px solid var(--line)}
+  .models th{font-weight:600;color:var(--ink);border-top:0}
+  .models td:last-child{color:var(--mute)}
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ii init Di qi Sr Bi Zi Pi capture calculateEventProperties Yi register register_once register_for_session unregister unregister_for_session Xi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Ji identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wi Vi createPersonProfile setInternalOrTestUser Gi Fi Ki opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $i debug Tr Ui getPageViewId captureTraceFeedback captureTraceMetric Ri".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_voUxUKDMLBkQEURMkscKkUZzqUAiEjyyMnmxXgLB5kNu', {
+        api_host: 'https://t.romanpeschke.com',
+        ui_host: 'https://us.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'always',
+    })
+  </script>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KH8ZF9SF"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<div class="band">
+    <div class="container topbar"><a href="/">Roman Peschke</a><a class="ig" href="https://instagram.com/roman.peschke" target="_blank" rel="noopener">@roman.peschke</a></div>
+    <header class="container hero">
+      <h1 itemprop="name">How to Run Hermes Agent on Your Claude Subscription</h1>
+      <p class="subtitle" itemprop="description">Set up the Claude Subscription DirectSDK plugin in Hermes Desktop, install it, restart, pick it in the dropdown, and stop paying through the API.</p>
+      <ul class="tools" aria-label="Tools you'll use">
+        <li><a class="tool" href="https://hermes-agent.nousresearch.com/docs/user-guide/desktop" target="_blank" rel="noopener">Hermes Desktop</a></li>
+        <li><a class="tool" href="https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk" target="_blank" rel="noopener">Claude Subscription DirectSDK</a></li>
+        <li><a class="tool" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">Claude Code</a></li>
+      </ul>
+    </header>
+  </div>
+  <main class="container">
+    <article itemscope itemtype="https://schema.org/HowTo">
+    <div class="offer">
+      <span class="sheen" aria-hidden="true"></span>
+      <p class="offer-title">Join AI Ads w/ Roman</p>
+      <p class="offer-desc">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+      <p class="offer-row"><a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">Learn more</a></p>
+    </div>
+    <section class="intro" aria-label="Context"><p><strong>You can finally connect your Claude Code subscription back to <a href="https://hermes-agent.nousresearch.com/" rel="noopener" target="_blank">Hermes</a>.</strong> Nous Research, the team that builds Hermes, released the official plugin for it.</p>
+    <div class="callout"><h3>The link from the reel</h3><p>The plugin page with the Open in Hermes Desktop button: <a href="https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk" rel="noopener" target="_blank">Claude Subscription DirectSDK</a>.</p></div></section>
+
+    <section class="section"><div class="phase"><h2>Setup</h2><ol class="steps">
+      <li class="step"><div class="step-num">1</div><div><h3>Open the plugin page</h3><p><a href="https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk" rel="noopener" target="_blank">Claude Subscription DirectSDK</a> on the Hermes plugin catalog.</p></div></li>
+      <li class="step"><div class="step-num">2</div><div><h3>Click Open in Hermes Desktop</h3></div></li>
+      <li class="step"><div class="step-num">3</div><div><h3>Click Install</h3></div></li>
+      <li class="step"><div class="step-num">4</div><div><h3>Restart Hermes</h3></div></li>
+      <li class="step"><div class="step-num">5</div><div><h3>Log into Claude Code</h3><p>Skip if Claude Code is already logged in on this machine. Otherwise:</p><pre>npm install -g @anthropic-ai/claude-code
+claude auth login</pre></div></li>
+      <li class="step"><div class="step-num">6</div><div><h3>Click the model dropdown in the chat composer</h3></div></li>
+      <li class="step"><div class="step-num">7</div><div><h3>Select Claude Subscription DirectSDK (Experimental)</h3><p>Pick a model:</p><div class="table-wrap"><table class="models"><thead><tr><th>Model</th><th>Context</th></tr></thead><tbody>
+<tr><td>Sonnet 5</td><td>1M</td></tr>
+<tr><td>Opus 5</td><td>1M</td></tr>
+<tr><td>Opus 4.8</td><td>1M</td></tr>
+<tr><td>Fable 5.1</td><td>1M</td></tr>
+<tr><td>Haiku 4.5</td><td>200K</td></tr>
+</tbody></table></div></div></li>
+      <li class="step"><div class="step-num">8</div><div><h3>Optional: set it as the default in Settings → Model</h3></div></li>
+    </ol></div></section>
+
+    <section class="section"><h2>Before you rely on it</h2><ul class="warns">
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Needs Hermes 0.21.4 or newer and a Claude Pro or Max plan.</strong> Update Hermes under Settings → About → Update now.</div></li>
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Usage goes about 1.7x faster than Claude Code.</strong> Nous measured it at the same rate as <code>claude -p</code>. Expect roughly 60% of Claude Code's throughput per 5-hour window.</div></li>
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Fable 5.1 costs extra on Pro.</strong> It bills to usage credits from the first request; Max includes it up to half your weekly limit. Pick it on Pro without credits and you get a "Fable 5.1 requires usage credits" error.</div></li>
+      <li class="warn"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg><div><strong>Turn off extra usage in your Claude account if you don't want overage.</strong> The plugin adds no spending cap, and the cost Hermes shows is a list-price estimate, not what your plan charges.</div></li>
+    </ul></section>
+
+    <section class="section"><h2>Sources</h2><ul class="toolcards">
+      <li><a href="https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk" target="_blank" rel="noopener"><span class="tc-name">Claude Subscription DirectSDK</span><p class="tc-desc">The plugin's catalog page: requirements, install, model list, and the usage measurements.</p><span class="tc-url">hermes-agent.nousresearch.com/docs/plugins</span></a></li>
+      <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/desktop" target="_blank" rel="noopener"><span class="tc-name">Hermes Desktop</span><p class="tc-desc">The desktop app docs: model picker, Settings → Model, status bar, and the Plugins pane.</p><span class="tc-url">hermes-agent.nousresearch.com/docs/user-guide/desktop</span></a></li>
+      <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/plugin-catalog" target="_blank" rel="noopener"><span class="tc-name">Hermes Plugin Catalog</span><p class="tc-desc">How catalog installs work: reviewed pins, the Open in Hermes Desktop link, and updates.</p><span class="tc-url">hermes-agent.nousresearch.com/docs/user-guide/features/plugin-catalog</span></a></li>
+      <li><a href="https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan" target="_blank" rel="noopener"><span class="tc-name">Claude Fable models on your plan</span><p class="tc-desc">Anthropic's help article on which plans include Fable 5.1 and when it bills to usage credits.</p><span class="tc-url">support.claude.com</span></a></li>
+    </ul></section>
+
+    <section class="section"><h2>FAQ</h2><ul class="faq">
+      <li><h3>Does this use my Claude subscription or an API key?</h3><p>Your subscription. The plugin has no credentials of its own and sends no API key. Every request runs through the Claude Code CLI you logged into, and the plugin never opens or copies its credential files.</p></li>
+      <li><h3>Which Claude models can Hermes use?</h3><p>Sonnet 5, Haiku 4.5, Opus 5, Opus 4.8, and Fable 5.1. Sonnet, Opus, and Fable run on their 1M-token routes; Haiku has a 200K window.</p></li>
+      <li><h3>Does Hermes burn my usage faster than Claude Code?</h3><p>Per token it meters at the same rate as <code>claude -p</code>, about 1.7x the interactive terminal. On identical coding tasks Nous saw Hermes send about 0.6x the tokens Claude Code did.</p></li>
+      <li><h3>Is running Hermes on a subscription allowed?</h3><p>Anthropic's help center says Agent SDK, <code>claude -p</code>, and third-party app usage draw from your subscription's usage limits. A plan to move that usage onto a separate monthly credit was paused on June 15, 2026.</p></li>
+    </ul></section>
+    </article>
+  </main>
+  <footer><div class="container">
+    <p class="footer-title">Join AI Ads w/ Roman</p>
+    <p class="footer-cta">The exact AI automations, agents, and strategies my team and I use to scale Meta ads (Facebook ads), content, and sales for $1m+ businesses</p>
+    <a class="btn" href="https://www.skool.com/ai-ads-with-roman/about" target="_blank" rel="noopener">See the community</a>
+    <div class="footer-meta"><a href="/">romanpeschke.com</a><a href="https://youtube.com/channel/UCKCFX_RcAJwNK7bqZd069iQ" target="_blank" rel="noopener">YouTube</a></div>
+  </div></footer>
+  <script src="/assets/guide.js?v=3" defer></script>
+</body>
+</html>
