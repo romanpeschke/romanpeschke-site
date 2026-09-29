@@ -3,8 +3,11 @@
 <head>
 <!-- Google Tag Manager -->
 <script>
-// Trackers start after the page has loaded and gone idle, so they never delay first paint.
-function afterLoad(f){function go(){'requestIdleCallback' in window?requestIdleCallback(f,{timeout:2000}):setTimeout(f,1)}document.readyState==='complete'?go():addEventListener('load',go,{once:true})}
+// Trackers start once the page has loaded, painted its first content, and gone idle, so they never delay first paint.
+function afterLoad(f){var n=2,done=0;function step(){if(--n)return;'requestIdleCallback' in window?requestIdleCallback(f,{timeout:2000}):setTimeout(f,1)}
+document.readyState==='complete'?step():addEventListener('load',step,{once:true});
+function painted(){if(!done){done=1;step()}}setTimeout(painted,3000);
+try{new PerformanceObserver(function(l){l.getEntries().forEach(function(e){if(e.name==='first-contentful-paint')painted()})}).observe({type:'paint',buffered:true})}catch(e){painted()}}
 </script>
 <script>afterLoad(function(){(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -106,6 +109,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         ui_host: 'https://us.posthog.com',
         defaults: '2026-01-30',
         person_profiles: 'always',
+        disable_session_recording: true,
+        disable_surveys: true,
     })
   });</script>
 </head>
