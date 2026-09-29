@@ -224,3 +224,4 @@ code.prompt{display:block;white-space:pre-wrap;word-break:break-word;padding:12p
 .table .recommended td:first-child{color:var(--acc)}
 .section ul:not([class]){padding-left:20px}.section li{margin:5px 0}
 .section>p{margin:0 0 14px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
